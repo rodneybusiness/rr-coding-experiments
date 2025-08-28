@@ -1,0 +1,10 @@
+# Shared utilities requirements
+# Python standard library only
+
+# All functions use only standard library modules:
+# - json
+# - datetime
+# - pathlib
+# - typing
+
+# No pip install needed for this project

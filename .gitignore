@@ -1,0 +1,252 @@
+# ===================================
+# RR Coding Experiments .gitignore
+# Optimized for GitHub syncing
+# ===================================
+
+# ===== Operating System Files =====
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+
+# ===== IDE and Editor Files =====
+# VS Code
+.vscode/
+*.swp
+*.swo
+
+# PyCharm
+.idea/
+
+# Vim
+*.swp
+*.swo
+*.un~
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+
+# ===== Python =====
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.conda/
+conda-meta/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# Spyder
+.spyderproject
+.spyproject
+
+# ===== Node.js =====
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn-integrity
+
+# ===== Data Files (Large/Sensitive) =====
+# Large data files that shouldn't be in version control
+*.jsonl
+*.parquet
+*.csv
+*.tsv
+*.xlsx
+*.xls
+*.db
+*.sqlite
+*.sqlite3
+
+# But keep small sample/test data files
+!sample_data/
+!**/sample*.jsonl
+!**/test*.csv
+!**/example*.json
+
+# ===== Output and Generated Files =====
+# Reports and outputs
+reports/*.html
+outputs/
+logs/
+*.log
+*.tmp
+temp/
+tmp/
+
+# Generated documentation
+docs/_build/
+site/
+
+# ===== Archives and Media =====
+*.zip
+*.tar.gz
+*.rar
+*.7z
+*.mov
+*.mp4
+*.avi
+*.wmv
+*.flv
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+*.ico
+
+# But keep small icons and logos
+!**/icon*.png
+!**/logo*.png
+!**/favicon.ico
+
+# ===== Configuration and Secrets =====
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Configuration files with secrets
+config.json
+secrets.json
+credentials.json
+*.pem
+*.key
+*.crt
+
+# ===== Project-Specific =====
+# CogRepo large data files
+cogrepo/COGREPO_FINAL_*/
+cogrepo/**/*.jsonl
+cogrepo/**/*.parquet
+cogrepo/**/*.index
+
+# But keep the structure and small files
+!cogrepo/COGREPO_FINAL_*/.gitkeep
+!cogrepo/**/README.md
+!cogrepo/**/*.py
+!cogrepo/**/package.json
+
+# Family travel analysis data
+family-travel-analysis/data/*.json
+family-travel-analysis/data/*.jsonl
+
+# 8BG large output files
+8bg-renaming-tools/outputs/
+8bg-renaming-tools/backup/
+
+# Zombie quest saves and assets
+zombie-quest/saves/
+zombie-quest/screenshots/
+
+# ===== Backup and Temporary Files =====
+*.bak
+*.backup
+*.orig
+*.old
+*_backup
+*_old
+*~
+*.tmp
+
+# ===== Web Files =====
+# Browser files
+*.webloc
+*.url
+
+# ===== Keep Important Files =====
+# Always include these even if they match patterns above
+!.gitkeep
+!.gitignore
+!README.md
+!requirements.txt
+!package.json
+!*.py
+!*.sh
+!*.js
+!*.html
+!*.css
+!*.md

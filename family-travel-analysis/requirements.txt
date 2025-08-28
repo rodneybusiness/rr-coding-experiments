@@ -1,0 +1,12 @@
+# Family Travel Analysis Requirements
+# Python standard library only - no external dependencies required
+
+# All imports are from Python standard library:
+# - json
+# - datetime
+# - collections
+# - pathlib
+# - sys
+# - re
+
+# No pip install needed for this project
