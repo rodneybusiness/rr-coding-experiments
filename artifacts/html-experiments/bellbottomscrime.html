@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bell Bottoms - Crime Network</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0a0a0a;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+        
+        #container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        #title {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 100;
+        }
+        
+        #main-title {
+            color: #FFD700;
+            font-size: 32px;
+            font-weight: bold;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            margin: 0;
+            letter-spacing: 2px;
+        }
+        
+        #subtitle {
+            color: #00BCD4;
+            font-size: 16px;
+            font-style: italic;
+            margin-top: 5px;
+        }
+        
+        .node {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .node:hover {
+            filter: brightness(1.3);
+        }
+        
+        .node-label {
+            pointer-events: none;
+            font-weight: bold;
+            font-size: 11px;
+            text-anchor: middle;
+            fill: white;
+            text-shadow: 0 0 3px black, 0 0 5px black;
+        }
+        
+        .link {
+            fill: none;
+            stroke-opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+        
+        .link:hover {
+            stroke-opacity: 1;
+            stroke-width: 4px !important;
+        }
+        
+        .link-label {
+            font-size: 10px;
+            fill: #FFD700;
+            font-weight: bold;
+            text-anchor: middle;
+            background: black;
+            pointer-events: none;
+        }
+        
+        #legend {
+            position: absolute;
+            top: 80px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #FFD700;
+            border-radius: 10px;
+            padding: 15px;
+            z-index: 100;
+        }
+        
+        .legend-title {
+            color: #FFD700;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid white;
+        }
+        
+        .legend-label {
+            color: white;
+            font-size: 12px;
+        }
+        
+        .insight-box {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.95);
+            border-radius: 10px;
+            padding: 15px;
+            z-index: 100;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+        }
+        
+        .insight-title {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .insight-text {
+            color: white;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+        
+        #paradox-box {
+            bottom: 30px;
+            right: 30px;
+            border: 2px solid #00BCD4;
+        }
+        
+        #paradox-box .insight-title {
+            color: #00BCD4;
+        }
+        
+        #stakes-box {
+            bottom: 30px;
+            left: 30px;
+            border: 2px solid #E91E63;
+        }
+        
+        #stakes-box .insight-title {
+            color: #E91E63;
+        }
+        
+        #twist-box {
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 2px solid #FFD700;
+        }
+        
+        #twist-box .insight-title {
+            color: #FFD700;
+        }
+        
+        .glow {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { filter: brightness(1) drop-shadow(0 0 10px currentColor); }
+            50% { filter: brightness(1.2) drop-shadow(0 0 20px currentColor); }
+            100% { filter: brightness(1) drop-shadow(0 0 10px currentColor); }
+        }
+
+        #tooltip {
+            position: absolute;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.95);
+            border: 1px solid #FFD700;
+            border-radius: 5px;
+            color: white;
+            font-size: 12px;
+            pointer-events: none;
+            display: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="title">
+            <h1 id="main-title">BELL BOTTOMS: TORRENTI MURDER CONSPIRACY</h1>
+            <div id="subtitle">Time Loop Crime Network • 1972 ⟷ 2026</div>
+        </div>
+        
+        <div id="legend">
+            <div class="legend-title">CHARACTER TYPES</div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #FF1744;"></div>
+                <div class="legend-label">Victim/Murder</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #FFD700;"></div>
+                <div class="legend-label">Wrongly Accused</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #E91E63;"></div>
+                <div class="legend-label">The Angels</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #00BCD4;"></div>
+                <div class="legend-label">Young Charlie</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #9C27B0;"></div>
+                <div class="legend-label">Villains</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #FF6F00;"></div>
+                <div class="legend-label">Time Traveler</div>
+            </div>
+        </div>
+        
+        <div class="insight-box" id="paradox-box">
+            <div class="insight-title">⏰ TEMPORAL PARADOX</div>
+            <div class="insight-text">
+                Charlie must solve case<br>
+                to create the Angels<br>
+                who help him solve it
+            </div>
+        </div>
+        
+        <div class="insight-box" id="stakes-box">
+            <div class="insight-title">💀 THE STAKES</div>
+            <div class="insight-text">
+                If Charlie fails:<br>
+                Angels never exist<br>
+                Their families vanish
+            </div>
+        </div>
+        
+        <div class="insight-box" id="twist-box">
+            <div class="insight-title">🔪 THE TWIST</div>
+            <div class="insight-text">
+                Otto is the killer<br>
+                Anna is innocent
+            </div>
+        </div>
+
+        <div id="tooltip"></div>
+    </div>
+
+    <script>
+        // Data
+        const nodes = [
+            { id: "sam", name: "SAM TORRENTI", emoji: "💀", subtitle: "VICTIM", type: "victim", x: 500, y: 400 },
+            { id: "anna", name: "ANNA TORRENTI", emoji: "🎯", subtitle: "FRAMED WIFE", type: "innocent", x: 350, y: 250 },
+            { id: "otto", name: "OTTO TORRENTI", emoji: "🔪", subtitle: "TRUE KILLER", type: "killer", x: 650, y: 250 },
+            { id: "charlie", name: "YOUNG CHARLIE", emoji: "🔍", subtitle: "1972 PI", type: "hero", x: 200, y: 150 },
+            { id: "angels", name: "THE ANGELS", emoji: "⚡", subtitle: "TIME TRAVELERS", type: "protagonists", x: 500, y: 100 },
+            { id: "ezekiel", name: "EZEKIEL", emoji: "🌀", subtitle: "CULT LEADER", type: "villain", x: 300, y: 450 },
+            { id: "lapd", name: "DIRTY LAPD", emoji: "🚔", subtitle: "CORRUPT COPS", type: "villain", x: 500, y: 550 },
+            { id: "mob", name: "THE MOB", emoji: "💊", subtitle: "DRUG NETWORK", type: "villain", x: 700, y: 450 },
+            { id: "ray", name: "RAY CALDERO (2026)", emoji: "⏰", subtitle: "TIME MACHINE", type: "mastermind", x: 800, y: 150 },
+            { id: "gore", name: "GORE", emoji: "🎯", subtitle: "ENFORCER", type: "villain", x: 850, y: 300 }
+        ];
+
+        const links = [
+            { source: "otto", target: "sam", label: "MURDERS", type: "murder" },
+            { source: "otto", target: "anna", label: "FRAMES", type: "murder" },
+            { source: "anna", target: "sam", label: "FALSELY ACCUSED", type: "innocent" },
+            { source: "ezekiel", target: "sam", label: "LSD DISTRIBUTION", type: "criminal" },
+            { source: "lapd", target: "sam", label: "COVER-UP", type: "criminal" },
+            { source: "mob", target: "sam", label: "WATERBED DRUGS", type: "criminal" },
+            { source: "ray", target: "anna", label: "LOVES/EXONERATES", type: "love" },
+            { source: "gore", target: "ray", label: "SERVES", type: "criminal" },
+            { source: "angels", target: "charlie", label: "TRAIN", type: "help" },
+            { source: "charlie", target: "anna", label: "MUST SOLVE", type: "help" },
+            { source: "angels", target: "otto", label: "EXPOSE", type: "help" },
+            { source: "ray", target: "charlie", label: "HATES", type: "conflict" }
+        ];
+
+        const colorMap = {
+            victim: "#FF1744",
+            innocent: "#FFD700",
+            killer: "#8B0000",
+            hero: "#00BCD4",
+            protagonists: "#E91E63",
+            villain: "#9C27B0",
+            mastermind: "#FF6F00"
+        };
+
+        const linkColorMap = {
+            murder: "#FF1744",
+            innocent: "#FFD700",
+            criminal: "#9C27B0",
+            love: "#FFD700",
+            help: "#00BCD4",
+            conflict: "#FF6F00"
+        };
+
+        // Create SVG
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        const svg = d3.select("#container")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        // Create arrow markers
+        svg.append("defs").selectAll("marker")
+            .data(Object.keys(linkColorMap))
+            .enter().append("marker")
+            .attr("id", d => `arrow-${d}`)
+            .attr("viewBox", "0 -5 10 10")
+            .attr("refX", 25)
+            .attr("refY", 0)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M0,-5L10,0L0,5")
+            .attr("fill", d => linkColorMap[d]);
+
+        // Create links
+        const link = svg.append("g")
+            .selectAll("path")
+            .data(links)
+            .enter().append("path")
+            .attr("class", "link")
+            .attr("stroke", d => linkColorMap[d.type])
+            .attr("stroke-width", d => d.type === "murder" ? 3 : 2)
+            .attr("marker-end", d => `url(#arrow-${d.type})`)
+            .attr("d", d => {
+                const source = nodes.find(n => n.id === d.source);
+                const target = nodes.find(n => n.id === d.target);
+                const dx = target.x - source.x;
+                const dy = target.y - source.y;
+                const dr = Math.sqrt(dx * dx + dy * dy) * 0.5;
+                return `M${source.x},${source.y}A${dr},${dr} 0 0,1 ${target.x},${target.y}`;
+            });
+
+        // Create link labels
+        const linkLabels = svg.append("g")
+            .selectAll("text")
+            .data(links)
+            .enter().append("text")
+            .attr("class", "link-label")
+            .attr("x", d => {
+                const source = nodes.find(n => n.id === d.source);
+                const target = nodes.find(n => n.id === d.target);
+                return (source.x + target.x) / 2;
+            })
+            .attr("y", d => {
+                const source = nodes.find(n => n.id === d.source);
+                const target = nodes.find(n => n.id === d.target);
+                return (source.y + target.y) / 2 - 5;
+            })
+            .text(d => d.label);
+
+        // Create node groups
+        const node = svg.append("g")
+            .selectAll("g")
+            .data(nodes)
+            .enter().append("g")
+            .attr("transform", d => `translate(${d.x},${d.y})`);
+
+        // Add glow effect for important nodes
+        node.filter(d => ["victim", "protagonists", "mastermind"].includes(d.type))
+            .append("circle")
+            .attr("r", 45)
+            .attr("fill", d => colorMap[d.type])
+            .attr("opacity", 0.3)
+            .attr("class", "glow");
+
+        // Add main node circles
+        node.append("circle")
+            .attr("class", "node")
+            .attr("r", 35)
+            .attr("fill", d => colorMap[d.type])
+            .attr("stroke", "white")
+            .attr("stroke-width", 3)
+            .on("mouseover", function(event, d) {
+                d3.select("#tooltip")
+                    .style("display", "block")
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 10) + "px")
+                    .html(`<strong>${d.name}</strong><br>${d.subtitle}<br>Type: ${d.type}`);
+            })
+            .on("mouseout", function() {
+                d3.select("#tooltip").style("display", "none");
+            });
+
+        // Add emoji
+        node.append("text")
+            .attr("class", "node-label")
+            .attr("y", -5)
+            .style("font-size", "20px")
+            .text(d => d.emoji);
+
+        // Add name
+        node.append("text")
+            .attr("class", "node-label")
+            .attr("y", 10)
+            .style("font-size", "10px")
+            .text(d => d.name);
+
+        // Add subtitle
+        node.append("text")
+            .attr("class", "node-label")
+            .attr("y", 22)
+            .style("font-size", "8px")
+            .style("fill", "#aaa")
+            .text(d => d.subtitle);
+
+        // Make nodes draggable
+        const drag = d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended);
+
+        node.call(drag);
+
+        function dragstarted(event, d) {
+            d3.select(this).raise().attr("stroke", "yellow");
+        }
+
+        function dragged(event, d) {
+            d.x = event.x;
+            d.y = event.y;
+            d3.select(this).attr("transform", `translate(${d.x},${d.y})`);
+            
+            // Update links
+            link.attr("d", linkData => {
+                const source = nodes.find(n => n.id === linkData.source);
+                const target = nodes.find(n => n.id === linkData.target);
+                const dx = target.x - source.x;
+                const dy = target.y - source.y;
+                const dr = Math.sqrt(dx * dx + dy * dy) * 0.5;
+                return `M${source.x},${source.y}A${dr},${dr} 0 0,1 ${target.x},${target.y}`;
+            });
+            
+            // Update link labels
+            linkLabels
+                .attr("x", linkData => {
+                    const source = nodes.find(n => n.id === linkData.source);
+                    const target = nodes.find(n => n.id === linkData.target);
+                    return (source.x + target.x) / 2;
+                })
+                .attr("y", linkData => {
+                    const source = nodes.find(n => n.id === linkData.source);
+                    const target = nodes.find(n => n.id === linkData.target);
+                    return (source.y + target.y) / 2 - 5;
+                });
+        }
+
+        function dragended(event, d) {
+            d3.select(this).attr("stroke", null);
+        }
+
+        // Add zoom functionality
+        const zoom = d3.zoom()
+            .scaleExtent([0.5, 3])
+            .on("zoom", (event) => {
+                svg.selectAll("g").attr("transform", event.transform);
+                svg.selectAll("path").attr("transform", event.transform);
+            });
+
+        d3.select("svg").call(zoom);
+    </script>
+</body>
+</html>
