@@ -199,16 +199,24 @@ credentials.json
 
 # ===== Project-Specific =====
 # CogRepo large data files
-cogrepo/COGREPO_FINAL_*/
-cogrepo/**/*.jsonl
-cogrepo/**/*.parquet
-cogrepo/**/*.index
+*/cogrepo/data/*.jsonl
+*/cogrepo/data/*.parquet
+*/cogrepo/data/*.index
+
+# Comedy Writers Analysis data
+*/comedy-writers-analysis/*.csv
+*/comedy-writers-analysis/*.xlsx
+*/comedy-writers-analysis/data/
+*/comedy-writers-analysis/modern_magic_etl/
+
+# Roam Graph Analysis data
+*/roam-graph-analysis/*.msgpack
+*/roam-graph-analysis/*.txt
 
 # But keep the structure and small files
-!cogrepo/COGREPO_FINAL_*/.gitkeep
-!cogrepo/**/README.md
-!cogrepo/**/*.py
-!cogrepo/**/package.json
+!**/README.md
+!**/*.py
+!**/package.json
 
 # Family travel analysis data
 family-travel-analysis/data/*.json
