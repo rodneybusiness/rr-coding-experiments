@@ -1,0 +1,60 @@
+version: 1.3.0
+generated:
+  date: "2025-08-30"
+  authors:
+    - "Rodney Rothman (Modern Magic) — taxonomy owner"
+    - "Drafting assistant: GPT-5 Pro"
+  notes: >
+    Lifecycle is expressed as phases; each has a single DRI (sub-area code).
+    Phase names may change but IDs remain stable. DISCOVER is named 'Origin' to match mental model.
+    G_ORIGIN_APPROVED supersedes G_DEV_APPROVED (kept as legacy alias).
+
+phases:
+  - id: DISCOVER
+    name: "Origin (Talent/Idea Scouting & Vetting)"
+    dri: CP-ORIG
+    partners: [TA-DISCOVER, BP-NET, SOL-LEGAL]
+    exit_gate: G_ORIGIN_APPROVED
+    legacy_exit_gates: [G_DEV_APPROVED]
+    evidence_required:
+      - "Origination brief (concept, audience/fit thesis)"
+      - "Talent match confirmed (creator/team/partner)"
+      - "Rights availability or option viability"
+
+  - id: DEV
+    name: "Creative Development"
+    dri: CP-DEV
+    partners: [TP-RND, TA-CAST]
+    exit_gate: G_GREENLIGHT
+    evidence_required:
+      - "Creative lock (brief/script v1)"
+      - "Initial budget & schedule"
+      - "Lead(s) attached"
+      - "Financing path identified (Feeder or Typical)"
+
+  - id: DEALS
+    name: "Project Financing & Distribution"
+    dri: FIN-PROJ
+    co_dri: BP-DEALS
+    partners: [SOL-LEGAL, SOL-ENTITY]
+    exit_gate: G_FUNDED
+    evidence_required:
+      - "Funds committed / facility documented"
+      - "Distribution window/route committed"
+      - "LLC/SPV formed"
+
+  - id: PROD
+    name: "Production"
+    dri: CP-PROD
+    partners: [TP-OPS, TP-RND]
+    exit_gate: G_DELIVERED
+    evidence_required:
+      - "Contractual delivery achieved (episode/film/trailer/assets)"
+
+  - id: RELEASE
+    name: "Release & Growth"
+    dri: MC-COMMUNITY
+    partners: [MC-MKT, MC-BRAND, TP-DATA, FIN-CORP]
+    exit_gate: G_POST_EVAL
+    evidence_required:
+      - "30–90d KPI review and Tier decision (Kill/Prove/Scale/Franchise)"

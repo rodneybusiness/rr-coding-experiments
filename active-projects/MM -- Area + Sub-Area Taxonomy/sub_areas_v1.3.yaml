@@ -1,0 +1,216 @@
+version: 1.3.0
+generated:
+  date: "2025-08-30"
+  authors:
+    - "Rodney Rothman (Modern Magic) — taxonomy owner"
+    - "Drafting assistant: GPT-5 Pro"
+  notes: >
+    Sub-areas reference parent Areas by 'parent'. `owns` provides one-line scope.
+    `exclusions` are hard boundaries to prevent overlap. `dri_in_phases` indicates
+    lifecycle ownership (see phases.yaml).
+
+sub_areas:
+  # Creative Projects
+  - id: CP-ORIG
+    code: CP-ORIG
+    name: "Creative Origination & Vetting"
+    parent: CREATIVE_PROJECTS
+    owns: "Incoming/outbound pitches, internal concept generation, editorial pairing/matching of ideas with talent; prepares the origination brief"
+    exclusions: ["People pipeline (TA-DISCOVER)", "Partner network negotiations (BP-NET)", "Final option execution (SOL-LEGAL)"]
+    dri_in_phases: ["DISCOVER"]
+  - id: CP-DEV
+    code: CP-DEV
+    name: "Dev Slate (Pre-Greenlight)"
+    parent: CREATIVE_PROJECTS
+    owns: "Turn the selected concept/team into a greenlight-ready package (brief/script, budget/schedule v1, leads attached, financing path)"
+    exclusions: ["People pipeline (TA-DISCOVER)", "Campaign execution (MC)", "Partner sourcing (BP-NET)", "Final contracts (SOL-LEGAL)"]
+    dri_in_phases: ["DEV"]
+  - id: CP-PROD
+    code: CP-PROD
+    name: "Production Slate (Greenlit/Active)"
+    parent: CREATIVE_PROJECTS
+    owns: "Delivery of greenlit titles (production through post)"
+    exclusions: ["Financing (FIN-PROJ)", "Distribution/JV (BP-DEALS)", "Brand/comms (MC)"]
+    dri_in_phases: ["PROD"]
+
+  # Technology & Pipeline
+  - id: TP-RND
+    code: TP-RND
+    name: "Look-Dev & Pipeline R&D"
+    parent: TECHNOLOGY_AND_PIPELINE
+    owns: "New stylization, tools, and AI experiments to be validated for shows"
+    exclusions: ["Show ops (TP-OPS)", "Audience telemetry (TP-DATA)"]
+    dri_in_phases: []
+  - id: TP-OPS
+    code: TP-OPS
+    name: "Production Tech & Pipeline Ops"
+    parent: TECHNOLOGY_AND_PIPELINE
+    owns: "Show-level pipeline integration, render, DCC support"
+    exclusions: ["Strategic R&D (TP-RND)", "Campaign analytics (TP-DATA)"]
+    dri_in_phases: []
+  - id: TP-DATA
+    code: TP-DATA
+    name: "Growth Data & Instrumentation"
+    parent: TECHNOLOGY_AND_PIPELINE
+    owns: "Instrumentation across YT/TikTok/Discord/shop; KPI dashboards and experiment flags"
+    exclusions: ["Creative notes (CP-*)", "Deal terms (BP-*)"]
+    dri_in_phases: ["RELEASE"]
+
+  # Talent & Casting
+  - id: TA-DISCOVER
+    code: TA-DISCOVER
+    name: "Creator Discovery & Outreach"
+    parent: TALENT_AND_CASTING
+    owns: "Sourcing creators (writers/directors/artists), rosters, outreach, inbound triage by person"
+    exclusions: ["Concept vetting/pairing (CP-ORIG)", "Casting for specific roles (TA-CAST)"]
+    dri_in_phases: []
+  - id: TA-CAST
+    code: TA-CAST
+    name: "Casting & Voice Talent"
+    parent: TALENT_AND_CASTING
+    owns: "Casting process, availabilities, offers for voice and performance"
+    exclusions: ["Studio hiring (TA-HIRING)"]
+    dri_in_phases: []
+  - id: TA-HIRING
+    code: TA-HIRING
+    name: "Studio Hiring & Recruitment"
+    parent: TALENT_AND_CASTING
+    owns: "Reqs, pipelines, interviews, offers for internal roles"
+    exclusions: ["Casting (TA-CAST)"]
+    dri_in_phases: []
+
+  # People & Culture
+  - id: PC-DEV
+    code: PC-DEV
+    name: "Team Growth & Development"
+    parent: PEOPLE_AND_CULTURE
+    owns: "Leveling, learning programs, feedback cycles"
+    exclusions: []
+    dri_in_phases: []
+  - id: PC-CULTURE
+    code: PC-CULTURE
+    name: "Culture & Rituals"
+    parent: PEOPLE_AND_CULTURE
+    owns: "Norms, rituals, internal communications, engagement"
+    exclusions: []
+    dri_in_phases: []
+  - id: PC-PEOPLEOPS
+    code: PC-PEOPLEOPS
+    name: "HR & People Ops"
+    parent: PEOPLE_AND_CULTURE
+    owns: "Policies, onboarding, compensation process administration"
+    exclusions: ["Securities compliance (SOL-COMPLIANCE)"]
+    dri_in_phases: []
+
+  # Business & Partnerships
+  - id: BP-NET
+    code: BP-NET
+    name: "Network/Anchor Partner Portfolio"
+    parent: BUSINESS_AND_PARTNERSHIPS
+    owns: "Amplifier & anchor partner deals at portfolio-level and project network slot"
+    exclusions: ["Campaign execution (MC-*)", "Casting/hiring (TA-*)"]
+    dri_in_phases: []
+  - id: BP-BIZDEV
+    code: BP-BIZDEV
+    name: "Strategic Partners (Non-title)"
+    parent: BUSINESS_AND_PARTNERSHIPS
+    owns: "Non-title partner origination and relationship development"
+    exclusions: []
+    dri_in_phases: []
+  - id: BP-DEALS
+    code: BP-DEALS
+    name: "Distribution / JV / Co-Pro / Licensing"
+    parent: BUSINESS_AND_PARTNERSHIPS
+    owns: "Title/portfolio deals, rights windows, licensing structures"
+    exclusions: ["Final legal language (SOL-LEGAL)"]
+    dri_in_phases: ["DEALS"]
+  - id: BP-STRAT
+    code: BP-STRAT
+    name: "Company & Portfolio Strategy"
+    parent: BUSINESS_AND_PARTNERSHIPS
+    owns: "Market bets, slate architecture, international footprint"
+    exclusions: []
+    dri_in_phases: []
+
+  # Finance
+  - id: FIN-FUND
+    code: FIN-FUND
+    name: "Fund & Portfolio Finance"
+    parent: FINANCE
+    owns: "$25M fund accounting, waterfalls, SPV/LLC capitalization, investor reporting"
+    exclusions: ["Project budgets (FIN-PROJ)"]
+    dri_in_phases: []
+  - id: FIN-CORP
+    code: FIN-CORP
+    name: "Corporate Finance & FP&A"
+    parent: FINANCE
+    owns: "Corporate budgets, runway, reporting"
+    exclusions: ["Fund finance (FIN-FUND)", "Project financing (FIN-PROJ)"]
+    dri_in_phases: []
+  - id: FIN-PROJ
+    code: FIN-PROJ
+    name: "Project Financing"
+    parent: FINANCE
+    owns: "Title budgets, tax credits, loans, equity, cash-flow facilities"
+    exclusions: ["Distribution/licensing terms (BP-DEALS)"]
+    dri_in_phases: ["DEALS"]
+  - id: FIN-IR
+    code: FIN-IR
+    name: "Investor Relations"
+    parent: FINANCE
+    owns: "Investor updates, board materials, fundraising"
+    exclusions: []
+    dri_in_phases: []
+
+  # Studio Ops & Legal
+  - id: SOL-OPS
+    code: SOL-OPS
+    name: "Studio Operations & PMO"
+    parent: STUDIO_OPS_AND_LEGAL
+    owns: "Facilities, IT, SOPs, project management standards"
+    exclusions: []
+    dri_in_phases: []
+  - id: SOL-LEGAL
+    code: SOL-LEGAL
+    name: "Legal & Rights"
+    parent: STUDIO_OPS_AND_LEGAL
+    owns: "Options, agreements, chain of title, rights management"
+    exclusions: ["Securities/regulatory compliance (SOL-COMPLIANCE)", "Entity setup (SOL-ENTITY)"]
+    dri_in_phases: ["DEALS"]
+  - id: SOL-COMPLIANCE
+    code: SOL-COMPLIANCE
+    name: "Governance & Securities Compliance"
+    parent: STUDIO_OPS_AND_LEGAL
+    owns: "Reg D/blue-sky, privacy, labor, security compliance"
+    exclusions: []
+    dri_in_phases: []
+  - id: SOL-ENTITY
+    code: SOL-ENTITY
+    name: "Entity & Rights Management"
+    parent: STUDIO_OPS_AND_LEGAL
+    owns: "LLC/SPV formation, cap tables, EINs, rights registry"
+    exclusions: ["Contract lawyering (SOL-LEGAL)"]
+    dri_in_phases: ["DEALS"]
+
+  # Marketing & Community
+  - id: MC-MKT
+    code: MC-MKT
+    name: "Marketing & Publicity"
+    parent: MARKETING_AND_COMMUNITY
+    owns: "Campaigns, assets, press"
+    exclusions: ["Partner dealmaking (BP-*)", "KPI instrumentation (TP-DATA)"]
+    dri_in_phases: ["RELEASE"]
+  - id: MC-BRAND
+    code: MC-BRAND
+    name: "Brand & Communications"
+    parent: MARKETING_AND_COMMUNITY
+    owns: "Brand system, site, social voice, comms"
+    exclusions: []
+    dri_in_phases: ["RELEASE"]
+  - id: MC-COMMUNITY
+    code: MC-COMMUNITY
+    name: "Audience & Community"
+    parent: MARKETING_AND_COMMUNITY
+    owns: "Discord/newsletter/programming, UGC amplification, micro-influencer ops"
+    exclusions: ["Partner negotiations (BP-*)"]
+    dri_in_phases: ["RELEASE"]
