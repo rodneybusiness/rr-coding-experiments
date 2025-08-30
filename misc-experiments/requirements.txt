@@ -1,5 +1,0 @@
-# Miscellaneous Experiments Requirements
-# Currently contains only static files and web bookmarks
-
-# No Python dependencies at this time
-# No pip install needed for this project
