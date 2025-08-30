@@ -1,0 +1,24 @@
+name: README Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  readme-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Check for README files
+      run: |
+        # Check that each project directory has a README
+        find . -mindepth 2 -maxdepth 2 -type d ! -path "./.git/*" ! -path "./.github/*" -exec test ! -f {}/README.md \; -print | tee missing_readmes.txt
+        if [ -s missing_readmes.txt ]; then
+          echo "Missing README files in:"
+          cat missing_readmes.txt
+          exit 1
+        else
+          echo "All project directories have README files ✓"
+        fi
