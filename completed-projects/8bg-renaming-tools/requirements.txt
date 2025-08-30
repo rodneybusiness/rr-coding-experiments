@@ -1,0 +1,10 @@
+# 8BG Renaming Tools Requirements
+
+# Python dependencies (for rename_8bg_files.py)
+# Standard library only - no external packages required
+
+# Shell script dependencies:
+# - bash (standard on macOS/Linux)
+# - common Unix utilities (mv, cp, find, grep, etc.)
+
+# No pip install needed for this project
