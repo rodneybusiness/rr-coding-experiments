@@ -9,7 +9,10 @@ This repository contains various coding projects and experiments, ranging from c
 ### 🎬 [8BG Renaming Tools](./8bg-renaming-tools/)
 A universal file naming system for creative projects. Originally developed for film production, now applicable to any collaborative creative work. Solves the chaos of version control in creative industries.
 
-### 🧠 [CogRepo](./cogrepo/)
+### 🏢 [MM Area + Sub-Area Taxonomy](./active-projects/MM%20--%20Area%20+%20Sub-Area%20Taxonomy/)
+Modern Magic's canonical 8-area organizational taxonomy with lifecycle phases. Features GitHub→Notion sync, stable IDs, and clear DRI assignments for project lifecycle management.
+
+### 🧠 [CogRepo](./active-projects/cogrepo/)
 Transform LLM conversations into a searchable knowledge base. Captures, indexes, and analyzes AI chat history to extract insights, patterns, and strategic opportunities from thousands of conversations.
 
 ### ✈️ [Family Travel Analysis](./family-travel-analysis/)

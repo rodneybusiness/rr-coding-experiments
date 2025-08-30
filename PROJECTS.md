@@ -44,12 +44,13 @@ This document catalogs all projects in the RR Coding Experiments repository.
 - **Dependencies**: Node.js
 - **Last Modified**: 2025-08-30
 
-### modern-magic-taxonomy
-- **Location**: `active-projects/modern-magic-taxonomy/`
+### MM -- Area + Sub-Area Taxonomy
+- **Location**: `active-projects/MM -- Area + Sub-Area Taxonomy/`
 - **Original Source**: `/Users/newuser/Downloads/1. Organized/1_Business/Financial_Work/` and Research_Data
-- **Status**: Active development
-- **Description**: Business taxonomy system for Modern Magic: Areas/Sub-Areas and Role classifications
-- **Dependencies**: CSV processing tools
+- **Status**: Active development - **v1.3.0 with lifecycle phases**
+- **Description**: Modern Magic's canonical 8-area organizational taxonomy with lifecycle phases, DRI assignments, and GitHub→Notion sync capability
+- **Dependencies**: Python, YAML processing, Notion API
+- **Current Branch**: `new-model-updates`
 - **Last Modified**: 2025-08-30
 
 ### roam-graph-analysis
