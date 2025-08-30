@@ -1,0 +1,13 @@
+mm-taxonomy/
+  README.md
+  schema/
+    areas.yaml
+    sub_areas.yaml
+  mapping/
+    notion_mapping.yaml
+  scripts/
+    validate.py
+    sync_notion.py
+  requirements.txt
+  .github/workflows/
+    sync.yml

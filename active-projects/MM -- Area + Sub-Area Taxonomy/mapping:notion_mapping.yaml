@@ -1,0 +1,43 @@
+# Notion Database Configuration for GitHub Taxonomy Sync
+# Updated with correct database IDs and property names
+
+notion_api_version: "2022-06-28"
+
+# Modern Magic Projects Database
+projects:
+  database_id: "d77885f1faa9412fb937d3a6ce913f9f"  # Correct ID (removed view parameters)
+  area_property: "Company Area"  # Relation to Pillars database
+  subarea_property: "Company Sub-Area"  # Relation to Pillars database sub-area/child (projects need these links created
+
+# Pillars Database (Company Areas)
+pillars:
+  database_id: "ef479ea3dd6d4ab8b4569032a9fa43c9"  # Correct ID
+  subarea_property: "Sub-Area"  # Relation to same database (parent/child hierarchy)
+  pillar_property: "Pillar"  # Title property
+  pillar_group_property: "Pillar Group"  # Multi-select with: Home & Social, Growth, Modern Magic, Personal Work
+  parent_pillar_property: "Parent Pillar"  # Relation to same database (for hierarchy)
+  status_property: "Status"  # Select: Active, Paused, Inactive, Archived
+
+# MM Outcome Goals Database
+# Note: This database (a67deff8-2fe5-4839-a846-43b90c9b7046) appears to be referenced 
+# but may not be shared with your integration or may need different access permissions
+goals:
+  database_id: "a67deff82fe548398a8643b90c9b7046"  # Referenced in Pillars as "MM Outcome Goals"
+  area_property: "MM Area"  # Likely property name based on project structure
+  pillar_property: "Pillars"  # Relation to Pillars database
+
+# Personal Outcome Goals Database (if separate)
+personal_goals:
+  database_id: "e8835b66-0a63-48d6-b615-488b1895a41b"  # "Outcome Goals🔗" from Pillars
+  area_property: "Area"  # Property name
+  pillar_property: "Pillars"  # Relation to Pillars
+
+# Taxonomy Database (Optional - for dedicated taxonomy tracking)
+# Note: No dedicated taxonomy database was found in your workspace
+# You may want to create one or use the Pillars database for taxonomy
+taxonomy:
+  database_id: "YOUR_NOTION_TAXONOMY_DB_ID"  # Create if needed
+  name_property: "Name"  # Title property
+  type_property: "Type"  # Select: "Area" or "Sub-Area"
+  code_property: "Code"  # Text property for area codes
+  parent_property: "Parent"  # Relation to same DB (for sub-areas)

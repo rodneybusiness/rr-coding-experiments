@@ -1,0 +1,15 @@
+# Each sub-area references a parent Area by id
+- id: LOOKDEV_PIPELINE
+  parent: TECHNOLOGY_AND_PIPELINE
+  name: Look-Dev & Pipeline R&D
+  sort: 10
+
+- id: CREATOR_DISCOVERY
+  parent: TALENT_AND_CASTING
+  name: Creator Discovery
+  sort: 10
+
+- id: DISTRIBUTION_DEALS
+  parent: BUSINESS_AND_PARTNERSHIPS
+  name: Distribution & JV/Co-Pro Deals
+  sort: 10

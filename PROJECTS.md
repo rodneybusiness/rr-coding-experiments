@@ -6,10 +6,18 @@ This document catalogs all projects in the RR Coding Experiments repository.
 
 ### anime-directors-analysis
 - **Location**: `active-projects/anime-directors-analysis/`
-- **Original Source**: Existing in main repo
+- **Original Source**: Existing in main repo (separate repo archived)
 - **Status**: Active development
 - **Description**: Analysis and visualization of anime directors with Streamlit dashboard
 - **Dependencies**: Python, Streamlit, data analysis libraries
+- **Last Modified**: 2025-08-30
+
+### 8bg-renaming-tools
+- **Location**: `active-projects/8bg-renaming-tools/`
+- **Original Source**: Existing in main repo
+- **Status**: Active development
+- **Description**: Batch file renaming utilities with convention guides
+- **Dependencies**: Bash, Python
 - **Last Modified**: 2025-08-30
 
 ### cogrepo
@@ -36,6 +44,14 @@ This document catalogs all projects in the RR Coding Experiments repository.
 - **Dependencies**: Node.js
 - **Last Modified**: 2025-08-30
 
+### modern-magic-taxonomy
+- **Location**: `active-projects/modern-magic-taxonomy/`
+- **Original Source**: `/Users/newuser/Downloads/1. Organized/1_Business/Financial_Work/` and Research_Data
+- **Status**: Active development
+- **Description**: Business taxonomy system for Modern Magic: Areas/Sub-Areas and Role classifications
+- **Dependencies**: CSV processing tools
+- **Last Modified**: 2025-08-30
+
 ### roam-graph-analysis
 - **Location**: `active-projects/roam-graph-analysis/`
 - **Original Source**: `/Users/newuser/Dropbox/***Documents/Code-Projects/Roam-Graph-Analysis`
@@ -44,29 +60,21 @@ This document catalogs all projects in the RR Coding Experiments repository.
 - **Dependencies**: Python
 - **Last Modified**: 2025-08-30
 
-## Completed Projects
-
-### 8bg-renaming-tools
-- **Location**: `completed-projects/8bg-renaming-tools/`
+### zombie-quest
+- **Location**: `active-projects/zombie-quest/`
 - **Original Source**: Existing in main repo
-- **Status**: Completed
-- **Description**: Batch file renaming utilities with convention guides
-- **Dependencies**: Bash, Python
-- **Last Modified**: 2025-08-30
-
-### family-travel-analysis
-- **Location**: `completed-projects/family-travel-analysis/`
-- **Original Source**: Existing in main repo
-- **Status**: Completed
-- **Description**: Travel analytics and reporting system
+- **Status**: Active development
+- **Description**: Interactive game implementation
 - **Dependencies**: Python
 - **Last Modified**: 2025-08-30
 
-### zombie-quest
-- **Location**: `completed-projects/zombie-quest/`
+## Archived Projects (Internal)
+
+### family-travel-analysis
+- **Location**: `archived-projects-internal/family-travel-analysis/`
 - **Original Source**: Existing in main repo
-- **Status**: Completed
-- **Description**: Interactive game implementation
+- **Status**: Archived (completed)
+- **Description**: Travel analytics and reporting system
 - **Dependencies**: Python
 - **Last Modified**: 2025-08-30
 
@@ -119,5 +127,10 @@ This document catalogs all projects in the RR Coding Experiments repository.
 ---
 
 **Repository Consolidation Date**: August 30, 2025  
-**Total Projects**: 11  
+**Total Projects**: 12 (8 active, 1 internal archive, 3 external archives)  
 **GitHub Repository**: https://github.com/rodneybusiness/rr-coding-experiments
+
+## Notes
+- Separate `anime-directors-analysis` repo archived (consolidated version is more recent)
+- Modern Magic taxonomy projects added from Downloads/Business folders
+- 8bg-renaming-tools and zombie-quest moved to active (per user feedback)

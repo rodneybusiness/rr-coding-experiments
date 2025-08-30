@@ -1,0 +1,41 @@
+# Each Area is a top-level pillar (stable IDs; names can change)
+- id: CREATIVE_PROJECTS
+  name: Creative Projects
+  code: CP
+  status: active
+  sort: 10
+- id: TECHNOLOGY_AND_PIPELINE
+  name: Technology & Pipeline
+  code: TP
+  status: active
+  sort: 20
+- id: TALENT_AND_CASTING
+  name: Talent Acquisition & Casting
+  code: TC
+  status: active
+  sort: 30
+- id: PEOPLE_AND_CULTURE
+  name: People & Culture
+  code: PC
+  status: active
+  sort: 40
+- id: BUSINESS_AND_PARTNERSHIPS
+  name: Business & Partnerships
+  code: BP
+  status: active
+  sort: 50
+- id: FINANCE
+  name: Finance
+  code: FIN
+  status: active
+  sort: 60
+- id: STUDIO_OPS_AND_LEGAL
+  name: Studio Ops & Legal
+  code: SOL
+  status: active
+  sort: 70
+- id: MARKETING_AND_COMMUNITY
+  name: Marketing & Community
+  code: MC
+  status: active
+  sort: 80
