@@ -1,0 +1,13 @@
+{
+  "name": "custom-mcp-server",
+  "version": "1.0.0",
+  "description": "Custom MCP server with think tool",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "latest"
+  }
+}
