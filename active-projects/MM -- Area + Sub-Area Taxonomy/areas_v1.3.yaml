@@ -1,0 +1,58 @@
+version: 1.3.0
+generated:
+  date: "2025-08-30"
+  authors:
+    - "Rodney Rothman (Modern Magic) — taxonomy owner"
+    - "Drafting assistant: GPT-5 Pro"
+  notes: >
+    Canonical 8 Areas for Modern Magic. Sub-areas are defined in sub_areas.yaml.
+    IDs are stable; names may change; codes are used in analytics and Notion/Select options.
+areas:
+  - id: CREATIVE_PROJECTS
+    code: CP
+    name: "Creative Projects"
+    status: active
+    sort: 10
+    description: "Owns creative origination/vetting, title development, and production lifecycle (DRI for ORIGIN and PROD phases)."
+  - id: TECHNOLOGY_AND_PIPELINE
+    code: TP
+    name: "Technology & Pipeline"
+    status: active
+    sort: 20
+    description: "Owns look-dev & pipeline R&D, show pipeline ops, and growth data instrumentation."
+  - id: TALENT_AND_CASTING
+    code: TA
+    name: "Talent Acquisition & Casting"
+    status: active
+    sort: 30
+    description: "Owns creator discovery, casting/voice, and studio recruitment (people pipeline)."
+  - id: PEOPLE_AND_CULTURE
+    code: PC
+    name: "People & Culture"
+    status: active
+    sort: 40
+    description: "Owns team development, culture/rituals, and HR/people operations."
+  - id: BUSINESS_AND_PARTNERSHIPS
+    code: BP
+    name: "Business & Partnerships"
+    status: active
+    sort: 50
+    description: "Owns partner origination, network/anchor relationships, distribution/JV/licensing, and portfolio strategy."
+  - id: FINANCE
+    code: FIN
+    name: "Finance"
+    status: active
+    sort: 60
+    description: "Owns fund finance, corporate FP&A, project financing, and investor relations."
+  - id: STUDIO_OPS_AND_LEGAL
+    code: SOL
+    name: "Studio Ops & Legal"
+    status: active
+    sort: 70
+    description: "Owns studio operations/PMO, legal/contracts/rights, compliance, and entity/cap-table management."
+  - id: MARKETING_AND_COMMUNITY
+    code: MC
+    name: "Marketing & Community"
+    status: active
+    sort: 80
+    description: "Owns brand/comms, marketing/publicity, and audience/community programs."
