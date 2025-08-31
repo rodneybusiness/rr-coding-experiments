@@ -4,6 +4,14 @@ This document catalogs all projects in the RR Coding Experiments repository.
 
 ## Active Projects
 
+### Index Cards Project (2025)
+- **Location**: `active-projects/Index Cards Project (2025)/`
+- **Original Source**: `/Users/newuser/Desktop/Index Cards Project (2025)`
+- **Status**: Active development
+- **Description**: Tools for creating and managing index card sets for RemNote and Anki.
+- **Dependencies**: TBD
+- **Last Modified**: 2025-08-31
+
 ### anime-directors-analysis
 - **Location**: `active-projects/anime-directors-analysis/`
 - **Original Source**: Existing in main repo (separate repo archived)
@@ -128,7 +136,7 @@ This document catalogs all projects in the RR Coding Experiments repository.
 ---
 
 **Repository Consolidation Date**: August 30, 2025  
-**Total Projects**: 12 (8 active, 1 internal archive, 3 external archives)  
+**Total Projects**: 13 (9 active, 1 internal archive, 3 external archives)
 **GitHub Repository**: https://github.com/rodneybusiness/rr-coding-experiments
 
 ## Notes
