@@ -22,6 +22,7 @@ import {
   DollarSign,
   Percent,
   TrendingDown,
+  AlertCircle,
 } from 'lucide-react';
 import { formatCurrency, formatPercentage } from '@/lib/utils';
 import {
@@ -146,6 +147,18 @@ export default function WaterfallPage() {
             </CardContent>
           </Card>
 
+          {/* Error Display */}
+          {error && (
+            <Card className="border-red-300 bg-red-50">
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-2 text-red-700">
+                  <AlertCircle className="h-5 w-5" />
+                  <p className="font-semibold">{error}</p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {results && (
             <Card className="bg-gradient-to-br from-green-500 to-emerald-600 text-white">
               <CardHeader>
@@ -228,7 +241,16 @@ export default function WaterfallPage() {
                   </CardHeader>
                   <CardContent>
                     <ResponsiveContainer width="100%" height={400}>
-                      <BarChart data={results.distribution_timeline}>
+                      <BarChart
+                        data={results.distribution_timeline.map((qt) => ({
+                          quarter: qt.quarter,
+                          senior: Number(qt.distributions['senior-debt'] || 0),
+                          gap: Number(qt.distributions['gap-financing'] || 0),
+                          mezzanine: Number(qt.distributions['mezzanine'] || 0),
+                          equity: Number(qt.distributions['equity'] || 0),
+                          backend: Number(qt.distributions['backend'] || 0),
+                        }))}
+                      >
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="quarter" />
                         <YAxis
@@ -242,6 +264,7 @@ export default function WaterfallPage() {
                         <Legend />
                         <Bar dataKey="senior" name="Senior Debt" fill="#3b82f6" stackId="a" />
                         <Bar dataKey="gap" name="Gap Financing" fill="#8b5cf6" stackId="a" />
+                        <Bar dataKey="mezzanine" name="Mezzanine" fill="#a78bfa" stackId="a" />
                         <Bar dataKey="equity" name="Equity" fill="#10b981" stackId="a" />
                         <Bar dataKey="backend" name="Backend" fill="#f59e0b" stackId="a" />
                       </BarChart>
