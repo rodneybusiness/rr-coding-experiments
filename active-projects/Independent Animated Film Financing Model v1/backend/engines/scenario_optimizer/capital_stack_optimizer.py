@@ -593,10 +593,10 @@ class CapitalStackOptimizer:
             elif inst_type == PreSale:
                 instrument = PreSale(
                     amount=amount,
-                    buyer_name=template_inst.buyer_name,
                     territory=template_inst.territory,
-                    rights_term_years=template_inst.rights_term_years,
-                    discount_rate=template_inst.discount_rate
+                    rights_description=template_inst.rights_description,
+                    mg_amount=amount,
+                    payment_on_delivery=template_inst.payment_on_delivery
                 )
             elif inst_type == TaxIncentive:
                 # Recalculate qualified spend based on new amount
@@ -689,10 +689,10 @@ class CapitalStackOptimizer:
             elif inst_type == PreSale:
                 instrument = PreSale(
                     amount=new_amount,
-                    buyer_name=template_inst.buyer_name,
                     territory=template_inst.territory,
-                    rights_term_years=template_inst.rights_term_years,
-                    discount_rate=template_inst.discount_rate
+                    rights_description=template_inst.rights_description,
+                    mg_amount=new_amount,
+                    payment_on_delivery=template_inst.payment_on_delivery
                 )
             elif inst_type == TaxIncentive:
                 qualified_spend = new_amount / (template_inst.credit_rate / Decimal("100"))

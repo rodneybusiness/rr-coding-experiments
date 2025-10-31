@@ -100,6 +100,7 @@ class Debt(FinancialInstrument):
 
     # Interest and fees
     interest_rate: Decimal = Field(..., ge=0, description="Annual interest rate %")
+    term_months: int = Field(default=24, gt=0, description="Loan term in months")
     origination_fee_percentage: Decimal = Field(default=Decimal("0"), ge=0, description="Upfront fee %")
     commitment_fee_percentage: Decimal = Field(default=Decimal("0"), ge=0, description="Commitment fee %")
 

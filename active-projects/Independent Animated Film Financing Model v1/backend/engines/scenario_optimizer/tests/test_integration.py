@@ -9,7 +9,9 @@ import pytest
 from pathlib import Path
 from decimal import Decimal
 
-from backend.models.waterfall import WaterfallStructure, WaterfallNode, RecoupmentPriority
+from backend.models.waterfall import (
+    WaterfallStructure, WaterfallNode, RecoupmentPriority, PayeeType, RecoupmentBasis
+)
 from backend.models.capital_stack import CapitalStack
 
 from backend.engines.scenario_optimizer import (
@@ -33,32 +35,46 @@ from backend.engines.scenario_optimizer import (
 def sample_waterfall():
     """Create sample waterfall structure for testing."""
     waterfall = WaterfallStructure(
+        waterfall_id="test_waterfall_1",
+        project_id="test_project_1",
         waterfall_name="Test Waterfall",
         default_distribution_fee_rate=Decimal("30.0"),
         nodes=[
             WaterfallNode(
+                node_id="node_1",
                 priority=RecoupmentPriority.SENIOR_DEBT_PRINCIPAL,
-                payee="Senior Lender",
-                amount=Decimal("10000000"),
-                percentage=None
+                description="Senior Debt Recoupment",
+                payee_type=PayeeType.LENDER,
+                payee_name="Senior Lender",
+                recoupment_basis=RecoupmentBasis.GROSS_RECEIPTS,
+                fixed_amount=Decimal("10000000")
             ),
             WaterfallNode(
+                node_id="node_2",
                 priority=RecoupmentPriority.MEZZANINE_DEBT,
-                payee="Mezzanine Lender",
-                amount=Decimal("5000000"),
-                percentage=None
+                description="Mezzanine Debt Recoupment",
+                payee_type=PayeeType.LENDER,
+                payee_name="Mezzanine Lender",
+                recoupment_basis=RecoupmentBasis.REMAINING_POOL,
+                fixed_amount=Decimal("5000000")
             ),
             WaterfallNode(
+                node_id="node_3",
                 priority=RecoupmentPriority.EQUITY_RECOUPMENT,
-                payee="Equity Investors",
-                amount=Decimal("15000000"),
-                percentage=None
+                description="Equity Investment Recoupment",
+                payee_type=PayeeType.INVESTOR,
+                payee_name="Equity Investors",
+                recoupment_basis=RecoupmentBasis.REMAINING_POOL,
+                fixed_amount=Decimal("15000000")
             ),
             WaterfallNode(
+                node_id="node_4",
                 priority=RecoupmentPriority.NET_PROFITS,
-                payee="Equity Investors",
-                amount=None,
-                percentage=Decimal("100.0")
+                description="Net Profit Distribution",
+                payee_type=PayeeType.INVESTOR,
+                payee_name="Equity Investors",
+                recoupment_basis=RecoupmentBasis.REMAINING_POOL,
+                percentage_of_receipts=Decimal("100.0")
             ),
         ]
     )

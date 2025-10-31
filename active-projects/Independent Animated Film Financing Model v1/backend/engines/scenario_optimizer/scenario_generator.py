@@ -166,10 +166,10 @@ class ScenarioGenerator:
 
             presale = PreSale(
                 amount=amount,
-                buyer_name=terms.get("buyer_name", "SVOD Platform"),
                 territory=terms.get("territory", "Worldwide"),
-                rights_term_years=int(terms.get("rights_term", 10)),
-                discount_rate=Decimal(str(terms.get("discount_rate", 15.0)))
+                rights_description=terms.get("rights_description", "All Rights"),
+                mg_amount=amount,  # MG amount equals the amount
+                payment_on_delivery=amount * Decimal("0.8")  # 80% on delivery
             )
             components.append(CapitalComponent(instrument=presale, position=position))
             position += 1
