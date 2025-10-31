@@ -1,0 +1,59 @@
+{
+  "policy_id": "CA-QC-PSTC-2025",
+  "jurisdiction": "Canada - Quebec",
+  "program_name": "Quebec Production Services Tax Credit (PSTC) - Animation Enhanced",
+  "headline_rate": "20.0",
+  "enhanced_rate": "36.0",
+  "incentive_type": "refundable_tax_credit",
+  "qpe_definition": {
+    "included_categories": [
+      "labor_resident",
+      "goods_services_local",
+      "vfx_animation"
+    ],
+    "excludes_financing_costs": true,
+    "excludes_distribution_costs": true,
+    "excludes_completion_bond": true,
+    "excludes_insurance": true,
+    "labor_cap_per_person": null,
+    "minimum_local_labor_percentage": null,
+    "minimum_local_spend_percentage": null,
+    "special_rules": "Base rate of 20% applies to all qualified expenditures (labor + goods/services). Animation productions receive an additional 16% on qualified labor costs specifically. Combined effective rate is 36% on animation labor (20% base + 16% animation uplift). The 20% rate applies to the cost of property and services provided in Quebec; the additional 16% applies only to labor costs related to computer-aided special effects and animation."
+  },
+  "per_project_cap": null,
+  "annual_program_cap": null,
+  "per_applicant_annual_cap": null,
+  "minimum_total_spend": null,
+  "minimum_local_spend": null,
+  "cultural_test": {
+    "requires_cultural_test": false,
+    "test_name": null,
+    "minimum_points_required": null,
+    "total_points_available": null,
+    "points_for_setting": null,
+    "points_for_characters": null,
+    "points_for_production": null,
+    "test_details_url": null
+  },
+  "requires_local_spv": true,
+  "spv_requirements": "Must be a qualified corporation with a permanent establishment in Quebec. Can be foreign-controlled (this is a service production credit, not a Canadian content credit).",
+  "monetization_methods": [
+    "direct_cash",
+    "loan_collateral"
+  ],
+  "typical_transfer_discount_low": null,
+  "typical_transfer_discount_high": null,
+  "timing_months_audit_to_certification": 6,
+  "timing_months_certification_to_cash": 2,
+  "is_taxable_income_federal": false,
+  "is_taxable_income_local": false,
+  "federal_tax_rate": null,
+  "local_tax_rate": null,
+  "audit_cost_typical": "35000",
+  "application_fee": null,
+  "effective_date": "2025-01-01",
+  "expiry_date": null,
+  "program_url": "https://sodec.gouv.qc.ca/english/credit-film-production-services/",
+  "last_updated": "2025-10-31",
+  "notes": "Administered by SODEC (Société de développement des entreprises culturelles) and Revenu Québec. The Quebec PSTC is designed for service productions (including foreign productions) and does not require Canadian content certification. For animation specifically, the effective rate structure is: (1) 20% on all qualified Quebec expenditures (labor + goods/services), PLUS (2) additional 16% on computer-aided animation labor costs, for a combined 36% on animation labor. This makes Quebec one of the most competitive jurisdictions globally for animation production. Can be stacked with federal PSTC (16%) for service productions, yielding a potential combined federal+provincial rate of ~52% on animation labor."
+}

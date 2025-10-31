@@ -1,0 +1,386 @@
+{
+  "version": "1.0",
+  "effective_date": "2025-10-31",
+  "currency": "USD",
+  "notes": "Market rates for animation film financing as of late 2025. Rates vary based on project size, risk profile, collateral strength, and producer track record. All percentages are annualized unless otherwise noted.",
+
+  "debt_instruments": {
+    "senior_production_loan": {
+      "description": "Senior secured production loan backed by strong collateral (pre-sales, negative pickup, tax credits)",
+      "interest_rate": {
+        "low": "7.0",
+        "base": "8.5",
+        "high": "10.0",
+        "units": "% annual"
+      },
+      "origination_fee": {
+        "low": "1.5",
+        "base": "2.0",
+        "high": "3.0",
+        "units": "% of loan amount"
+      },
+      "commitment_fee": {
+        "low": "0.25",
+        "base": "0.5",
+        "high": "1.0",
+        "units": "% of loan amount"
+      },
+      "advance_rate": {
+        "low": "85",
+        "base": "90",
+        "high": "95",
+        "units": "% of collateral value"
+      },
+      "assumptions": "Rates at low end require AAA collateral (major studio negative pickup, tier-1 MGs). High end for weaker collateral or smaller productions.",
+      "citations": "Industry standards 2025, film financing surveys"
+    },
+
+    "tax_credit_loan": {
+      "description": "Loan secured by certified or pre-certified tax credit",
+      "interest_rate": {
+        "low": "7.0",
+        "base": "8.0",
+        "high": "9.0",
+        "units": "% annual"
+      },
+      "origination_fee": {
+        "low": "1.5",
+        "base": "2.0",
+        "high": "2.5",
+        "units": "% of loan amount"
+      },
+      "advance_rate": {
+        "low": "80",
+        "base": "85",
+        "high": "90",
+        "units": "% of certified credit"
+      },
+      "assumptions": "Advance rate depends on jurisdiction, timing, and whether credit is pre-certified or final-certified. Refundable credits command higher advance rates than transferable credits.",
+      "citations": "Tax credit financing market data 2025"
+    },
+
+    "gap_financing": {
+      "description": "Loan against estimated value of unsold territories",
+      "interest_rate": {
+        "low": "11.0",
+        "base": "13.0",
+        "high": "15.0",
+        "units": "% annual"
+      },
+      "origination_fee": {
+        "low": "2.5",
+        "base": "3.5",
+        "high": "4.5",
+        "units": "% of loan amount"
+      },
+      "advance_rate": {
+        "low": "30",
+        "base": "40",
+        "high": "50",
+        "units": "% of unsold territory value"
+      },
+      "additional_fees": {
+        "low": "7.0",
+        "base": "10.0",
+        "high": "15.0",
+        "units": "% total fees + interest",
+        "description": "Total financing cost including all fees"
+      },
+      "assumptions": "Gap financing is high-risk. Advance rate depends on sales agent reputation, comparable projects, and package strength. Rarely exceeds 50% of estimated unsold value. Lower rates for strong packages with A-list talent.",
+      "citations": "Gap financing market rates 2025"
+    },
+
+    "mezzanine_debt": {
+      "description": "Subordinated debt, junior to senior and gap financing",
+      "interest_rate": {
+        "low": "14.0",
+        "base": "16.0",
+        "high": "18.0",
+        "units": "% annual"
+      },
+      "origination_fee": {
+        "low": "3.0",
+        "base": "4.0",
+        "high": "5.0",
+        "units": "% of loan amount"
+      },
+      "equity_kicker": {
+        "typical_percentage": "5.0",
+        "range_low": "3.0",
+        "range_high": "10.0",
+        "description": "Equity participation percentage as sweetener"
+      },
+      "assumptions": "Mezz debt sits between senior debt and equity in waterfall. Higher rates reflect subordination risk. Equity kicker common to compensate for risk. Some sources cite mezz rates up to 20%.",
+      "citations": "Mezzanine financing market 2025"
+    },
+
+    "bridge_financing": {
+      "description": "Short-term loan until main financing closes",
+      "interest_rate": {
+        "low": "10.0",
+        "base": "12.0",
+        "high": "14.0",
+        "units": "% annual"
+      },
+      "term_months": {
+        "typical": "3-6",
+        "maximum": "12"
+      },
+      "origination_fee": {
+        "low": "2.0",
+        "base": "3.0",
+        "high": "4.0",
+        "units": "% of loan amount"
+      },
+      "assumptions": "Bridge loans are short-term (typically 3-6 months). Higher rates compensate for short duration and execution risk of pending financing.",
+      "citations": "Film bridge financing market 2025"
+    }
+  },
+
+  "equity_and_participation": {
+    "equity_investor_premium": {
+      "description": "Expected return premium above principal recoupment",
+      "premium_percentage": {
+        "low": "15",
+        "base": "20",
+        "high": "30",
+        "units": "% of investment"
+      },
+      "structure": "Typical '120 and 50' structure: investors recoup 100% of principal + 20% premium before 50/50 profit split",
+      "irr_expectation": {
+        "low": "15",
+        "base": "20",
+        "high": "30",
+        "units": "% IRR target"
+      },
+      "assumptions": "20% premium is market standard in '120' structure. Higher premiums for riskier projects or less-established producers. Animation can command lower premiums due to more predictable revenue streams vs live action.",
+      "citations": "Film equity financing standards 2025"
+    },
+
+    "backend_participation": {
+      "description": "Profit participation for producers and talent",
+      "producer_participation": {
+        "low": "25",
+        "base": "40",
+        "high": "50",
+        "units": "% of net profits"
+      },
+      "talent_backend": {
+        "low": "5",
+        "base": "10",
+        "high": "20",
+        "units": "% of defined profits",
+        "description": "Voice actors, directors in independent animation"
+      },
+      "assumptions": "Net profits defined in IPA. Producers typically get 30-50% of net after all recoupment and premiums. Talent backend varies widely based on stature.",
+      "citations": "Standard film profit participation 2025"
+    }
+  },
+
+  "ancillary_services": {
+    "completion_bond": {
+      "description": "Completion guarantee insurance",
+      "bond_fee": {
+        "low": "3.0",
+        "base": "3.5",
+        "high": "5.0",
+        "units": "% of budget"
+      },
+      "contingency_requirement": {
+        "low": "10.0",
+        "base": "12.0",
+        "high": "15.0",
+        "units": "% of budget"
+      },
+      "assumptions": "Fee varies based on director/team track record, script complexity, and production risk. Animation contingency typically 10-12% (lower than live-action 12-15%) due to controlled production environment.",
+      "citations": "Completion bond market 2025"
+    },
+
+    "errors_and_omissions_insurance": {
+      "description": "E&O insurance for distribution",
+      "premium": {
+        "low": "0.15",
+        "base": "0.20",
+        "high": "0.25",
+        "units": "% of budget"
+      },
+      "flat_fee_minimum": {
+        "amount": "15000",
+        "units": "USD"
+      },
+      "assumptions": "Required by all distributors. Covers legal claims (copyright, defamation, etc.). Animation typically at lower end due to original content.",
+      "citations": "E&O insurance market 2025"
+    },
+
+    "cama_fees": {
+      "description": "Collection Account Management Agreement administration",
+      "fee_structure": "Typically flat fee or small percentage",
+      "flat_fee": {
+        "low": "15000",
+        "base": "25000",
+        "high": "50000",
+        "units": "USD annual"
+      },
+      "percentage_alternative": {
+        "low": "0.05",
+        "base": "0.10",
+        "high": "0.15",
+        "units": "% of collections"
+      },
+      "assumptions": "Larger productions typically use percentage; smaller use flat fee. Fee covers neutral third-party collection and waterfall administration.",
+      "citations": "CAMA industry standards 2025"
+    },
+
+    "audit_fees": {
+      "description": "Required audit for tax credit certification",
+      "tax_credit_audit": {
+        "low": "25000",
+        "base": "35000",
+        "high": "50000",
+        "units": "USD per jurisdiction"
+      },
+      "assumptions": "Per-jurisdiction cost. Multi-jurisdiction productions incur multiple audits. Cost scales with budget complexity.",
+      "citations": "Film audit costs 2025"
+    }
+  },
+
+  "distribution_and_sales": {
+    "sales_agent_commission": {
+      "description": "International sales agent commission on MGs and overages",
+      "commission_rate": {
+        "low": "15",
+        "base": "20",
+        "high": "25",
+        "units": "% of sales"
+      },
+      "by_budget": {
+        "above_10M": "10-15",
+        "5M_to_10M": "15-20",
+        "2M_to_5M": "20-22",
+        "below_2M": "22-25",
+        "units": "% of sales"
+      },
+      "expense_cap": {
+        "low": "75000",
+        "base": "150000",
+        "high": "250000",
+        "units": "USD",
+        "description": "Recoupable marketing/market expenses"
+      },
+      "assumptions": "Commission inversely correlates with budget. Documentaries command higher rates (20-25%). Commercial animation features typically 15-20%. Industry average 19%.",
+      "citations": "International sales market 2025"
+    },
+
+    "distributor_fees": {
+      "theatrical": {
+        "description": "Theatrical distribution fee",
+        "fee_percentage": {
+          "low": "25",
+          "base": "30",
+          "high": "35",
+          "units": "% of gross receipts"
+        },
+        "exhibitor_split": "Exhibitors retain approximately 50-55% of box office; remaining goes to distributor/producer",
+        "assumptions": "Major studio theatrical distribution typically 30%. Independent distributors 25-35%."
+      },
+      "pvod_est": {
+        "description": "Premium VOD / Electronic Sell-Through",
+        "fee_percentage": {
+          "low": "20",
+          "base": "25",
+          "high": "30",
+          "units": "% of gross receipts"
+        },
+        "producer_share": "Studios realize ~80% of PVOD revenue vs ~50% of theatrical",
+        "assumptions": "PVOD is increasingly important for animation. Lower distribution costs yield better producer economics than theatrical."
+      },
+      "svod_licensing": {
+        "description": "SVOD platform licensing (flat fee model)",
+        "fee_percentage": {
+          "low": "10",
+          "base": "15",
+          "high": "25",
+          "units": "% of gross receipts (if rev-share)"
+        },
+        "flat_fee_typical": "Most SVOD deals are flat licensing fees, not rev-share",
+        "assumptions": "SVOD deals typically flat fees ($5k-$50k for mid-size EU regions per title). Major platforms (Netflix, Disney+, Amazon) negotiate worldwide or territory bundles."
+      },
+      "avod_fast": {
+        "description": "Ad-supported VOD and FAST channels",
+        "fee_percentage": {
+          "low": "30",
+          "base": "35",
+          "high": "40",
+          "units": "% of ad revenue"
+        },
+        "revenue_share": "Typically 50-50 to 70-30 revenue share (platform-producer)",
+        "assumptions": "AVOD is growing distribution channel. Revenue-share model. Platform retains 60-70% typically for ad sales and infrastructure."
+      },
+      "television": {
+        "description": "Traditional television licensing",
+        "fee_percentage": {
+          "low": "20",
+          "base": "25",
+          "high": "30",
+          "units": "% of license fee"
+        }
+      }
+    },
+
+    "pa_expenses": {
+      "description": "Prints and Advertising costs",
+      "theatrical_wide_release": {
+        "low_budget_film": "2000000-5000000",
+        "mid_budget_film": "10000000-25000000",
+        "animated_feature": "25000000-75000000",
+        "units": "USD",
+        "description": "Animation P&A typically higher due to family audience targeting"
+      },
+      "recoupment_structure": "P&A recouped at 110-120% (lender protection margin)",
+      "assumptions": "Theatrical P&A for animation is substantial. Streaming-first releases dramatically reduce P&A costs but may reduce downstream value."
+    },
+
+    "streamer_cost_plus": {
+      "description": "SVOD platform cost-plus buyout model",
+      "premium_percentage": {
+        "low": "15",
+        "base": "20",
+        "high": "25",
+        "units": "% above budget"
+      },
+      "structure": "Platform pays budget + fixed premium (15-25%). Producer relinquishes IP ownership and backend.",
+      "assumptions": "Major streamers (Netflix, Apple, Amazon) use cost-plus for original content. Producer gets guaranteed financing + fee but no upside. Animation typically 18-22% premium.",
+      "citations": "Streamer financing models 2025"
+    }
+  },
+
+  "timing_and_cashflow": {
+    "tax_credit_timing": {
+      "production_completion_to_audit": "2-4 months",
+      "audit_to_certification": "3-6 months",
+      "certification_to_cash_receipt": "2-3 months",
+      "total_typical": "7-13 months from production wrap to cash",
+      "assumptions": "Varies by jurisdiction. Refundable credits fastest. Transferable credits can be monetized earlier via sale or loan."
+    },
+    "pre_sale_mg_payment": {
+      "typical_structure": "Payment upon delivery and QC acceptance",
+      "delivery_to_payment": "30-90 days",
+      "assumptions": "MGs paid when film delivered and passes quality control. Some deals have milestone payments (e.g., 50% on delivery, 50% on acceptance)."
+    }
+  },
+
+  "citations_and_sources": [
+    "Film financing industry surveys (2025)",
+    "Tax credit lender market data (Entertainment Partners, Monarch Private Capital, 2025)",
+    "Completion bond market rates (Film Finances, international guarantors, 2025)",
+    "Sales agent commission survey (average 19%, range 15-25% per Stephen Follows, 2025)",
+    "Distribution fee standards (theatrical 25-35%, PVOD 20-30%, AVOD 30-40% per industry standards)",
+    "Gap financing rates (11-15% per Beverly Boy, Blue Fox Financing, 2025)",
+    "Senior/mezzanine rates (Entertainment Partners, Wrapbook production financing guides, 2025)",
+    "Equity return expectations (Film Finance recoupment standards, '120 and 50' structure)",
+    "SVOD flat fee ranges (The Film Collaborative, 2025)",
+    "Streamer cost-plus premiums (industry negotiations, 15-25% typical)"
+  ],
+
+  "methodology": "Rates compiled from official government sources (tax credit programs), industry publications (Wrapbook, Entertainment Partners, Film Commission websites), market surveys (Stephen Follows), and lender/financier published guidelines as of October 2025. Conservative estimates used where ranges exist. Animation-specific adjustments made where data available."
+}

@@ -1,0 +1,58 @@
+{
+  "policy_id": "CA-FEDERAL-CPTC-2025",
+  "jurisdiction": "Canada (Federal)",
+  "program_name": "Canadian Film or Video Production Tax Credit (CPTC)",
+  "headline_rate": "25.0",
+  "enhanced_rate": null,
+  "incentive_type": "refundable_tax_credit",
+  "qpe_definition": {
+    "included_categories": [
+      "labor_resident"
+    ],
+    "excludes_financing_costs": true,
+    "excludes_distribution_costs": true,
+    "excludes_completion_bond": true,
+    "excludes_insurance": true,
+    "labor_cap_per_person": null,
+    "minimum_local_labor_percentage": "75.0",
+    "minimum_local_spend_percentage": null,
+    "special_rules": "Credit is 25% of qualified Canadian labor expenditure (QCLE). Maximum QCLE is capped at 60% of total production costs (net of assistance), making the effective maximum credit 15% of total costs. Only Canadian resident labor qualifies. At least 75% of production services costs and post-production costs must be for services provided in Canada by Canadians or permanent residents."
+  },
+  "per_project_cap": null,
+  "annual_program_cap": null,
+  "per_applicant_annual_cap": null,
+  "minimum_total_spend": null,
+  "minimum_local_spend": null,
+  "cultural_test": {
+    "requires_cultural_test": true,
+    "test_name": "Canadian Content Certification",
+    "minimum_points_required": 6,
+    "total_points_available": 10,
+    "points_for_setting": 2,
+    "points_for_characters": null,
+    "points_for_creative_team": 6,
+    "points_for_production": 2,
+    "test_details_url": "https://www.canada.ca/en/canadian-heritage/services/funding/cavco-tax-credits.html"
+  },
+  "requires_local_spv": true,
+  "spv_requirements": "Must be a Canadian corporation with Canadian individuals controlling at least 51% of voting shares",
+  "monetization_methods": [
+    "direct_cash",
+    "loan_collateral"
+  ],
+  "typical_transfer_discount_low": null,
+  "typical_transfer_discount_high": null,
+  "timing_months_audit_to_certification": 5,
+  "timing_months_certification_to_cash": 2,
+  "is_taxable_income_federal": false,
+  "is_taxable_income_local": false,
+  "federal_tax_rate": null,
+  "local_tax_rate": null,
+  "audit_cost_typical": "30000",
+  "application_fee": null,
+  "effective_date": "2025-01-01",
+  "expiry_date": null,
+  "program_url": "https://www.canada.ca/en/canadian-heritage/services/funding/cavco-tax-credits/canadian-film-video-production.html",
+  "last_updated": "2025-10-31",
+  "notes": "Administered by CAVCO (Canadian Audio-Visual Certification Office) and Canada Revenue Agency. The CPTC is for Canadian content productions. For productions without Canadian content (service productions), see the Canadian Film or Video Production Services Tax Credit (PSTC Federal) which offers 16%. Canadian content certification requires meeting cultural test (minimum 6/10 points) and having key Canadian creative positions. Animation productions are fully eligible and follow the same requirements as live-action. Can be stacked with provincial/territorial credits."
+}

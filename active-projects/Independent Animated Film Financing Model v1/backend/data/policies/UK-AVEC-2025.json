@@ -1,0 +1,62 @@
+{
+  "policy_id": "UK-AVEC-2025",
+  "jurisdiction": "United Kingdom",
+  "program_name": "Audio-Visual Expenditure Credit (AVEC) - Animation",
+  "headline_rate": "39.0",
+  "enhanced_rate": null,
+  "incentive_type": "refundable_tax_credit",
+  "qpe_definition": {
+    "included_categories": [
+      "labor_resident",
+      "labor_non_resident",
+      "goods_services_local",
+      "post_production",
+      "vfx_animation"
+    ],
+    "excludes_financing_costs": true,
+    "excludes_distribution_costs": true,
+    "excludes_completion_bond": true,
+    "excludes_insurance": true,
+    "labor_cap_per_person": null,
+    "minimum_local_labor_percentage": null,
+    "minimum_local_spend_percentage": "10.0",
+    "special_rules": "Available on the lower of: (1) 80% of total core expenditure, or (2) actual UK core expenditure. To qualify as animation, at least 51% of core costs must be spent on animation."
+  },
+  "per_project_cap": null,
+  "annual_program_cap": null,
+  "per_applicant_annual_cap": null,
+  "minimum_total_spend": null,
+  "minimum_local_spend": null,
+  "cultural_test": {
+    "requires_cultural_test": true,
+    "test_name": "BFI Cultural Test",
+    "minimum_points_required": 16,
+    "total_points_available": 31,
+    "points_for_setting": 4,
+    "points_for_characters": 4,
+    "points_for_creative_team": 16,
+    "points_for_production": 7,
+    "test_details_url": "https://www.bfi.org.uk/apply-british-certification-tax-relief"
+  },
+  "requires_local_spv": true,
+  "spv_requirements": "Must be a company liable to UK Corporation Tax",
+  "monetization_methods": [
+    "direct_cash",
+    "loan_collateral"
+  ],
+  "typical_transfer_discount_low": null,
+  "typical_transfer_discount_high": null,
+  "timing_months_audit_to_certification": 4,
+  "timing_months_certification_to_cash": 2,
+  "is_taxable_income_federal": false,
+  "is_taxable_income_local": false,
+  "federal_tax_rate": null,
+  "local_tax_rate": null,
+  "audit_cost_typical": "35000",
+  "application_fee": null,
+  "effective_date": "2025-04-01",
+  "expiry_date": null,
+  "program_url": "https://www.gov.uk/guidance/claim-audio-visual-expenditure-credits-for-corporation-tax",
+  "last_updated": "2025-10-31",
+  "notes": "The UK transitioned from Film Tax Relief (FTR) to AVEC starting April 1, 2025. Animation receives the enhanced 39% rate (vs 34% for live action). The net effective benefit after UK corporation tax (25%) is approximately 29.25%. Standard AVEC rate (34%) applies to live-action; enhanced rate (39%) applies to animation and children's programming. New productions must claim under AVEC from April 1, 2025; all productions must use AVEC from April 1, 2027."
+}

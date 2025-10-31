@@ -1,0 +1,62 @@
+{
+  "policy_id": "US-CA-FILMTAX-2025",
+  "jurisdiction": "United States - California",
+  "program_name": "California Film & Television Tax Credit Program 4.0 - Animation",
+  "headline_rate": "35.0",
+  "enhanced_rate": "40.0",
+  "incentive_type": "refundable_tax_credit",
+  "qpe_definition": {
+    "included_categories": [
+      "labor_resident",
+      "labor_non_resident",
+      "goods_services_local",
+      "post_production",
+      "vfx_animation"
+    ],
+    "excludes_financing_costs": true,
+    "excludes_distribution_costs": true,
+    "excludes_completion_bond": false,
+    "excludes_insurance": false,
+    "labor_cap_per_person": null,
+    "minimum_local_labor_percentage": null,
+    "minimum_local_spend_percentage": null,
+    "special_rules": "Program 4.0 (effective July 1, 2025) significantly expanded animation eligibility. Animated series and films now qualify with $1M+ California spend per episode (minimum 20 min runtime for series). Previously animation was excluded. Credits are now refundable for all qualified applicants (major change from prior non-refundable structure)."
+  },
+  "per_project_cap": null,
+  "annual_program_cap": "750000000",
+  "per_applicant_annual_cap": null,
+  "minimum_total_spend": "1000000",
+  "minimum_local_spend": "1000000",
+  "cultural_test": {
+    "requires_cultural_test": false,
+    "test_name": null,
+    "minimum_points_required": null,
+    "total_points_available": null,
+    "points_for_setting": null,
+    "points_for_characters": null,
+    "points_for_creative_team": null,
+    "points_for_production": null,
+    "test_details_url": null
+  },
+  "requires_local_spv": false,
+  "spv_requirements": null,
+  "monetization_methods": [
+    "direct_cash",
+    "tax_liability_offset"
+  ],
+  "typical_transfer_discount_low": null,
+  "typical_transfer_discount_high": null,
+  "timing_months_audit_to_certification": 6,
+  "timing_months_certification_to_cash": 3,
+  "is_taxable_income_federal": true,
+  "is_taxable_income_local": false,
+  "federal_tax_rate": "21.0",
+  "local_tax_rate": null,
+  "audit_cost_typical": "45000",
+  "application_fee": null,
+  "effective_date": "2025-07-01",
+  "expiry_date": "2030-06-30",
+  "program_url": "https://film.ca.gov/tax-credit/",
+  "last_updated": "2025-10-31",
+  "notes": "Program 4.0 represents a major expansion from Program 3.0. Key changes effective July 1, 2025: (1) Base rate increased from 20% to 35%, (2) Refundability extended to all qualified productions (previously non-refundable), (3) Animation explicitly included for first time ($1M+ budget), (4) Annual program budget increased to $750M (from $330M), (5) Additional 5% uplift available for productions outside LA County (total 40%). The program runs through June 30, 2030. Allocation is competitive via application process administered by California Film Commission. The 35-40% refundable rate makes California newly competitive with other major animation hubs. Credits are taxable as federal income (21% corporate rate), yielding net effective benefit of approximately 27.65-31.6% (35% rate) or 31.6-36.4% (40% rate with LA County uplift) after federal tax. Being refundable dramatically improves cash flow compared to prior non-refundable structure. Major policy shift to retain animation production in California."
+}
