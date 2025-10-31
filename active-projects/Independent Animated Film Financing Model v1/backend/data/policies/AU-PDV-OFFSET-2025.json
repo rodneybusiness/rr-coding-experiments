@@ -1,0 +1,59 @@
+{
+  "policy_id": "AU-PDV-OFFSET-2025",
+  "jurisdiction": "Australia",
+  "program_name": "Australian Post, Digital and Visual Effects (PDV) Offset",
+  "headline_rate": "30.0",
+  "enhanced_rate": null,
+  "incentive_type": "refundable_tax_credit",
+  "qpe_definition": {
+    "included_categories": [
+      "post_production",
+      "vfx_animation"
+    ],
+    "excludes_financing_costs": true,
+    "excludes_distribution_costs": true,
+    "excludes_completion_bond": true,
+    "excludes_insurance": true,
+    "labor_cap_per_person": null,
+    "minimum_local_labor_percentage": null,
+    "minimum_local_spend_percentage": null,
+    "special_rules": "Applies specifically to post-production, digital production, and visual effects work conducted in Australia. Eligible regardless of where principal photography occurred. Covers CGI animation work, compositing, digital color grading, editing, sound design, and visual effects. Can be combined with Producer Offset or Location Offset."
+  },
+  "per_project_cap": null,
+  "annual_program_cap": null,
+  "per_applicant_annual_cap": null,
+  "minimum_total_spend": "500000",
+  "minimum_local_spend": "500000",
+  "cultural_test": {
+    "requires_cultural_test": false,
+    "test_name": null,
+    "minimum_points_required": null,
+    "total_points_available": null,
+    "points_for_setting": null,
+    "points_for_characters": null,
+    "points_for_creative_team": null,
+    "points_for_production": null,
+    "test_details_url": null
+  },
+  "requires_local_spv": true,
+  "spv_requirements": "Applicant must be an Australian company that qualifies as an Australian resident for tax purposes. No cultural test required.",
+  "monetization_methods": [
+    "direct_cash",
+    "tax_liability_offset"
+  ],
+  "typical_transfer_discount_low": null,
+  "typical_transfer_discount_high": null,
+  "timing_months_audit_to_certification": 3,
+  "timing_months_certification_to_cash": 2,
+  "is_taxable_income_federal": false,
+  "is_taxable_income_local": false,
+  "federal_tax_rate": null,
+  "local_tax_rate": null,
+  "audit_cost_typical": "35000",
+  "application_fee": null,
+  "effective_date": "2025-01-01",
+  "expiry_date": null,
+  "program_url": "https://www.ausfilm.com.au/incentives/post-digital-and-visual-effects-production-pdv-offset/",
+  "last_updated": "2025-10-31",
+  "notes": "The PDV Offset is specifically designed for post-production and VFX work, making it ideal for animation projects. 30% refundable credit on qualifying Australian PDV expenditure. Minimum AUD $500,000 in qualifying PDV spend required. Eligible formats include feature films, TV series, documentaries, reality, animation (both live-action and animated content). No cultural test required - can be used by international productions. Particularly valuable for CGI animation which is PDV-intensive. Can be stacked with state/territory incentives. Some Australian states offer additional incentives that can bring total support above 40%. The PDV Offset is one of three offsets under the Australian Screen Production Incentive. Refundable - excess over tax liability is paid in cash."
+}

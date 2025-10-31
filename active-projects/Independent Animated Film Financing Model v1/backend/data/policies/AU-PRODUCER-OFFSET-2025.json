@@ -1,0 +1,63 @@
+{
+  "policy_id": "AU-PRODUCER-OFFSET-2025",
+  "jurisdiction": "Australia",
+  "program_name": "Australian Producer Offset - Animation",
+  "headline_rate": "40.0",
+  "enhanced_rate": null,
+  "incentive_type": "refundable_tax_credit",
+  "qpe_definition": {
+    "included_categories": [
+      "labor_resident",
+      "labor_non_resident",
+      "goods_services_local",
+      "post_production",
+      "vfx_animation",
+      "development_costs"
+    ],
+    "excludes_financing_costs": true,
+    "excludes_distribution_costs": true,
+    "excludes_completion_bond": false,
+    "excludes_insurance": false,
+    "labor_cap_per_person": null,
+    "minimum_local_labor_percentage": null,
+    "minimum_local_spend_percentage": null,
+    "special_rules": "QAPE (Qualifying Australian Production Expenditure) includes all expenditure directly related to production incurred in Australia. For theatrically-released feature films (including animation): 40% offset. For non-theatrical features, TV series, short-form animation: 30% offset."
+  },
+  "per_project_cap": null,
+  "annual_program_cap": null,
+  "per_applicant_annual_cap": null,
+  "minimum_total_spend": "500000",
+  "minimum_local_spend": "500000",
+  "cultural_test": {
+    "requires_cultural_test": true,
+    "test_name": "Significant Australian Content (SAC) Test",
+    "minimum_points_required": null,
+    "total_points_available": null,
+    "points_for_setting": null,
+    "points_for_characters": null,
+    "points_for_creative_team": null,
+    "points_for_production": null,
+    "test_details_url": "https://www.screenaustralia.gov.au/funding-and-support/producer-offset"
+  },
+  "requires_local_spv": true,
+  "spv_requirements": "Applicant must be an Australian company that qualifies as an Australian resident for tax purposes. Significant Australian content required.",
+  "monetization_methods": [
+    "direct_cash",
+    "tax_liability_offset"
+  ],
+  "typical_transfer_discount_low": null,
+  "typical_transfer_discount_high": null,
+  "timing_months_audit_to_certification": 3,
+  "timing_months_certification_to_cash": 2,
+  "is_taxable_income_federal": false,
+  "is_taxable_income_local": false,
+  "federal_tax_rate": null,
+  "local_tax_rate": null,
+  "audit_cost_typical": "40000",
+  "application_fee": null,
+  "effective_date": "2025-02-01",
+  "expiry_date": null,
+  "program_url": "https://www.screenaustralia.gov.au/funding-and-support/producer-offset",
+  "last_updated": "2025-10-31",
+  "notes": "The Producer Offset is one of three offsets under the Australian Screen Production Incentive. Animation features intended for theatrical release receive the 40% rate. Short-form animation and TV animation receive the 30% rate. The offset is refundable - if the offset exceeds the company's tax liability, the excess is refunded. Can be combined with state/territory incentives and the PDV Offset for post/VFX work. Minimum QAPE of AUD $500,000 required. Must meet Significant Australian Content test. Administered by Screen Australia and the Australian Tax Office."
+}

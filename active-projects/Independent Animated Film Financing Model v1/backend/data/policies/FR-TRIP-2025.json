@@ -1,0 +1,61 @@
+{
+  "policy_id": "FR-TRIP-2025",
+  "jurisdiction": "France",
+  "program_name": "Tax Rebate for International Productions (TRIP)",
+  "headline_rate": "30.0",
+  "enhanced_rate": "40.0",
+  "incentive_type": "rebate",
+  "qpe_definition": {
+    "included_categories": [
+      "labor_resident",
+      "labor_non_resident",
+      "goods_services_local",
+      "post_production",
+      "vfx_animation"
+    ],
+    "excludes_financing_costs": true,
+    "excludes_distribution_costs": true,
+    "excludes_completion_bond": false,
+    "excludes_insurance": false,
+    "labor_cap_per_person": null,
+    "minimum_local_labor_percentage": null,
+    "minimum_local_spend_percentage": "50.0",
+    "special_rules": "Qualifying expenditures are those incurred in France for production services. Enhanced 40% rate available for VFX-intensive projects with over €2M in French VFX expenses. Animation projects must spend minimum €250,000 or at least 50% of total budget in France. Must pass animation-specific cultural test administered by CNC."
+  },
+  "per_project_cap": "30000000",
+  "annual_program_cap": null,
+  "per_applicant_annual_cap": null,
+  "minimum_total_spend": "250000",
+  "minimum_local_spend": "250000",
+  "cultural_test": {
+    "requires_cultural_test": true,
+    "test_name": "CNC Cultural Test for Animation",
+    "minimum_points_required": null,
+    "total_points_available": null,
+    "points_for_setting": null,
+    "points_for_characters": null,
+    "points_for_creative_team": null,
+    "points_for_production": null,
+    "test_details_url": "https://www.filmfrance.net/en/tax-rebate/"
+  },
+  "requires_local_spv": true,
+  "spv_requirements": "French production services company must be engaged to apply for TRIP. The rebate is granted to the French service company, not the foreign producer directly.",
+  "monetization_methods": [
+    "direct_cash"
+  ],
+  "typical_transfer_discount_low": null,
+  "typical_transfer_discount_high": null,
+  "timing_months_audit_to_certification": 8,
+  "timing_months_certification_to_cash": 3,
+  "is_taxable_income_federal": false,
+  "is_taxable_income_local": false,
+  "federal_tax_rate": null,
+  "local_tax_rate": null,
+  "audit_cost_typical": "45000",
+  "application_fee": null,
+  "effective_date": "2025-01-01",
+  "expiry_date": null,
+  "program_url": "https://www.cnc.fr/web/en/tax-rebate/",
+  "last_updated": "2025-10-31",
+  "notes": "TRIP is administered by CNC (Centre national du cinéma et de l'image animée). Designed for international productions serviced in France. 30% base rate on French qualifying expenditures. Enhanced 40% rate for VFX-intensive projects (over €2M French VFX spend). Maximum €30M rebate per project. Animation-specific cultural test required. Eligible formats: feature films (live action or animation), TV series, web series, VR, short films, TV specials. Animation productions have lower minimum spend (€250k vs higher for live-action). France is a major European animation hub (e.g., Illumination Mac Guff). TRIP is separate from CNC's automatic aid system (which is for French/European co-productions). Processing time approximately 11 months. Rebate paid directly to French service company, which typically passes through to foreign producer via reduced invoice. Very competitive for animation due to strong infrastructure and talent pool in France."
+}

@@ -1,0 +1,61 @@
+{
+  "policy_id": "ES-FILM-TAX-CREDIT-2025",
+  "jurisdiction": "Spain",
+  "program_name": "Spanish Film Tax Credit / Rebate",
+  "headline_rate": "30.0",
+  "enhanced_rate": "25.0",
+  "incentive_type": "refundable_tax_credit",
+  "qpe_definition": {
+    "included_categories": [
+      "labor_resident",
+      "labor_non_resident",
+      "goods_services_local",
+      "post_production",
+      "vfx_animation"
+    ],
+    "excludes_financing_costs": true,
+    "excludes_distribution_costs": true,
+    "excludes_completion_bond": false,
+    "excludes_insurance": false,
+    "labor_cap_per_person": null,
+    "minimum_local_labor_percentage": null,
+    "minimum_local_spend_percentage": null,
+    "special_rules": "Two-tier rate structure: 30% on the first €1 million of eligible Spanish expenses, then 25% on remaining expenses. Animation productions have reduced minimum spend requirement of €200,000 (vs €1M for live-action). Can apply to both tax credit (Spanish productions) and tax rebate (foreign productions). Same rates for both."
+  },
+  "per_project_cap": "20000000",
+  "annual_program_cap": null,
+  "per_applicant_annual_cap": null,
+  "minimum_total_spend": "200000",
+  "minimum_local_spend": "200000",
+  "cultural_test": {
+    "requires_cultural_test": false,
+    "test_name": null,
+    "minimum_points_required": null,
+    "total_points_available": null,
+    "points_for_setting": null,
+    "points_for_characters": null,
+    "points_for_production": null,
+    "test_details_url": null
+  },
+  "requires_local_spv": true,
+  "spv_requirements": "Spanish production company must be the applicant. For foreign productions (rebate), must work through Spanish production services company.",
+  "monetization_methods": [
+    "direct_cash",
+    "tax_liability_offset"
+  ],
+  "typical_transfer_discount_low": null,
+  "typical_transfer_discount_high": null,
+  "timing_months_audit_to_certification": 6,
+  "timing_months_certification_to_cash": 3,
+  "is_taxable_income_federal": false,
+  "is_taxable_income_local": false,
+  "federal_tax_rate": null,
+  "local_tax_rate": null,
+  "audit_cost_typical": "35000",
+  "application_fee": null,
+  "effective_date": "2025-01-01",
+  "expiry_date": null,
+  "program_url": "https://spainfilmcommission.com/en/shooting-in-spain/tax-incentives/",
+  "last_updated": "2025-10-31",
+  "notes": "Spain's incentive applies to both Spanish productions/co-productions (tax credit) and foreign productions (tax rebate) at the same rates. Two-tier structure: 30% on first €1M, 25% on remaining eligible expenses. Animation-specific advantage: Minimum spend requirement reduced to €200,000 (vs €1M for other productions). Maximum €20M rebate per feature film, €10M per TV series episode. Enhanced limits for low-budget animations: Productions with budgets under €2.5M can receive up to 75% of production cost when combining all tax incentives and subsidies (vs standard 50% limit). Eligible for feature films, TV series, short films, and animation. Administered by ICAA (Institute of Cinematography and Audiovisual Arts). Spain has competitive costs, diverse locations, and growing animation sector. Processing time approximately 9 months. Regional incentives available in some autonomous communities (Canary Islands, Basque Country, etc.) that can stack with national incentive. Very attractive for mid-budget European animation co-productions due to low minimum threshold."
+}
