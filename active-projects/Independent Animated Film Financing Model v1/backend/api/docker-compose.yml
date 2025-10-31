@@ -1,0 +1,135 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: filmfinance-db
+    environment:
+      POSTGRES_USER: filmfinance
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-devpassword}
+      POSTGRES_DB: filmfinance_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U filmfinance"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - filmfinance-network
+
+  # Redis Cache & Queue
+  redis:
+    image: redis:7-alpine
+    container_name: filmfinance-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - filmfinance-network
+
+  # FastAPI Backend
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: filmfinance-api
+    environment:
+      DATABASE_URL: postgresql+asyncpg://filmfinance:${DB_PASSWORD:-devpassword}@postgres:5432/filmfinance_db
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+      SECRET_KEY: ${SECRET_KEY:-dev-secret-key-change-in-production}
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - filmfinance-network
+
+  # Celery Worker
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: filmfinance-celery
+    environment:
+      DATABASE_URL: postgresql+asyncpg://filmfinance:${DB_PASSWORD:-devpassword}@postgres:5432/filmfinance_db
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    command: celery -A app.tasks worker --loglevel=info
+    networks:
+      - filmfinance-network
+
+  # Celery Beat (Scheduled Tasks - Optional)
+  celery-beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: filmfinance-celery-beat
+    environment:
+      DATABASE_URL: postgresql+asyncpg://filmfinance:${DB_PASSWORD:-devpassword}@postgres:5432/filmfinance_db
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    command: celery -A app.tasks beat --loglevel=info
+    networks:
+      - filmfinance-network
+
+  # Flower (Celery Monitoring - Optional)
+  flower:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: filmfinance-flower
+    environment:
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+    depends_on:
+      - redis
+      - celery
+    ports:
+      - "5555:5555"
+    command: celery -A app.tasks flower --port=5555
+    networks:
+      - filmfinance-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  filmfinance-network:
+    driver: bridge
