@@ -1,0 +1,62 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.14, pytest-7.4.3, pluggy-1.6.0 -- /usr/local/bin/python
+cachedir: .pytest_cache
+rootdir: /home/user/rr-coding-experiments/active-projects/Independent Animated Film Financing Model v1/backend
+plugins: cov-4.1.0, asyncio-0.21.1, anyio-3.7.1
+asyncio: mode=Mode.STRICT
+collecting ... collected 14 items / 4 errors
+
+==================================== ERRORS ====================================
+___ ERROR collecting engines/incentive_calculator/tests/test_integration.py ____
+ImportError while importing test module '/home/user/rr-coding-experiments/active-projects/Independent Animated Film Financing Model v1/backend/engines/incentive_calculator/tests/test_integration.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+engines/incentive_calculator/__init__.py:13: in <module>
+    from backend.engines.incentive_calculator.policy_loader import PolicyLoader
+E   ModuleNotFoundError: No module named 'backend'
+__ ERROR collecting engines/incentive_calculator/tests/test_policy_loader.py ___
+ImportError while importing test module '/home/user/rr-coding-experiments/active-projects/Independent Animated Film Financing Model v1/backend/engines/incentive_calculator/tests/test_policy_loader.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+engines/incentive_calculator/__init__.py:13: in <module>
+    from backend.engines.incentive_calculator.policy_loader import PolicyLoader
+E   ModuleNotFoundError: No module named 'backend'
+____ ERROR collecting engines/scenario_optimizer/tests/test_integration.py _____
+ImportError while importing test module '/home/user/rr-coding-experiments/active-projects/Independent Animated Film Financing Model v1/backend/engines/scenario_optimizer/tests/test_integration.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+engines/scenario_optimizer/__init__.py:8: in <module>
+    from backend.engines.scenario_optimizer.scenario_generator import (
+E   ModuleNotFoundError: No module named 'backend'
+____ ERROR collecting engines/waterfall_executor/tests/test_integration.py _____
+ImportError while importing test module '/home/user/rr-coding-experiments/active-projects/Independent Animated Film Financing Model v1/backend/engines/waterfall_executor/tests/test_integration.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+engines/waterfall_executor/__init__.py:12: in <module>
+    from backend.engines.waterfall_executor.revenue_projector import (
+E   ModuleNotFoundError: No module named 'backend'
+=============================== warnings summary ===============================
+../../../../../../usr/local/lib/python3.11/dist-packages/pydantic/_internal/_config.py:268
+../../../../../../usr/local/lib/python3.11/dist-packages/pydantic/_internal/_config.py:268
+../../../../../../usr/local/lib/python3.11/dist-packages/pydantic/_internal/_config.py:268
+../../../../../../usr/local/lib/python3.11/dist-packages/pydantic/_internal/_config.py:268
+../../../../../../usr/local/lib/python3.11/dist-packages/pydantic/_internal/_config.py:268
+  /usr/local/lib/python3.11/dist-packages/pydantic/_internal/_config.py:268: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.5/migration/
+    warnings.warn(DEPRECATION_MESSAGE, DeprecationWarning)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+ERROR engines/incentive_calculator/tests/test_integration.py
+ERROR engines/incentive_calculator/tests/test_policy_loader.py
+ERROR engines/scenario_optimizer/tests/test_integration.py
+ERROR engines/waterfall_executor/tests/test_integration.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 4 errors during collection !!!!!!!!!!!!!!!!!!!!
+======================== 5 warnings, 4 errors in 0.57s =========================

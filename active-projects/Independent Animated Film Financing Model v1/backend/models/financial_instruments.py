@@ -48,6 +48,14 @@ class FinancialInstrument(BaseModel):
     funding_date: Optional[date] = None
     maturity_date: Optional[date] = None
 
+    # S-curve: Investment drawdown schedule
+    # Maps quarter number (int) to percentage of total amount (0-100)
+    # Example: {0: 40, 1: 30, 2: 20, 3: 10} means 40% at quarter 0, 30% at quarter 1, etc.
+    drawdown_schedule: Optional[Dict[int, Decimal]] = Field(
+        default=None,
+        description="S-curve drawdown schedule by quarter. If None, assumes 100% at quarter 0."
+    )
+
     # Metadata
     provider_name: Optional[str] = None
     notes: Optional[str] = None
@@ -57,6 +65,26 @@ class FinancialInstrument(BaseModel):
     def validate_amount(cls, v: Decimal) -> Decimal:
         if v <= 0:
             raise ValueError("Amount must be positive")
+        return v
+
+    @field_validator('drawdown_schedule')
+    @classmethod
+    def validate_drawdown_schedule(cls, v: Optional[Dict[int, Decimal]]) -> Optional[Dict[int, Decimal]]:
+        if v is None:
+            return v
+
+        # Check that all quarters are non-negative
+        for quarter, percentage in v.items():
+            if quarter < 0:
+                raise ValueError("Quarter numbers must be non-negative")
+            if percentage < 0 or percentage > 100:
+                raise ValueError("Drawdown percentages must be between 0 and 100")
+
+        # Check that percentages sum to 100%
+        total_percentage = sum(v.values())
+        if abs(total_percentage - Decimal("100")) > Decimal("0.01"):  # Allow for rounding
+            raise ValueError(f"Drawdown schedule must sum to 100%, got {total_percentage}%")
+
         return v
 
     class Config:
