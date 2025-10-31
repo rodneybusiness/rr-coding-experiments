@@ -38,7 +38,7 @@ class RecoupmentPriority(int, Enum):
 class FinancialInstrument(BaseModel):
     """Base class for all financial instruments"""
 
-    instrument_id: str = Field(..., description="Unique identifier for this instrument")
+    instrument_id: str = Field(default_factory=lambda: f"INS-{id(object())}", description="Unique identifier for this instrument")
     instrument_type: InstrumentType
     amount: Decimal = Field(..., gt=0, description="Principal amount in USD")
     currency: str = Field(default="USD", description="Currency code (ISO 4217)")
@@ -246,3 +246,30 @@ class Grant(FinancialInstrument):
     application_date: Optional[date] = None
     approval_date: Optional[date] = None
     disbursement_schedule: Optional[Dict[str, Decimal]] = None
+
+
+class GapFinancing(Debt):
+    """Gap financing against expected sales (Engine 3 compatible)"""
+
+    instrument_type: InstrumentType = Field(default=InstrumentType.GAP_DEBT, frozen=True)
+    recoupment_priority: RecoupmentPriority = Field(default=RecoupmentPriority.SENIOR_DEBT)
+
+    # Gap-specific (Engine 3 attributes)
+    minimum_presales_percentage: Decimal = Field(
+        default=Decimal("0"),
+        ge=0,
+        le=100,
+        description="Minimum pre-sales required as %"
+    )
+
+
+class TaxIncentive(FinancialInstrument):
+    """Tax incentive/credit (Engine 3 compatible)"""
+
+    instrument_type: InstrumentType = Field(default=InstrumentType.GRANT, frozen=True)  # Use GRANT as closest type
+
+    # Tax incentive specifics
+    jurisdiction: str = Field(..., description="Tax jurisdiction (e.g., 'Quebec', 'Ireland')")
+    qualified_spend: Decimal = Field(..., gt=0, description="Qualified production spend")
+    credit_rate: Decimal = Field(..., gt=0, le=100, description="Tax credit rate %")
+    timing_months: int = Field(default=18, gt=0, description="Months until cash receipt")
