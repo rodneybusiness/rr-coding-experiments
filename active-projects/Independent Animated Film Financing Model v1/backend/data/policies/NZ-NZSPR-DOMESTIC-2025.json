@@ -1,0 +1,60 @@
+{
+  "policy_id": "NZ-NZSPR-DOMESTIC-2025",
+  "jurisdiction": "New Zealand",
+  "program_name": "New Zealand Screen Production Rebate - Domestic Productions",
+  "headline_rate": "40.0",
+  "enhanced_rate": null,
+  "incentive_type": "rebate",
+  "qpe_definition": {
+    "included_categories": [
+      "labor_resident",
+      "goods_services_local",
+      "post_production",
+      "vfx_animation"
+    ],
+    "excludes_financing_costs": true,
+    "excludes_distribution_costs": true,
+    "excludes_completion_bond": false,
+    "excludes_insurance": false,
+    "labor_cap_per_person": null,
+    "minimum_local_labor_percentage": null,
+    "minimum_local_spend_percentage": null,
+    "special_rules": "Qualifying New Zealand Production Expenditure (QNZPE) includes expenditure incurred in New Zealand on goods, services, and labor. Eligible formats include feature films, television, short-form animation, and other non-feature formats. Must be primarily New Zealand content."
+  },
+  "per_project_cap": null,
+  "annual_program_cap": null,
+  "per_applicant_annual_cap": null,
+  "minimum_total_spend": null,
+  "minimum_local_spend": null,
+  "cultural_test": {
+    "requires_cultural_test": true,
+    "test_name": "New Zealand Content Criteria",
+    "minimum_points_required": null,
+    "total_points_available": null,
+    "points_for_setting": null,
+    "points_for_characters": null,
+    "points_for_creative_team": null,
+    "points_for_production": null,
+    "test_details_url": "https://www.nzfilm.co.nz/incentives-co-productions/nzspg-nz"
+  },
+  "requires_local_spv": true,
+  "spv_requirements": "Production must have significant New Zealand content and participation. Applicant must be a New Zealand company or qualifying entity.",
+  "monetization_methods": [
+    "direct_cash"
+  ],
+  "typical_transfer_discount_low": null,
+  "typical_transfer_discount_high": null,
+  "timing_months_audit_to_certification": 4,
+  "timing_months_certification_to_cash": 2,
+  "is_taxable_income_federal": false,
+  "is_taxable_income_local": false,
+  "federal_tax_rate": null,
+  "local_tax_rate": null,
+  "audit_cost_typical": "30000",
+  "application_fee": null,
+  "effective_date": "2025-07-01",
+  "expiry_date": null,
+  "program_url": "https://www.nzfilm.co.nz/incentives-co-productions/nzspg-nz",
+  "last_updated": "2025-10-31",
+  "notes": "The New Zealand Screen Production Rebate (NZSPR) replaced the previous NZSPG (Screen Production Grant) system. For domestic New Zealand productions (including animation): 40% cash rebate on QNZPE. Animation is an eligible format and is treated equally with live-action. Updated criteria effective July 1, 2025. New Zealand has a strong animation industry history (Weta, LOTR trilogy VFX/animation). The 40% domestic rate is among the highest globally for qualifying domestic content. Rebate is cash-based, not a tax credit offset. Administered by the New Zealand Film Commission. No per-project or annual program caps. Processing typically 6 months from completion to payment. Can be combined with New Zealand regional incentives in some cases."
+}

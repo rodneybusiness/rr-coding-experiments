@@ -1,0 +1,61 @@
+{
+  "policy_id": "KR-KOFIC-LOCATION-2025",
+  "jurisdiction": "South Korea",
+  "program_name": "KOFIC Location Incentive - International Productions",
+  "headline_rate": "25.0",
+  "enhanced_rate": null,
+  "incentive_type": "rebate",
+  "qpe_definition": {
+    "included_categories": [
+      "labor_resident",
+      "labor_non_resident",
+      "goods_services_local",
+      "post_production",
+      "vfx_animation"
+    ],
+    "excludes_financing_costs": true,
+    "excludes_distribution_costs": true,
+    "excludes_completion_bond": true,
+    "excludes_insurance": true,
+    "labor_cap_per_person": null,
+    "minimum_local_labor_percentage": null,
+    "minimum_local_spend_percentage": null,
+    "special_rules": "Qualified expenditure includes costs incurred in South Korea for production. Must have at least 80% foreign financing to qualify as international production. Two tiers: 20% for minimum 5-day shoot with KRW 100M spend; 25% for minimum 10-day shoot with KRW 800M spend. Animation productions can qualify if significant work performed in Korea."
+  },
+  "per_project_cap": "200000000",
+  "annual_program_cap": null,
+  "per_applicant_annual_cap": null,
+  "minimum_total_spend": "100000000",
+  "minimum_local_spend": "100000000",
+  "cultural_test": {
+    "requires_cultural_test": false,
+    "test_name": null,
+    "minimum_points_required": null,
+    "total_points_available": null,
+    "points_for_setting": null,
+    "points_for_characters": null,
+    "points_for_creative_team": null,
+    "points_for_production": null,
+    "test_details_url": null
+  },
+  "requires_local_spv": false,
+  "spv_requirements": "Must work with Korean production service company. Foreign producer applies through Korean partner.",
+  "monetization_methods": [
+    "direct_cash"
+  ],
+  "typical_transfer_discount_low": null,
+  "typical_transfer_discount_high": null,
+  "timing_months_audit_to_certification": 5,
+  "timing_months_certification_to_cash": 3,
+  "is_taxable_income_federal": false,
+  "is_taxable_income_local": false,
+  "federal_tax_rate": null,
+  "local_tax_rate": null,
+  "audit_cost_typical": "25000",
+  "application_fee": null,
+  "effective_date": "2025-01-01",
+  "expiry_date": null,
+  "program_url": "http://english.seoulfc.or.kr/",
+  "last_updated": "2025-10-31",
+  "notes": "KOFIC (Korean Film Council) administers the location incentive for foreign productions. Two rate tiers: 20% rebate for 5+ day shoot with minimum KRW 100 million (approx USD $75k) qualified spend, OR 25% rebate for 10+ day shoot with minimum KRW 800 million (approx USD $600k) qualified spend. Cap of KRW 200 million (approx USD $150k) per project on the rebate amount. Must be at least 80% foreign-financed. Eligible for feature films, TV series, documentaries, and animation. South Korea has a growing animation industry with strong technical capabilities and cost-competitive labor. The per-project cap limits the incentive's value for very large productions, making it most attractive for mid-budget projects. Cash rebate paid after completion. Seoul Film Commission and regional film commissions also offer additional location support and services. Note: This is separate from domestic Korean production tax credits (5-15% for Korean companies producing content)."
+}

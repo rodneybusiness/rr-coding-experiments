@@ -1,0 +1,61 @@
+{
+  "policy_id": "NZ-NZSPR-INTL-2025",
+  "jurisdiction": "New Zealand",
+  "program_name": "New Zealand Screen Production Rebate - International Productions",
+  "headline_rate": "20.0",
+  "enhanced_rate": "25.0",
+  "incentive_type": "rebate",
+  "qpe_definition": {
+    "included_categories": [
+      "labor_resident",
+      "labor_non_resident",
+      "goods_services_local",
+      "post_production",
+      "vfx_animation"
+    ],
+    "excludes_financing_costs": true,
+    "excludes_distribution_costs": true,
+    "excludes_completion_bond": false,
+    "excludes_insurance": false,
+    "labor_cap_per_person": null,
+    "minimum_local_labor_percentage": null,
+    "minimum_local_spend_percentage": null,
+    "special_rules": "Qualifying New Zealand Production Expenditure (QNZPE) includes expenditure incurred in New Zealand. Enhanced 5% uplift available for projects meeting additional criteria (previously required PDV-heavy projects, now simplified). Eligible for international productions with at least 80% foreign financing."
+  },
+  "per_project_cap": null,
+  "annual_program_cap": null,
+  "per_applicant_annual_cap": null,
+  "minimum_total_spend": "15000000",
+  "minimum_local_spend": "15000000",
+  "cultural_test": {
+    "requires_cultural_test": false,
+    "test_name": null,
+    "minimum_points_required": null,
+    "total_points_available": null,
+    "points_for_setting": null,
+    "points_for_characters": null,
+    "points_for_creative_team": null,
+    "points_for_production": null,
+    "test_details_url": null
+  },
+  "requires_local_spv": false,
+  "spv_requirements": "Applicant must be the production company responsible for the production. New Zealand service company typically applies on behalf of foreign producer.",
+  "monetization_methods": [
+    "direct_cash"
+  ],
+  "typical_transfer_discount_low": null,
+  "typical_transfer_discount_high": null,
+  "timing_months_audit_to_certification": 4,
+  "timing_months_certification_to_cash": 2,
+  "is_taxable_income_federal": false,
+  "is_taxable_income_local": false,
+  "federal_tax_rate": null,
+  "local_tax_rate": null,
+  "audit_cost_typical": "35000",
+  "application_fee": null,
+  "effective_date": "2025-07-01",
+  "expiry_date": null,
+  "program_url": "https://www.nzfilm.co.nz/incentives-co-productions/nzspg-international",
+  "last_updated": "2025-10-31",
+  "notes": "NZSPR for international productions offers 20% base rebate, with potential 25% for projects meeting enhanced criteria. Minimum NZD $15 million in QNZPE required (approximately USD $9M). Updated July 2023 to simplify the 5% uplift eligibility - previously complex PDV threshold, now more accessible. International animation projects fully eligible. New Zealand renowned for high-quality VFX and animation work (Weta Digital, now Weta FX). The 20-25% rebate is competitive for high-budget international animations requiring world-class post/VFX. Cash-based rebate, not tax offset. Administered by New Zealand Film Commission. Processing ~6 months. Can be attractive for animations with significant CGI/VFX component. Updates to criteria effective July 1, 2025 continue to support international production attraction."
+}
