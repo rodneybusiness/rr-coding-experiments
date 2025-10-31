@@ -1,0 +1,59 @@
+{
+  "policy_id": "CA-ON-OCASE-2025",
+  "jurisdiction": "Canada - Ontario",
+  "program_name": "Ontario Computer Animation and Special Effects Tax Credit (OCASE)",
+  "headline_rate": "18.0",
+  "enhanced_rate": null,
+  "incentive_type": "refundable_tax_credit",
+  "qpe_definition": {
+    "included_categories": [
+      "labor_resident",
+      "vfx_animation"
+    ],
+    "excludes_financing_costs": true,
+    "excludes_distribution_costs": true,
+    "excludes_completion_bond": true,
+    "excludes_insurance": true,
+    "labor_cap_per_person": null,
+    "minimum_local_labor_percentage": null,
+    "minimum_local_spend_percentage": null,
+    "special_rules": "Credit applies to Ontario labor expenditures for computer animation and special effects activities. There is no cap on eligible expenditures. Minimum $25,000 in Ontario labor expenditures for animation/VFX work required (effective March 26, 2024)."
+  },
+  "per_project_cap": null,
+  "annual_program_cap": null,
+  "per_applicant_annual_cap": null,
+  "minimum_total_spend": null,
+  "minimum_local_spend": "25000",
+  "cultural_test": {
+    "requires_cultural_test": false,
+    "test_name": null,
+    "minimum_points_required": null,
+    "total_points_available": null,
+    "points_for_setting": null,
+    "points_for_characters": null,
+    "points_for_creative_team": null,
+    "points_for_production": null,
+    "test_details_url": null
+  },
+  "requires_local_spv": true,
+  "spv_requirements": "Must be a qualifying corporation with a permanent establishment in Ontario",
+  "monetization_methods": [
+    "direct_cash",
+    "loan_collateral"
+  ],
+  "typical_transfer_discount_low": null,
+  "typical_transfer_discount_high": null,
+  "timing_months_audit_to_certification": 5,
+  "timing_months_certification_to_cash": 2,
+  "is_taxable_income_federal": false,
+  "is_taxable_income_local": false,
+  "federal_tax_rate": null,
+  "local_tax_rate": null,
+  "audit_cost_typical": "28000",
+  "application_fee": null,
+  "effective_date": "2024-03-26",
+  "expiry_date": null,
+  "program_url": "https://www.ontariocreates.ca/tax-incentives/ofttc",
+  "last_updated": "2025-10-31",
+  "notes": "Administered by Ontario Creates and the Canada Revenue Agency. The 2024 Ontario Budget untethered OCASE from other Ontario film tax credits, simplifying eligibility. Productions now only need to meet the $25,000 minimum Ontario labor spend for animation/VFX activities (previously needed to qualify for OFTTC or other credits first). OCASE can be stacked with other Ontario credits (e.g., OFTTC) and federal credits. No maximum cap makes this particularly attractive for large-scale animation productions. The 18% rate has remained stable and applies specifically to computer animation and digital special effects labor."
+}

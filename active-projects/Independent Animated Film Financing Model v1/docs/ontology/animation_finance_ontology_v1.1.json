@@ -1,0 +1,306 @@
+{
+  "ontologyVersion": "1.1",
+  "lifecycleStages": [
+    {
+      "stageName": "Development",
+      "description": "The initial phase where the concept, story, and visual style are created, underlying rights are secured, and the project is packaged for financing.",
+      "keyActivities": [
+        {"activity": "Concept Creation & World Building", "description": "Generating the core idea, logline, and setting."},
+        {"activity": "IP Acquisition & Chain of Title Review", "description": "Securing rights to underlying material (e.g., books, games, life rights) and verifying ownership history."},
+        {"activity": "Scriptwriting", "description": "Developing the screenplay through treatments, outlines, and multiple drafts."},
+        {"activity": "Visual Development", "description": "Creating concept art, character designs, style guides, and potentially a teaser or proof-of-concept animatic."},
+        {"activity": "Packaging", "description": "Attaching key talent (Director, recognizable Voice Cast) to increase market value."},
+        {"activity": "Pitch Bible/Lookbook Creation", "description": "Assembling a comprehensive package for presentation."},
+        {"activity": "Preliminary Budgeting and Scheduling", "description": "Creating an initial top-sheet budget and timeline."}
+      ],
+      "stakeholders": [
+        {"role": "Creator/Writer", "focus": "IP creation and storytelling."},
+        {"role": "Producer (Lead)", "focus": "Packaging the project, securing initial funding, managing creative direction."},
+        {"role": "Entertainment Lawyer", "focus": "Securing underlying rights, drafting option/writer agreements, clearing chain of title."},
+        {"role": "Development Executive (Studio/Streamer)", "focus": "Providing creative feedback and guidance if under a development deal."},
+        {"role": "Talent Agents/Managers", "focus": "Brokering connections and negotiating talent deals."},
+        {"role": "Angel Investor/Seed Funder", "focus": "Providing high-risk early capital."}
+      ],
+      "financialInstruments": [
+        {"instrument": "Option and Purchase Agreement", "description": "Secures the exclusive right to develop underlying IP for a limited time, with a pre-negotiated purchase price."},
+        {"instrument": "Life Rights Agreement", "description": "Secures the rights to portray a real person's story."},
+        {"instrument": "Writer's Agreement (WGA or equivalent)", "description": "Contract defining payment, credits, and rights for the screenwriter."},
+        {"instrument": "Work-for-Hire Agreement (Artists/Designers)", "description": "Ensures all visual development created is owned by the production company."},
+        {"instrument": "Development Financing Agreement (DFA)", "description": "Loan or equity investment specifically for development costs, often carrying a premium recoupment position."},
+        {"instrument": "Studio Development Deal", "description": "Funding provided by a studio/streamer in exchange for Right of First Refusal/Last Negotiation (ROFR/RFLN). Subject to 'Turnaround' provisions if they pass."},
+        {"instrument": "Crowdfunding", "description": "Raising development funds (or partial production funds) from the public, often in exchange for perks or, rarely, equity."}
+      ],
+      "criticalDecisionPoints": [
+        {"decision": "Acquire/Option IP vs. Original Concept", "implication": "Impacts chain of title complexity, cost, and initial creative freedom."},
+        {"decision": "Seek Studio Development Funding vs. Independent Seed Funding", "implication": "Trade-off between access to resources/validation and potential loss of control/ownership early on."},
+        {"decision": "Attach Key Talent Early", "implication": "Increases project value but may create significant 'Pay-or-Play' financial obligations before financing is secured."},
+        {"decision": "Scope of Development Materials", "implication": "Deciding between script/pitch deck vs. full animatic/teaser; impacts the budget required to reach greenlight."}
+      ],
+      "keyOutputs": [
+        {"output": "Locked Script"},
+        {"output": "Pitch Bible / Lookbook"},
+        {"output": "Chain of Title Documentation Binder (Initial)"},
+        {"output": "Preliminary Budget (Top Sheet)"},
+        {"output": "Animatic or Teaser (Optional)"}
+      ]
+    },
+    {
+      "stageName": "Financing & Greenlighting",
+      "description": "Structuring the full production budget, securing commitments from all parties, closing the legal framework, and receiving the official authorization (Greenlight).",
+      "keyActivities": [
+        {"activity": "Detailed Budgeting and Production Planning", "description": "Creating a line-item budget and detailed production schedule."},
+        {"activity": "SPV Formation", "description": "Setting up the Special Purpose Vehicle (a dedicated company) to produce the film and isolate financial risk."},
+        {"activity": "Capital Stack Structuring", "description": "Determining the optimal mix of equity, debt, soft money, and pre-sales."},
+        {"activity": "Investor Prospectus Creation & Pitching", "description": "Developing the formal financial offering and securing commitments from equity partners and lenders."},
+        {"activity": "Sales Agent Engagement & Market Strategy", "description": "Partnering with an international sales agent, generating market estimates ('Comps'), and planning attendance at key markets (e.g., Annecy/MIFA, AFM, Cannes)."},
+        {"activity": "Pre-Sales Campaign", "description": "Securing territory pre-sales (Minimum Guarantees) based on the package and market reception."},
+        {"activity": "Tax Credit Application & Monetization Strategy", "description": "Applying for jurisdictional incentives and structuring loans or sales of those credits."},
+        {"activity": "Securing a Completion Bond", "description": "Mandatory insurance policy guaranteeing the film will be finished and delivered (required by lenders and most distributors)."},
+        {"activity": "Financial Closing", "description": "The complex legal process of finalizing all agreements (IPA, CAMA) and meeting Conditions Precedent (CPs) for funding."}
+      ],
+      "stakeholders": [
+        {"role": "Equity Investors (Active/Passive)", "focus": "Providing risk capital for potential upside (ROI)."},
+        {"role": "Senior Lenders (Banks/Debt Funds)", "focus": "Providing secured loans (Gap, Tax Credit loans) with interest and fees. Focus on collateral security."},
+        {"role": "Mezzanine Lenders", "focus": "Providing higher-risk debt, sitting between senior debt and equity."},
+        {"role": "Sales Agent (International)", "focus": "Maximizing international territory sales and MGs."},
+        {"role": "Distributors (Domestic/Foreign/SVOD)", "focus": "Acquiring rights for specific territories or worldwide."},
+        {"role": "Completion Guarantor (Bonder)", "focus": "Assessing production risk, underwriting the bond, monitoring production."},
+        {"role": "CAMA Agent (Collection Account Manager)", "focus": "Neutral third party managing the collection and disbursement of all revenues."},
+        {"role": "Co-Production Partners", "focus": "Contributing equity and accessing national incentives."}
+      ],
+      "financialInstruments": [
+        {"instrument": "The Capital Stack", "description": "The complete structure of all funding sources."},
+        {"instrument": "Equity Investment Agreement", "description": "Defines the terms of investment, share of ownership, and recoupment for equity partners."},
+        {"instrument": "Bridge Financing", "description": "Short-term loan to cover immediate expenses while waiting for the main financing (e.g., production loan or equity investment) to close."},
+        {"instrument": "Gap/Supergap Loan Agreement", "description": "Secured loan against the estimated value of unsold territories (Gap) and potentially other high-risk collateral (Supergap)."},
+        {"instrument": "Pre-Sale Agreement / Minimum Guarantee (MG)", "description": "Contract committing a distributor to pay a fixed amount upon delivery for rights in a specific territory."},
+        {"instrument": "Negative Pickup Agreement", "description": "A commitment by a studio/distributor to 'pick up' the completed film for a pre-agreed price, used as collateral for production loans."},
+        {"instrument": "Tax Credit Financing/Monetization", "description": "Loan against the expected value of a tax credit, or the outright sale of the credit at a discount."},
+        {"instrument": "Inter-Party Agreement (IPA)", "description": "The master agreement linking all financiers, the sales agent, and the bond company, defining the precise recoupment waterfall."},
+        {"instrument": "Completion Bond Agreement", "description": "The contract between the producer and the bond company, defining fees and takeover rights."},
+        {"instrument": "Collection Account Management Agreement (CAMA)", "description": "Agreement establishing the collection account and the rules for revenue disbursement."},
+        {"instrument": "Security Interest Filings (e.g., UCC-1)", "description": "Public registration of a lender's security interest in the film's assets and revenues (collateral)."}
+      ],
+      "criticalDecisionPoints": [
+        {"decision": "Choose Primary Strategic Pathway (Indie, Studio, Co-Pro, Hybrid)", "implication": "The foundational decision determining ownership, financial structure, risk profile, and creative control."},
+        {"decision": "Accept Streamer/Studio Buyout (Cost-Plus) Offer", "implication": "Trade-off between guaranteed financing/fee and loss of IP/backend potential."},
+        {"decision": "Selection of Production Jurisdiction(s)", "implication": "Heavily impacts net budget due to labor costs, currency fluctuations, and the value of available tax incentives."},
+        {"decision": "Level of Debt Leverage vs. Equity", "implication": "Higher debt increases risk (foreclosure) but preserves equity upside; higher equity dilutes ownership but is less risky."}
+      ],
+      "keyOutputs": [
+        {"output": "Greenlight Confirmation"},
+        {"output": "Locked Production Budget and Cashflow Schedule"},
+        {"output": "Executed Financing Agreements (IPA, Loan Docs, Equity Docs)"},
+        {"output": "Secured Completion Bond"},
+        {"output": "Established SPV and CAMA"}
+      ]
+    },
+    {
+      "stageName": "Pre-Production",
+      "description": "Detailed planning, story refinement, visual design finalization, casting, and technical preparation before animation begins.",
+      "keyActivities": [
+        {"activity": "Storyboarding and Animatic Creation", "description": "Developing the visual blueprint of the film, culminating in a locked story reel/animatic."},
+        {"activity": "Voice Casting and Recording", "description": "Casting and recording the primary voice performances."},
+        {"activity": "Art Direction and Final Design", "description": "Locking character models, environments, props, and color palettes."},
+        {"activity": "Script and Design Clearance (Legal)", "description": "Reviewing the script and designs for potential legal issues (defamation, trademark infringement) required for E&O insurance."},
+        {"activity": "Pipeline Setup and R&D", "description": "Establishing the technical workflow and tools for animation and rendering."},
+        {"activity": "Hiring Key Crew (HODs)", "description": "Staffing department heads (Head of Story, Art Director, Animation Supervisor)."}
+      ],
+      "stakeholders": [
+        {"role": "Director & Creative Team", "focus": "Creative vision, locking the story, directing performances."},
+        {"role": "Line Producer/UPM", "focus": "Day-to-day budget and schedule management, cost reporting."},
+        {"role": "Voice Actors", "focus": "Performing the vocal tracks."},
+        {"role": "Technical Director/Pipeline Supervisor", "focus": "Workflow and technology management."},
+        {"role": "Service Studio Management (if outsourced)", "focus": "Integrating the project into their pipeline and workforce."},
+        {"role": "Guilds (e.g., SAG-AFTRA, Animation Guild)", "focus": "Enforcing labor standards, residuals, and working conditions."}
+      ],
+      "financialInstruments": [
+        {"instrument": "Initial Drawdown", "description": "First release of funds from the production loan or escrow account upon financial close."},
+        {"instrument": "Talent Agreements (Director, Voice Actors)", "description": "Contracts defining compensation (fixed fees, bonuses, backend), obligations, and credits. May include 'Pay-or-Play' clauses."},
+        {"instrument": "Service Studio Agreement", "description": "Contract with external animation studios detailing scope of work, payment schedules, and delivery milestones."},
+        {"instrument": "Union/Guild Agreements", "description": "Contracts governing the employment terms, rates, and residuals for unionized labor."}
+      ],
+      "criticalDecisionPoints": [
+        {"decision": "In-House Production vs. Outsourced Service Studio", "implication": "Impacts budget, creative control, scalability, and eligibility for certain tax credits."},
+        {"decision": "Locking the Story Reel/Animatic (Creative Lock)", "implication": "The final chance to make major story changes before expensive animation begins. Crucial for budget control."},
+        {"decision": "Choice of Animation Technology (2D, 3D, Hybrid, Stop-Motion, Real-time)", "implication": "Significant impact on budget, schedule, and required talent pool."}
+      ],
+      "keyOutputs": [
+        {"output": "Locked Animatic/Story Reel"},
+        {"output": "Primary Voice Recordings"},
+        {"output": "Final Asset Designs (Characters, Environments)"},
+        {"output": "Established Production Pipeline"}
+      ]
+    },
+    {
+      "stageName": "Production",
+      "description": "The execution phase where the bulk of the animation, lighting, and rendering takes place.",
+      "keyActivities": [
+        {"activity": "Asset Building (Modeling, Rigging, Surfacing)", "description": "Creating the 3D models or 2D rigs for characters, props, and environments."},
+        {"activity": "Layout and Previsualization", "description": "Staging the scenes and defining camera movements."},
+        {"activity": "Animation", "description": "Bringing the characters and objects to life, sequence by sequence."},
+        {"activity": "Lighting, FX, and Compositing", "description": "Adding visual effects, lighting the scenes, and combining all elements."},
+        {"activity": "Rendering", "description": "Computational process of generating the final images."},
+        {"activity": "Cost Reporting and Monitoring", "description": "Weekly tracking of expenditures against the budget."}
+      ],
+      "stakeholders": [
+        {"role": "Animators, Modelers, Riggers, Lighters, TDs", "focus": "Execution of the animation tasks."},
+        {"role": "Animation Supervisor", "focus": "Managing the animation team and quality."},
+        {"role": "Production Manager/Line Producer", "focus": "Managing the budget, schedule, and crew."},
+        {"role": "Completion Bond Representative", "focus": "Active oversight to ensure delivery milestones are met; has authority to take over if necessary."},
+        {"role": "Financiers/Studio Executives", "focus": "Reviewing progress and approving contingency access if needed."}
+      ],
+      "financialInstruments": [
+        {"instrument": "Ongoing Cashflow Drawdowns", "description": "Continued funding based on production milestones or weekly cash flow needs."},
+        {"instrument": "Contingency Access Requests", "description": "Approval to use the budgeted contingency funds (usually 10-15%) for unforeseen overages."},
+        {"instrument": "Currency Hedging", "description": "Financial strategies to mitigate risk from exchange rate fluctuations in international productions."},
+        {"instrument": "Weekly Cost Reports", "description": "Detailed financial documents tracking expenditures."}
+      ],
+      "criticalDecisionPoints": [
+        {"decision": "Addressing Budget Overages", "implication": "Requires accessing contingency or, in extreme cases, seeking additional funding or facing a takeover by the bond company."},
+        {"decision": "Creative Changes During Production", "implication": "Significant cost and schedule impact; requires approval from producers, director, and potentially financiers/bond company."},
+        {"decision": "Managing Vendor Performance (Service Studios)", "implication": "Ensuring external studios deliver the required quality on schedule."},
+        {"decision": "Managing Co-Production Work Splits", "implication": "Ensuring the allocation of work meets treaty requirements for international co-productions."}
+      ],
+      "keyOutputs": [
+        {"output": "Completed Animation Sequences"},
+        {"output": "Final Rendered Shots"},
+        {"output": "Weekly Cost Reports"}
+      ]
+    },
+    {
+      "stageName": "Post-Production & Delivery",
+      "description": "The final phase involving editing, sound, music, color correction, and the creation of the final deliverables package.",
+      "keyActivities": [
+        {"activity": "Editorial", "description": "Assembling the final cut of the film."},
+        {"activity": "Sound Design and Mixing", "description": "Creating the soundtrack, including ADR, Foley, and the final audio mix (e.g., 5.1, Dolby Atmos)."},
+        {"activity": "Music Composition and Scoring", "description": "Creating and recording the original score."},
+        {"activity": "Digital Intermediate (DI) / Color Grading", "description": "Finalizing the color and look of the film."},
+        {"activity": "Localization (Dubbing/Subtitling)", "description": "Creating foreign language versions required for international delivery."},
+        {"activity": "Mastering and Deliverable Creation", "description": "Creating the required formats for distribution (DCP, M&E tracks)."},
+        {"activity": "Clearance and Legal Delivery", "description": "Securing E&O insurance, music licenses, and finalizing credits/billing block."},
+        {"activity": "Rating/Classification Application (e.g., MPA)", "description": "Submitting the film for official age classification."},
+        {"activity": "Tax Credit Audit/Certification", "description": "Auditing production expenditures for final tax credit certification."}
+      ],
+      "stakeholders": [
+        {"role": "Editor", "focus": "Pacing, structure, and finalizing the picture."},
+        {"role": "Composer/Music Supervisor", "focus": "Original music score and licensing."},
+        {"role": "Sound Designer/Mixer", "focus": "Audio quality and mix."},
+        {"role": "Post-Production Supervisor", "focus": "Managing the post schedule and deliverables."},
+        {"role": "E&O Insurance Provider", "focus": "Underwriting insurance against legal claims (defamation, copyright infringement)."},
+        {"role": "Distributor QC Department", "focus": "Quality control and acceptance of deliverables."}
+      ],
+      "financialInstruments": [
+        {"instrument": "Music Licensing (Synchronization and Master Use)", "description": "Agreements to use pre-existing music in the film."},
+        {"instrument": "Errors & Omissions (E&O) Insurance Policy", "description": "Required insurance policy for distribution."},
+        {"instrument": "Final Drawdown", "description": "The last release of production funds upon completion of delivery."},
+        {"instrument": "MG Payments from Distributors", "description": "Payment of the agreed Minimum Guarantee upon technical acceptance of the film."},
+        {"instrument": "Tax Credit Redemption/Sale", "description": "The final process of receiving the cash benefit from the tax incentive."}
+      ],
+      "criticalDecisionPoints": [
+        {"decision": "Final Cut Approval (Picture Lock)", "description": "Determining who has the authority to approve the final version of the film (Producer, Director, or Studio/Financier)."},
+        {"decision": "Music Strategy (Original Score vs. Licensed Tracks)", "implication": "Impacts budget and complexity of legal clearances."},
+        {"decision": "Navigating QC Rejections", "implication": "Crucial for triggering MG payments; delays can increase post-production costs."}
+      ],
+      "keyOutputs": [
+        {"output": "Locked Picture (Final Cut)"},
+        {"output": "Final Audio Mix and M&E (Music & Effects) Tracks"},
+        {"output": "Digital Cinema Package (DCP) and Master Files"},
+        {"output": "Full Legal Delivery Package (Chain of Title, Licenses, E&O Policy, Credits)"},
+        {"output": "Certificate of Completion (issued by Bonder)"}
+      ]
+    },
+    {
+      "stageName": "Distribution & Recoupment",
+      "description": "The monetization phase where the film is released to the public, revenues are collected, and funds are disbursed to stakeholders according to the waterfall.",
+      "keyActivities": [
+        {"activity": "Marketing and Promotion (P&A Campaign)", "description": "Executing the Prints & Advertising campaign to drive audience awareness."},
+        {"activity": "Release Strategy Execution (Windowing)", "description": "Managing the sequential distribution windows (e.g., Theatrical, PVOD/EST, SVOD, AVOD, FAST, Television/Home Entertainment)."},
+        {"activity": "Revenue Collection", "description": "Collecting gross receipts from various sources (box office, licensing fees, sales)."},
+        {"activity": "Waterfall Administration", "description": "Disbursement of revenues by the distributor or CAMA according to the Inter-Party Agreement."},
+        {"activity": "Ancillary Exploitation", "description": "Managing merchandising, licensing, soundtrack, and other non-theatrical revenue streams."},
+        {"activity": "Franchise and Sequel/Prequel Rights Management", "description": "Developing future projects based on the IP (if ownership was retained)."},
+        {"activity": "Reporting and Auditing", "description": "Providing regular revenue statements to stakeholders and conducting audits if necessary."}
+      ],
+      "stakeholders": [
+        {"role": "Distributors (Domestic/International)", "focus": "Managing the release, marketing, P&A expenditure, deducting fees and expenses."},
+        {"role": "Exhibitors (Cinemas)", "focus": "Showing the film and splitting box office revenue with the distributor."},
+        {"role": "Streaming Platforms (SVOD/AVOD/PVOD)", "focus": "Licensing or hosting the film on their platform."},
+        {"role": "CAMA Agent", "focus": "Neutral management of revenue collection and disbursement according to the waterfall."},
+        {"role": "Lenders and Investors", "focus": "Receiving repayments (principal, interest, premiums)."},
+        {"role": "Profit Participants (Producers, Talent)", "focus": "Receiving deferred fees and net profit shares."},
+        {"role": "Residuals Administrator/Guilds", "focus": "Calculating and paying residuals to talent."}
+      ],
+      "financialInstruments": [
+        {"instrument": "Gross Receipts", "description": "Total revenue generated from all sources."},
+        {"instrument": "P&A (Prints & Advertising) Expenses", "description": "Direct costs associated with marketing and distribution, typically recouped first by the distributor."},
+        {"instrument": "Distribution Fees", "description": "Percentage fee charged by the distributor/sales agent (ranges widely, e.g., 10%-40%, depending on the deal and window)."},
+        {"instrument": "Recoupment Waterfall", "description": "The prioritized order of payment (e.g., Distribution Fees -> P&A Expenses -> Senior Debt Interest/Principal -> Mezzanine Debt -> Equity Investors + Premium -> Producer/Talent Profit Participation)."},
+        {"instrument": "Streamer Licensing Agreement (SVOD/AVOD)", "description": "Agreement defining the licensing fee (flat fee or performance-based), term, and exclusivity for streaming rights."},
+        {"instrument": "Residuals", "description": "Payments owed to talent (actors, writers, directors) based on revenue generated in ancillary markets."},
+        {"instrument": "Auditing Rights/Provisions", "description": "Contractual clauses allowing producers/financiers to inspect the distributor's accounting records to verify revenue reporting."}
+      ],
+      "criticalDecisionPoints": [
+        {"decision": "Distribution Model Selection (Worldwide Sale vs. Territory-by-Territory vs. Service Deal)", "implication": "Impacts revenue potential, control, and the complexity of management."},
+        {"decision": "Theatrical Release Scope (Wide vs. Limited)", "implication": "Impacts P&A costs, potential box office revenue, and downstream value (e.g., SVOD licensing)."},
+        {"decision": "'Renting the System' (Distribution Service Deal)", "implication": "Producer pays for P&A and retains control, using a distributor's infrastructure for a lower fee."},
+        {"decision": "P&A Budget Commitment Negotiation", "implication": "The level of marketing spend committed by the distributor, crucial for the film's success but increases the breakeven point."},
+        {"decision": "Definition of Net Profits in Contracts", "implication": "Crucial negotiation point that determines when (or if) talent and producers receive backend compensation."}
+      ],
+      "keyOutputs": [
+        {"output": "Marketing Campaign Assets (Trailers, Posters)"},
+        {"output": "Box Office Reports / Streaming Performance Metrics"},
+        {"output": "Revenue Statements (Distributor Reports and CAMA Reports)"},
+        {"output": "Disbursement Payments to Stakeholders"},
+        {"output": "Profit Participation Statements"}
+      ]
+    }
+  ],
+  "strategicPathways": [
+    {
+      "pathwayName": "Independent 'Patchwork' Finance",
+      "description": "Assembling the budget from a variety of disparate sources. Maximizes producer control and IP ownership but carries the highest complexity and execution risk.",
+      "typicalComponents": [
+        "Private Equity (often prioritized for the first 20-30% of the budget)",
+        "Pre-sales (Minimum Guarantees from international territories)",
+        "Gap/Supergap Debt (loans against unsold territories)",
+        "Tax Credits/Incentives (Soft Money Monetization)",
+        "Mezzanine Financing",
+        "Completion Bond (Mandatory)"
+      ],
+      "keyDecisionDrivers": ["Strong desire to retain IP ownership and creative control", "Project deemed too risky or non-commercial by major studios", "Leveraging specific high-value international tax incentives", "Strong track record of the producing team."]
+    },
+    {
+      "pathwayName": "Studio / Streamer Full Buyout (Cost-Plus)",
+      "description": "A single entity (major studio or SVOD platform) finances 100% of the budget. Often structured as a 'Cost-Plus' deal where the studio pays the budget plus a fixed premium to the producers.",
+      "typicalComponents": [
+        "Single Source Financing (P&F/D Agreement)",
+        "Cost-Plus Model (e.g., Budget + 15-25% premium)",
+        "Work-for-Hire structure (Studio/Streamer owns the IP)",
+        "Performance-based Bonuses (instead of true profit participation)."
+      ],
+      "keyDecisionDrivers": ["Maximizing budget security and minimizing financial risk", "Access to established, high-powered global marketing and distribution infrastructure", "Willingness to trade IP ownership for a guaranteed production and upfront fees."]
+    },
+    {
+      "pathwayName": "International Co-Production",
+      "description": "A formal treaty-based partnership between producers in two or more countries to pool resources and maximize access to multiple national incentive programs (subsidies, grants, tax credits).",
+      "typicalComponents": [
+        "Bi-lateral or Multi-lateral Treaty compliance",
+        "Access to multiple national subsidies/grants (non-dilutive funding)",
+        "Split production workflow (e.g., animation in Canada, post-production in France)",
+        "Shared equity and IP ownership among co-producers."
+      ],
+      "keyDecisionDrivers": ["Accessing significant non-dilutive funding (soft money)", "Creative synergy and collaboration between international partners", "Access to specific talent pools, studios, or specialized animation techniques."]
+    },
+    {
+      "pathwayName": "Hybrid Model (Pre-License/Negative Pickup)",
+      "description": "A blended approach where a major entity licenses key rights or territories (Pre-License) or commits to acquire the film upon delivery (Negative Pickup), providing collateral for independent production loans.",
+      "typicalComponents": [
+        "Anchor Tenant License Fee or Negative Pickup Agreement",
+        "Independent financing (Debt/Equity/Tax Credits) for the remaining budget",
+        "Retention of specific territories or distribution windows."
+      ],
+      "keyDecisionDrivers": ["Balancing risk mitigation with retention of partial IP ownership", "Leveraging the value of a major market commitment to secure other financing", "Desire to maintain control over international sales or theatrical windows."]
+    }
+  ]
+}

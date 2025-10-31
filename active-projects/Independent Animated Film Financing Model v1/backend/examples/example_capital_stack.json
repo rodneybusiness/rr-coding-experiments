@@ -1,0 +1,140 @@
+{
+  "stack_id": "STACK-DEMO-001",
+  "project_id": "PROJ-DEMO-001",
+  "components": [
+    {
+      "component_id": "COMP-001",
+      "position": 1,
+      "is_committed": true,
+      "is_closed": true,
+      "instrument": {
+        "instrument_id": "EQ-001",
+        "instrument_type": "equity",
+        "amount": "9000000",
+        "currency": "USD",
+        "provider_name": "Animation Film Fund I LP",
+        "ownership_percentage": "35",
+        "premium_percentage": "25",
+        "backend_participation_percentage": "50",
+        "backend_definition": "Net Profits (after all recoupment and premiums)",
+        "is_active_investor": true
+      },
+      "notes": "Lead equity investor, active in creative oversight"
+    },
+    {
+      "component_id": "COMP-002",
+      "position": 2,
+      "is_committed": true,
+      "is_closed": false,
+      "instrument": {
+        "instrument_id": "PRE-001",
+        "instrument_type": "pre_sale",
+        "amount": "6000000",
+        "currency": "USD",
+        "provider_name": "Major SVOD Platform",
+        "territory": "North America",
+        "rights_description": "SVOD rights only, 7-year term, after theatrical window",
+        "mg_amount": "6000000",
+        "payment_on_delivery": "6000000",
+        "has_overage": false,
+        "sales_agent_commission": "0"
+      },
+      "conditions_precedent": [
+        "Delivery of completed film meeting technical specs",
+        "MPAA rating of PG or G"
+      ],
+      "notes": "North America SVOD pre-sale, no sales commission (direct deal)"
+    },
+    {
+      "component_id": "COMP-003",
+      "position": 3,
+      "is_committed": true,
+      "is_closed": false,
+      "instrument": {
+        "instrument_id": "TAX-QC-001",
+        "instrument_type": "tax_credit_loan",
+        "amount": "5775000",
+        "currency": "USD",
+        "provider_name": "Quebec Production Services",
+        "tax_credit_jurisdiction": "Quebec",
+        "certified_tax_credit_amount": "6600000",
+        "advance_rate": "87.5",
+        "interest_rate": "8.5",
+        "origination_fee_percentage": "2.0",
+        "expected_certification_date": "2027-06-01",
+        "expected_cash_receipt_date": "2027-09-01",
+        "collateral_description": "Quebec PSTC certification",
+        "requires_completion_bond": true
+      },
+      "conditions_precedent": [
+        "Tax credit pre-certification",
+        "Completion bond in place",
+        "Production start in Quebec"
+      ],
+      "notes": "Loan against Quebec Production Services Tax Credit (40% of QC spend)"
+    },
+    {
+      "component_id": "COMP-004",
+      "position": 4,
+      "is_committed": false,
+      "is_closed": false,
+      "instrument": {
+        "instrument_id": "GAP-001",
+        "instrument_type": "gap_debt",
+        "amount": "4000000",
+        "currency": "USD",
+        "provider_name": "Gap Finance Partners",
+        "gap_percentage": "40",
+        "interest_rate": "12.0",
+        "origination_fee_percentage": "3.5",
+        "advance_rate": "40",
+        "collateral_description": "Unsold international territories (estimated $10M value)",
+        "requires_completion_bond": true,
+        "sales_agent_estimates": {
+          "UK/Ireland": "8000000",
+          "France": "6000000",
+          "Germany": "5000000",
+          "Rest of World": "21000000"
+        }
+      },
+      "conditions_precedent": [
+        "Sales agent delivery estimates",
+        "Completion bond in place",
+        "Senior debt in place"
+      ],
+      "notes": "Gap financing against 40% of unsold territory value"
+    },
+    {
+      "component_id": "COMP-005",
+      "position": 5,
+      "is_committed": false,
+      "is_closed": false,
+      "instrument": {
+        "instrument_id": "MEZZ-001",
+        "instrument_type": "mezzanine_debt",
+        "amount": "2500000",
+        "currency": "USD",
+        "provider_name": "Mezzanine Film Fund",
+        "interest_rate": "15.0",
+        "origination_fee_percentage": "4.0",
+        "equity_kicker": true,
+        "equity_kicker_percentage": "5",
+        "collateral_description": "Junior lien on all assets",
+        "balloon_payment": true
+      },
+      "conditions_precedent": [
+        "All senior debt committed",
+        "Minimum equity of $8M in place"
+      ],
+      "notes": "Mezzanine debt with 5% equity kicker"
+    }
+  ],
+  "completion_bond_fee_percentage": "3.5",
+  "completion_bond_fee_amount": "1050000",
+  "legal_fees": "350000",
+  "audit_fees": "75000",
+  "cama_fees": "25000",
+  "is_fully_financed": false,
+  "financing_gap": "2725000",
+  "notes": "Total capital: $27.275M. Remaining gap: $2.725M (includes bond fee and transaction costs). Target: additional pre-sales or equity."
+}
