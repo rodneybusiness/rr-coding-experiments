@@ -54,7 +54,33 @@ cogrepo/
 
 ## 🚀 Quick Start Guide
 
-### 1. **Import Your Conversations**
+### Option A: Web Interface (Recommended) 🌐
+
+**Beautiful drag-and-drop interface with real-time progress!**
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Start the web server
+./start_web_ui.sh
+
+# Open in browser:
+# 📤 Upload: http://localhost:5000/upload.html
+# 🔍 Search: http://localhost:5000/index.html
+```
+
+**Features:**
+- ✨ Drag-and-drop file upload
+- 📊 Real-time progress tracking via WebSocket
+- 💰 Live cost estimation
+- 📈 Import history dashboard
+- 🎨 Modern, responsive design
+
+**📖 See [WEB_UI_GUIDE.md](WEB_UI_GUIDE.md) for complete web interface documentation**
+
+### Option B: Command Line
+
 ```bash
 # Install dependencies
 pip install -r requirements.txt
@@ -72,7 +98,7 @@ python cogrepo_update.py --source chatgpt --file new_export.json
 python index_builder.py --rebuild
 ```
 
-**📖 See [IMPORT_GUIDE.md](IMPORT_GUIDE.md) for detailed instructions on exporting from ChatGPT, Claude, and Gemini**
+**📖 See [IMPORT_GUIDE.md](IMPORT_GUIDE.md) for detailed CLI instructions**
 
 ### 2. **Search Your Conversations (Command Line)**
 ```bash
