@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  output: 'standalone', // Enable Docker deployment
   env: {
     API_URL: process.env.API_URL || 'http://localhost:8000',
   },
