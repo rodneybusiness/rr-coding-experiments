@@ -5,9 +5,9 @@ Loads environment variables and provides application settings.
 Uses Pydantic Settings for type-safe configuration with validation.
 """
 
-from typing import List, Optional
+from typing import List, Optional, Any
 from pydantic_settings import BaseSettings
-from pydantic import AnyHttpUrl, field_validator, PostgresDsn
+from pydantic import AnyHttpUrl, field_validator, PostgresDsn, model_validator
 import secrets
 
 
@@ -36,18 +36,20 @@ class Settings(BaseSettings):
     # Redis
     REDIS_URL: str = "redis://localhost:6379/0"
 
-    # CORS
-    BACKEND_CORS_ORIGINS: List[str] = ["http://localhost:3000"]
+    # CORS - stored as string, parsed in model_validator
+    _BACKEND_CORS_ORIGINS: str = "http://localhost:3000"
+    BACKEND_CORS_ORIGINS: List[str] = []
 
-    @field_validator("BACKEND_CORS_ORIGINS", mode="before")
+    @model_validator(mode="before")
     @classmethod
-    def assemble_cors_origins(cls, v: str | List[str]) -> List[str]:
-        """Parse CORS origins from environment variable."""
-        if isinstance(v, str) and not v.startswith("["):
-            return [i.strip() for i in v.split(",")]
-        elif isinstance(v, (list, str)):
-            return v
-        raise ValueError(v)
+    def parse_cors_origins(cls, values: dict) -> dict:
+        """Parse CORS origins from comma-separated string."""
+        cors_str = values.get("_BACKEND_CORS_ORIGINS") or values.get("BACKEND_CORS_ORIGINS", "http://localhost:3000")
+        if isinstance(cors_str, str):
+            values["BACKEND_CORS_ORIGINS"] = [origin.strip() for origin in cors_str.split(",")]
+        elif isinstance(cors_str, list):
+            values["BACKEND_CORS_ORIGINS"] = cors_str
+        return values
 
     # Celery
     CELERY_BROKER_URL: str = "redis://localhost:6379/0"
@@ -81,6 +83,7 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         case_sensitive = True
+        extra = "allow"  # Allow extra fields from env
 
 
 # Create global settings instance
