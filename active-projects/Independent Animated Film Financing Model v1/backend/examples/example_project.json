@@ -1,0 +1,71 @@
+{
+  "project_id": "PROJ-DEMO-001",
+  "project_name": "The Dragon's Quest",
+  "project_type": "feature_film",
+  "animation_technique": "cgi_3d",
+  "target_audience": "family",
+  "target_runtime_minutes": 95,
+  "total_budget": "30000000",
+  "contingency_percentage": "12",
+  "development_status": "greenlit",
+  "expected_greenlight_date": "2025-06-01",
+  "expected_delivery_date": "2027-03-01",
+  "has_director_attached": true,
+  "director_name": "Jane Chen",
+  "director_track_record": "Previous: 'Fantasy Island' ($45M WW box office)",
+  "has_voice_talent_attached": true,
+  "key_voice_talent": ["A-list Actor 1", "Rising Star Voice Actor"],
+  "is_original_ip": true,
+  "ip_ownership_status": "Fully owned by production company",
+  "production_jurisdictions": [
+    {
+      "country": "Canada",
+      "state_province": "Quebec",
+      "estimated_spend_percentage": "55",
+      "estimated_spend_amount": "16500000",
+      "estimated_local_labor_percentage": "80",
+      "studio_partner": "Montreal Animation Studios",
+      "is_service_production": false,
+      "applicable_incentive_policies": ["CA-QC-PSTC-2025", "CA-FEDERAL-CPTC-2025"]
+    },
+    {
+      "country": "Ireland",
+      "estimated_spend_percentage": "25",
+      "estimated_spend_amount": "7500000",
+      "estimated_local_labor_percentage": "70",
+      "studio_partner": "Cartoon Saloon",
+      "is_service_production": false,
+      "applicable_incentive_policies": ["IE-S481-2025"]
+    },
+    {
+      "country": "United States",
+      "state_province": "California",
+      "estimated_spend_percentage": "20",
+      "estimated_spend_amount": "6000000",
+      "estimated_local_labor_percentage": "90",
+      "is_service_production": true,
+      "applicable_incentive_policies": ["US-CA-FILMTAX-2025"]
+    }
+  ],
+  "strategic_pathway": "independent_patchwork",
+  "estimated_worldwide_value": "65000000",
+  "territory_estimates": {
+    "North America": "25000000",
+    "UK/Ireland": "8000000",
+    "France": "6000000",
+    "Germany": "5000000",
+    "Rest of World": "21000000"
+  },
+  "comparable_projects": [
+    "The Secret of Kells ($10M budget, $7M WW)",
+    "Song of the Sea ($7.5M budget, $3M WW)",
+    "Wolfwalkers ($11M budget, strong festival performance)"
+  ],
+  "has_distribution_commitment": false,
+  "priority_creative_control": "40",
+  "priority_financial_return": "35",
+  "priority_risk_mitigation": "25",
+  "created_date": "2025-10-31",
+  "last_updated": "2025-10-31",
+  "notes": "Family-friendly fantasy adventure with environmental themes. Strong festival potential."
+}
