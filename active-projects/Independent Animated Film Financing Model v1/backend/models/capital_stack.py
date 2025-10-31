@@ -15,7 +15,7 @@ from .financial_instruments import FinancialInstrument, InstrumentType
 class CapitalComponent(BaseModel):
     """A component of the capital stack"""
 
-    component_id: str
+    component_id: str = Field(default_factory=lambda: f"COMP-{id(object())}", description="Auto-generated component ID")
     instrument: FinancialInstrument
     position: int = Field(..., description="Position in stack (1=senior)")
 
@@ -32,8 +32,12 @@ class CapitalComponent(BaseModel):
 class CapitalStack(BaseModel):
     """Complete capital stack for a project"""
 
-    stack_id: str = Field(..., description="Unique identifier for this capital structure")
-    project_id: str = Field(..., description="Reference to ProjectProfile")
+    stack_id: str = Field(default_factory=lambda: f"STACK-{id(object())}", description="Unique identifier for this capital structure")
+    project_id: str = Field(default="", description="Reference to ProjectProfile")
+
+    # Engine 3 compatibility fields
+    stack_name: str = Field(default="Unnamed Stack", description="Human-readable name")
+    project_budget: Decimal = Field(default=Decimal("0"), gt=0, description="Total project budget")
 
     # Components
     components: List[CapitalComponent] = Field(..., min_length=1)

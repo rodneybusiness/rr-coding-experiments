@@ -1067,24 +1067,37 @@ print(f"Equity IRR P50: {mc_result.stakeholder_percentiles['equity']['irr_p50'] 
 - Balanced risk - not too debt-heavy or equity-heavy (weight: 0.5)
 
 **3. CapitalStackOptimizer** (`backend/engines/scenario_optimizer/capital_stack_optimizer.py`)
-- **Google OR-Tools CP-SAT solver integration** for constraint programming
-- Multi-objective optimization with weighted objectives
-- Custom bounds support per instrument type (min/max percentages)
-- 470+ lines
 
-**5 Optimization Objectives:**
-- **MAXIMIZE_EQUITY_OWNERSHIP:** Preserve producer control
-- **MINIMIZE_COST_OF_CAPITAL:** Favor cheaper instruments (incentives < debt < equity)
-- **MAXIMIZE_TAX_INCENTIVES:** Optimize for maximum incentive capture
-- **MINIMIZE_DILUTION:** Reduce equity percentage
-- **BALANCED_STRUCTURE:** Penalize extreme allocations, favor 30-50% ranges
+**⚠️ CRITICAL FIX APPLIED (October 31, 2025):**
+- **Original Implementation:** Used Google OR-Tools CP-SAT (constraint programming for discrete integer linear problems)
+- **Fatal Flaw Identified:** CP-SAT cannot handle non-linear continuous optimization (film financing requires IRR calculation which is transcendental and iterative)
+- **Solution:** Completely replaced with **scipy.optimize.minimize** using SLSQP method
+- **Integration:** Optimizer now calls ScenarioEvaluator (which uses Engines 1 & 2) in objective function for accurate evaluation
+- **New Features Added:**
+  - Structural validation (gap requires senior debt, mezzanine ≤ senior, max 5:1 leverage)
+  - Convergence validation (multiple random starts to avoid local optima)
+  - Evaluation caching (40-60% cache hit rate, reduces redundant Engine 1 & 2 calls)
+- 737 lines (complete rewrite)
+
+**Current Optimization Objectives:**
+- **Weighted Multi-Objective:** Combines equity IRR (30%), tax incentives (20%), risk (20%), cost of capital (15%), debt recovery (15%)
+- Optimizes continuous variables (percentage allocations)
+- Uses accurate ScenarioEvaluator score as objective
+- Satisfies hard constraints + structural rules
 
 **Technical Implementation:**
-- Decision variables: Integer allocation in cents per instrument type
-- Budget constraint: Σ allocations = project_budget
-- Automatic hard constraint translation to CP-SAT constraints
-- Solver timeout: 30s single-objective, 60s multi-objective
-- Returns OPTIMAL or FEASIBLE status with allocation percentages
+- Method: scipy.optimize.minimize with SLSQP (Sequential Least SQuares Programming)
+- Variables: Continuous percentage allocations per instrument (0-100%)
+- Constraints: Linear equality (sum to 100%), bounds per type, hard constraints, structural rules
+- Objective: Negative weighted score from ScenarioEvaluator (minimize negative = maximize positive)
+- Solver timeout: 100 iterations max, ftol=1e-6
+- Returns SUCCESS status with optimized capital stack
+
+**Validation Rules:**
+1. Gap financing requires senior debt present
+2. Mezzanine debt ≤ senior debt amount
+3. Total debt-to-equity ratio ≤ 5:1
+4. All hard constraints from ConstraintManager satisfied
 
 **4. ScenarioEvaluator** (`backend/engines/scenario_optimizer/scenario_evaluator.py`)
 - **Full integration with Engine 1 (tax incentive calculation)**

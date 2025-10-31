@@ -16,6 +16,8 @@ from backend.engines.scenario_optimizer.constraint_manager import (
     Constraint,
     HardConstraint,
     SoftConstraint,
+    ConstraintType,
+    ConstraintCategory,
     ConstraintManager,
     ConstraintViolation,
     ConstraintValidationResult
@@ -33,6 +35,7 @@ from backend.engines.scenario_optimizer.scenario_evaluator import (
 )
 
 from backend.engines.scenario_optimizer.scenario_comparator import (
+    RankingCriterion,
     ScenarioRanking,
     ScenarioComparator
 )
@@ -54,6 +57,8 @@ __all__ = [
     "Constraint",
     "HardConstraint",
     "SoftConstraint",
+    "ConstraintType",
+    "ConstraintCategory",
     "ConstraintManager",
     "ConstraintViolation",
     "ConstraintValidationResult",
@@ -68,6 +73,7 @@ __all__ = [
     "ScenarioEvaluator",
 
     # Comparison
+    "RankingCriterion",
     "ScenarioRanking",
     "ScenarioComparator",
 
