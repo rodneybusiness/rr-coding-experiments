@@ -136,6 +136,10 @@ class WaterfallStructure(BaseModel):
     waterfall_id: str
     project_id: str = Field(..., description="Reference to ProjectProfile")
 
+    # Engine 2 & 3 compatibility
+    waterfall_name: str = Field(default="Unnamed Waterfall", description="Human-readable name")
+    default_distribution_fee_rate: Decimal = Field(default=Decimal("30.0"), ge=0, le=100, description="Default distribution fee %")
+
     nodes: List[WaterfallNode] = Field(..., min_length=1, description="Ordered list of waterfall tiers")
 
     # Definitions for clarity

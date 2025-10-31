@@ -149,7 +149,7 @@ class WaterfallExecutor:
         # Initialize cumulative state
         cumulative_recouped: Dict[str, Decimal] = {}
         for node in self.waterfall.nodes:
-            node_id = f"{node.priority.value}_{node.payee}"
+            node_id = f"{node.priority.value}_{node.payee_name}"
             cumulative_recouped[node_id] = Decimal("0")
 
         # Process each quarter
@@ -194,10 +194,10 @@ class WaterfallExecutor:
         # Calculate final unrecouped
         final_unrecouped: Dict[str, Decimal] = {}
         for node in self.waterfall.nodes:
-            node_id = f"{node.priority.value}_{node.payee}"
-            target_amount = node.amount or Decimal("0")  # Use 0 if None (for percentage-based nodes)
+            node_id = f"{node.priority.value}_{node.payee_name}"
+            target_amount = node.fixed_amount or Decimal("0")  # Use 0 if None (for percentage-based nodes)
 
-            if node.amount:  # Only track unrecouped for fixed-amount nodes
+            if node.fixed_amount:  # Only track unrecouped for fixed-amount nodes
                 recouped = total_recouped_by_node.get(node_id, Decimal("0"))
                 remaining = target_amount - recouped
                 if remaining > 0:
@@ -265,12 +265,12 @@ class WaterfallExecutor:
             if remaining_pool <= 0:
                 break
 
-            node_id = f"{node.priority.value}_{node.payee}"
+            node_id = f"{node.priority.value}_{node.payee_name}"
 
             # Calculate remaining to recoup
-            if node.amount:
+            if node.fixed_amount:
                 # Fixed amount node
-                target_amount = node.amount
+                target_amount = node.fixed_amount
                 already_recouped = cumulative_state.get(node_id, Decimal("0"))
                 remaining_to_recoup = target_amount - already_recouped
 
@@ -283,13 +283,13 @@ class WaterfallExecutor:
 
             else:
                 # Percentage-based node (e.g., profit splits)
-                if node.percentage:
-                    payment = remaining_pool * (node.percentage / Decimal("100"))
+                if node.percentage_of_receipts:
+                    payment = remaining_pool * (node.percentage_of_receipts / Decimal("100"))
 
                     # Apply cap if exists
-                    if node.cap:
+                    if node.capped_at:
                         already_recouped = cumulative_state.get(node_id, Decimal("0"))
-                        remaining_cap = node.cap - already_recouped
+                        remaining_cap = node.capped_at - already_recouped
                         if remaining_cap <= 0:
                             continue
                         payment = min(payment, remaining_cap)
@@ -299,7 +299,7 @@ class WaterfallExecutor:
 
             # Record payment
             node_payouts[node_id] = payment
-            payee_payouts[node.payee] = payee_payouts.get(node.payee, Decimal("0")) + payment
+            payee_payouts[node.payee_name] = payee_payouts.get(node.payee_name, Decimal("0")) + payment
 
             # Update cumulative state
             cumulative_state[node_id] = cumulative_state.get(node_id, Decimal("0")) + payment
@@ -310,19 +310,19 @@ class WaterfallExecutor:
         # Calculate unrecouped balances
         unrecouped_balances: Dict[str, Decimal] = {}
         for node in sorted_nodes:
-            node_id = f"{node.priority.value}_{node.payee}"
-            if node.amount:
+            node_id = f"{node.priority.value}_{node.payee_name}"
+            if node.fixed_amount:
                 recouped = cumulative_state.get(node_id, Decimal("0"))
-                remaining = node.amount - recouped
+                remaining = node.fixed_amount - recouped
                 if remaining > 0:
                     unrecouped_balances[node_id] = remaining
 
         # Calculate cumulative paid by payee
         cumulative_paid: Dict[str, Decimal] = {}
         for node in sorted_nodes:
-            node_id = f"{node.priority.value}_{node.payee}"
+            node_id = f"{node.priority.value}_{node.payee_name}"
             amount = cumulative_state.get(node_id, Decimal("0"))
-            cumulative_paid[node.payee] = cumulative_paid.get(node.payee, Decimal("0")) + amount
+            cumulative_paid[node.payee_name] = cumulative_paid.get(node.payee_name, Decimal("0")) + amount
 
         execution = QuarterlyWaterfallExecution(
             quarter=quarter,

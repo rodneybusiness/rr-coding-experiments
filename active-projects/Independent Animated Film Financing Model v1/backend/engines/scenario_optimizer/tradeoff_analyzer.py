@@ -403,14 +403,25 @@ class TradeOffAnalyzer:
             obj2_min = min(p.objective_2_value for p in frontier_points)
             obj2_max = max(p.objective_2_value for p in frontier_points)
 
-            insights.append(
-                f"{obj1_name} range: {obj1_min:.2f} to {obj1_max:.2f} "
-                f"({((obj1_max - obj1_min) / obj1_max * Decimal('100')):.1f}% spread)"
-            )
-            insights.append(
-                f"{obj2_name} range: {obj2_min:.2f} to {obj2_max:.2f} "
-                f"({((obj2_max - obj2_min) / obj2_max * Decimal('100')):.1f}% spread)"
-            )
+            # Obj1 spread
+            if obj1_max > 0:
+                obj1_spread = ((obj1_max - obj1_min) / obj1_max * Decimal('100'))
+                insights.append(
+                    f"{obj1_name} range: {obj1_min:.2f} to {obj1_max:.2f} "
+                    f"({obj1_spread:.1f}% spread)"
+                )
+            else:
+                insights.append(f"{obj1_name} range: {obj1_min:.2f} to {obj1_max:.2f}")
+
+            # Obj2 spread
+            if obj2_max > 0:
+                obj2_spread = ((obj2_max - obj2_min) / obj2_max * Decimal('100'))
+                insights.append(
+                    f"{obj2_name} range: {obj2_min:.2f} to {obj2_max:.2f} "
+                    f"({obj2_spread:.1f}% spread)"
+                )
+            else:
+                insights.append(f"{obj2_name} range: {obj2_min:.2f} to {obj2_max:.2f}")
 
         # Insight 3: Trade-off slope
         if slope:

@@ -143,7 +143,11 @@ class MonteCarloSimulator:
             all_revenues.append(sampled_revenue)
 
             # Generate revenue projection (scaled from base)
-            scale_factor = sampled_revenue / self.base_projection.metadata["total_ultimate_revenue"]
+            # Convert metadata value to Decimal if it's a string
+            total_revenue = self.base_projection.metadata["total_ultimate_revenue"]
+            if isinstance(total_revenue, str):
+                total_revenue = Decimal(total_revenue)
+            scale_factor = sampled_revenue / total_revenue
             scaled_projection = self._scale_projection(self.base_projection, scale_factor)
 
             # Execute waterfall
