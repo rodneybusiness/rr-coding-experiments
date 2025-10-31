@@ -168,11 +168,23 @@ class StakeholderAnalyzer:
                 payee_name
             )
 
-            # Get investment timing
-            investment_quarter = investment_timing.get(payee_name, 0)
-
             # Build cash flow list (investment + receipts)
-            cash_flows = [(investment_quarter, -instrument.amount)]  # Negative = outflow
+            # Handle S-curve drawdown schedule if present
+            if instrument.drawdown_schedule:
+                # Spread investment across quarters according to S-curve
+                cash_flows = []
+                for quarter, percentage in instrument.drawdown_schedule.items():
+                    drawdown_amount = instrument.amount * (percentage / Decimal("100"))
+                    cash_flows.append((quarter, -drawdown_amount))  # Negative = outflow
+
+                # Use earliest drawdown quarter as investment_quarter for tracking
+                investment_quarter = min(instrument.drawdown_schedule.keys())
+            else:
+                # Legacy behavior: single lump sum at investment_quarter
+                investment_quarter = investment_timing.get(payee_name, 0)
+                cash_flows = [(investment_quarter, -instrument.amount)]  # Negative = outflow
+
+            # Add receipts to cash flows
             for quarter, receipt in quarterly_receipts.items():
                 cash_flows.append((quarter, receipt))
 

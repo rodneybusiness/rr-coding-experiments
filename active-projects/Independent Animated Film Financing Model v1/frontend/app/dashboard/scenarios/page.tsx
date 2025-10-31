@@ -26,6 +26,8 @@ import {
   Zap,
 } from 'lucide-react';
 import { formatCurrency, formatPercentage, cn } from '@/lib/utils';
+import { generateScenarios as generateScenariosAPI } from '@/lib/api/services';
+import type { ScenarioGenerationResponse, Scenario } from '@/lib/api/types';
 import {
   RadarChart,
   PolarGrid,
@@ -47,129 +49,37 @@ import {
 export default function ScenariosPage() {
   const [projectBudget, setProjectBudget] = useState<number>(30000000);
   const [loading, setLoading] = useState(false);
-  const [scenarios, setScenarios] = useState<any[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [scenarios, setScenarios] = useState<Scenario[]>([]);
   const [selectedScenarios, setSelectedScenarios] = useState<string[]>([]);
 
   const generateScenarios = async () => {
     setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      const mockScenarios = [
-        {
-          id: 'max-leverage',
-          name: 'Maximum Leverage',
-          score: 82.5,
-          structure: {
-            seniorDebt: 12000000,
-            gap: 4500000,
-            mezzanine: 3000000,
-            equity: 7500000,
-            taxIncentives: 3000000,
-          },
-          metrics: {
-            equityIRR: 28.5,
-            costOfCapital: 11.2,
-            taxIncentiveRate: 10.0,
-            riskScore: 65,
-            debtCoverage: 1.8,
-            probabilityRecoupment: 78.9,
-          },
-          strengths: [
-            'Excellent equity returns (28.5% IRR)',
-            'Strong debt coverage ratio',
-            'Balanced risk profile',
-          ],
-          weaknesses: ['Moderate tax incentive capture', 'Higher cost of capital'],
-        },
-        {
-          id: 'tax-optimized',
-          name: 'Tax Optimized',
-          score: 88.2,
-          structure: {
-            seniorDebt: 9000000,
-            gap: 3000000,
-            mezzanine: 2000000,
-            equity: 10000000,
-            taxIncentives: 6000000,
-          },
-          metrics: {
-            equityIRR: 32.1,
-            costOfCapital: 10.5,
-            taxIncentiveRate: 20.0,
-            riskScore: 55,
-            debtCoverage: 2.2,
-            probabilityRecoupment: 85.5,
-          },
-          strengths: [
-            'Exceptional tax incentive capture (20%)',
-            'Highest equity returns (32.1% IRR)',
-            'Low risk profile',
-            'Excellent debt coverage',
-          ],
-          weaknesses: ['Requires more equity capital'],
-        },
-        {
-          id: 'balanced',
-          name: 'Balanced',
-          score: 85.7,
-          structure: {
-            seniorDebt: 10500000,
-            gap: 3750000,
-            mezzanine: 2250000,
-            equity: 8500000,
-            taxIncentives: 5000000,
-          },
-          metrics: {
-            equityIRR: 30.2,
-            costOfCapital: 10.8,
-            taxIncentiveRate: 16.7,
-            riskScore: 58,
-            debtCoverage: 2.0,
-            probabilityRecoupment: 82.3,
-          },
-          strengths: [
-            'Balanced capital structure',
-            'Strong equity returns (30.2% IRR)',
-            'Good tax incentive capture (16.7%)',
-            'Low risk profile',
-          ],
-          weaknesses: ['No significant weaknesses'],
-        },
-        {
-          id: 'low-risk',
-          name: 'Low Risk',
-          score: 79.3,
-          structure: {
-            seniorDebt: 8000000,
-            gap: 2000000,
-            mezzanine: 1000000,
-            equity: 12000000,
-            taxIncentives: 7000000,
-          },
-          metrics: {
-            equityIRR: 25.8,
-            costOfCapital: 9.8,
-            taxIncentiveRate: 23.3,
-            riskScore: 45,
-            debtCoverage: 2.8,
-            probabilityRecoupment: 92.1,
-          },
-          strengths: [
-            'Highest tax incentive capture (23.3%)',
-            'Lowest risk profile',
-            'Very high probability of recoupment (92%)',
-            'Lowest cost of capital',
-          ],
-          weaknesses: [
-            'Lower equity returns (25.8% IRR)',
-            'Requires most equity capital',
-          ],
-        },
-      ];
-      setScenarios(mockScenarios);
-      setSelectedScenarios([mockScenarios[1].id, mockScenarios[2].id]);
+    setError(null);
+
+    try {
+      const response = await generateScenariosAPI({
+        project_id: `proj_${Date.now()}`,
+        project_name: 'Film Project',
+        project_budget: projectBudget,
+        waterfall_id: `waterfall_${Date.now()}`,
+        num_scenarios: 4,
+      });
+
+      setScenarios(response.scenarios);
+      // Auto-select the best scenario and one other
+      if (response.scenarios.length >= 2) {
+        setSelectedScenarios([
+          response.best_scenario_id,
+          response.scenarios.find((s) => s.scenario_id !== response.best_scenario_id)?.scenario_id || response.scenarios[0].scenario_id,
+        ]);
+      }
+    } catch (err: any) {
+      setError(err.message || 'Failed to generate scenarios');
+      console.error('Error generating scenarios:', err);
+    } finally {
       setLoading(false);
-    }, 2000);
+    }
   };
 
   const toggleScenarioSelection = (id: string) => {
@@ -179,7 +89,7 @@ export default function ScenariosPage() {
   };
 
   const selectedScenariosData = scenarios.filter((s) =>
-    selectedScenarios.includes(s.id)
+    selectedScenarios.includes(s.scenario_id)
   );
 
   // Prepare radar chart data for comparison
@@ -187,41 +97,41 @@ export default function ScenariosPage() {
     {
       metric: 'Equity IRR',
       ...Object.fromEntries(
-        selectedScenariosData.map((s) => [s.name, s.metrics.equityIRR])
+        selectedScenariosData.map((s) => [s.scenario_name, s.metrics.equity_irr])
       ),
     },
     {
       metric: 'Tax Incentives',
       ...Object.fromEntries(
-        selectedScenariosData.map((s) => [s.name, s.metrics.taxIncentiveRate * 5])
+        selectedScenariosData.map((s) => [s.scenario_name, s.metrics.tax_incentive_rate * 5])
       ),
     },
     {
       metric: 'Low Risk',
       ...Object.fromEntries(
-        selectedScenariosData.map((s) => [s.name, 100 - s.metrics.riskScore])
+        selectedScenariosData.map((s) => [s.scenario_name, 100 - s.metrics.risk_score])
       ),
     },
     {
       metric: 'Debt Coverage',
       ...Object.fromEntries(
-        selectedScenariosData.map((s) => [s.name, s.metrics.debtCoverage * 15])
+        selectedScenariosData.map((s) => [s.scenario_name, s.metrics.debt_coverage_ratio * 15])
       ),
     },
     {
       metric: 'Low Cost',
       ...Object.fromEntries(
-        selectedScenariosData.map((s) => [s.name, 100 - s.metrics.costOfCapital * 5])
+        selectedScenariosData.map((s) => [s.scenario_name, 100 - s.metrics.cost_of_capital * 5])
       ),
     },
   ];
 
   // Prepare scatter data for trade-off analysis
   const scatterData = scenarios.map((s) => ({
-    x: s.metrics.equityIRR,
-    y: s.metrics.riskScore,
-    z: s.score,
-    name: s.name,
+    x: s.metrics.equity_irr,
+    y: s.metrics.risk_score,
+    z: s.optimization_score,
+    name: s.scenario_name,
   }));
 
   const COLORS = ['#3b82f6', '#10b981', '#8b5cf6', '#f59e0b'];
@@ -282,23 +192,35 @@ export default function ScenariosPage() {
           </CardContent>
         </Card>
 
+        {/* Error Display */}
+        {error && (
+          <Card className="border-red-300 bg-red-50">
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-2 text-red-700">
+                <AlertCircle className="h-5 w-5" />
+                <p className="font-semibold">{error}</p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Scenarios Grid */}
         {scenarios.length > 0 && (
           <>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               {scenarios.map((scenario) => {
-                const isSelected = selectedScenarios.includes(scenario.id);
-                const isTopScorer = scenario.score === Math.max(...scenarios.map((s) => s.score));
+                const isSelected = selectedScenarios.includes(scenario.scenario_id);
+                const isTopScorer = scenario.optimization_score === Math.max(...scenarios.map((s) => s.optimization_score));
 
                 return (
                   <Card
-                    key={scenario.id}
+                    key={scenario.scenario_id}
                     className={cn(
                       'relative cursor-pointer transition-all hover:shadow-lg',
                       isSelected && 'ring-2 ring-blue-500',
                       isTopScorer && 'border-green-500 border-2'
                     )}
-                    onClick={() => toggleScenarioSelection(scenario.id)}
+                    onClick={() => toggleScenarioSelection(scenario.scenario_id)}
                   >
                     {isTopScorer && (
                       <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
@@ -311,7 +233,7 @@ export default function ScenariosPage() {
 
                     <CardHeader className="pb-3">
                       <div className="flex items-center justify-between">
-                        <CardTitle className="text-lg">{scenario.name}</CardTitle>
+                        <CardTitle className="text-lg">{scenario.scenario_name}</CardTitle>
                         {isSelected && (
                           <CheckCircle2 className="h-5 w-5 text-blue-500" />
                         )}
@@ -320,10 +242,10 @@ export default function ScenariosPage() {
                         <div className="flex-1 bg-gray-200 rounded-full h-2">
                           <div
                             className="bg-gradient-to-r from-blue-500 to-green-500 h-2 rounded-full"
-                            style={{ width: `${scenario.score}%` }}
+                            style={{ width: `${scenario.optimization_score}%` }}
                           ></div>
                         </div>
-                        <span className="text-sm font-bold">{scenario.score.toFixed(1)}</span>
+                        <span className="text-sm font-bold">{scenario.optimization_score.toFixed(1)}</span>
                       </div>
                     </CardHeader>
 
@@ -333,23 +255,23 @@ export default function ScenariosPage() {
                           <div>
                             <p className="text-gray-500 text-xs">Equity IRR</p>
                             <p className="font-bold text-green-600">
-                              {formatPercentage(scenario.metrics.equityIRR)}
+                              {formatPercentage(scenario.metrics.equity_irr)}
                             </p>
                           </div>
                           <div>
                             <p className="text-gray-500 text-xs">Risk Score</p>
-                            <p className="font-bold">{scenario.metrics.riskScore}</p>
+                            <p className="font-bold">{scenario.metrics.risk_score}</p>
                           </div>
                           <div>
                             <p className="text-gray-500 text-xs">Tax Rate</p>
                             <p className="font-bold text-blue-600">
-                              {formatPercentage(scenario.metrics.taxIncentiveRate)}
+                              {formatPercentage(scenario.metrics.tax_incentive_rate)}
                             </p>
                           </div>
                           <div>
                             <p className="text-gray-500 text-xs">Recoupment</p>
                             <p className="font-bold">
-                              {formatPercentage(scenario.metrics.probabilityRecoupment)}
+                              {formatPercentage(scenario.metrics.probability_of_recoupment)}
                             </p>
                           </div>
                         </div>
@@ -377,22 +299,22 @@ export default function ScenariosPage() {
                 <TabsContent value="structure">
                   <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {selectedScenariosData.map((scenario) => (
-                      <Card key={scenario.id}>
+                      <Card key={scenario.scenario_id}>
                         <CardHeader>
-                          <CardTitle className="text-base">{scenario.name}</CardTitle>
+                          <CardTitle className="text-base">{scenario.scenario_name}</CardTitle>
                           <CardDescription>
-                            Score: {scenario.score.toFixed(1)}/100
+                            Score: {scenario.optimization_score.toFixed(1)}/100
                           </CardDescription>
                         </CardHeader>
                         <CardContent>
                           <div className="space-y-2">
-                            {Object.entries(scenario.structure).map(([key, value]: [string, any]) => {
+                            {Object.entries(scenario.capital_structure).map(([key, value]: [string, any]) => {
                               const percentage = (value / projectBudget) * 100;
                               return (
                                 <div key={key}>
                                   <div className="flex justify-between text-sm mb-1">
                                     <span className="capitalize">
-                                      {key.replace(/([A-Z])/g, ' $1').trim()}
+                                      {key.replace(/_/g, ' ')}
                                     </span>
                                     <span className="font-semibold">
                                       {formatCurrency(value)} ({percentage.toFixed(1)}%)
@@ -437,8 +359,8 @@ export default function ScenariosPage() {
                             <tr className="border-b">
                               <th className="text-left p-3 font-medium">Metric</th>
                               {selectedScenariosData.map((s) => (
-                                <th key={s.id} className="text-center p-3 font-medium">
-                                  {s.name}
+                                <th key={s.scenario_id} className="text-center p-3 font-medium">
+                                  {s.scenario_name}
                                 </th>
                               ))}
                             </tr>
@@ -447,50 +369,50 @@ export default function ScenariosPage() {
                             <tr className="border-b hover:bg-gray-50">
                               <td className="p-3 font-medium">Overall Score</td>
                               {selectedScenariosData.map((s) => (
-                                <td key={s.id} className="text-center p-3">
-                                  <span className="font-bold text-lg">{s.score.toFixed(1)}</span>
+                                <td key={s.scenario_id} className="text-center p-3">
+                                  <span className="font-bold text-lg">{s.optimization_score.toFixed(1)}</span>
                                 </td>
                               ))}
                             </tr>
                             <tr className="border-b hover:bg-gray-50">
                               <td className="p-3">Equity IRR</td>
                               {selectedScenariosData.map((s) => (
-                                <td key={s.id} className="text-center p-3 font-semibold text-green-600">
-                                  {formatPercentage(s.metrics.equityIRR)}
+                                <td key={s.scenario_id} className="text-center p-3 font-semibold text-green-600">
+                                  {formatPercentage(s.metrics.equity_irr)}
                                 </td>
                               ))}
                             </tr>
                             <tr className="border-b hover:bg-gray-50">
                               <td className="p-3">Cost of Capital</td>
                               {selectedScenariosData.map((s) => (
-                                <td key={s.id} className="text-center p-3">
-                                  {formatPercentage(s.metrics.costOfCapital)}
+                                <td key={s.scenario_id} className="text-center p-3">
+                                  {formatPercentage(s.metrics.cost_of_capital)}
                                 </td>
                               ))}
                             </tr>
                             <tr className="border-b hover:bg-gray-50">
                               <td className="p-3">Tax Incentive Rate</td>
                               {selectedScenariosData.map((s) => (
-                                <td key={s.id} className="text-center p-3 font-semibold text-blue-600">
-                                  {formatPercentage(s.metrics.taxIncentiveRate)}
+                                <td key={s.scenario_id} className="text-center p-3 font-semibold text-blue-600">
+                                  {formatPercentage(s.metrics.tax_incentive_rate)}
                                 </td>
                               ))}
                             </tr>
                             <tr className="border-b hover:bg-gray-50">
                               <td className="p-3">Risk Score</td>
                               {selectedScenariosData.map((s) => (
-                                <td key={s.id} className="text-center p-3">
+                                <td key={s.scenario_id} className="text-center p-3">
                                   <span
                                     className={cn(
                                       'px-2 py-1 rounded-full text-xs font-semibold',
-                                      s.metrics.riskScore < 50
+                                      s.metrics.risk_score < 50
                                         ? 'bg-green-100 text-green-700'
-                                        : s.metrics.riskScore < 70
+                                        : s.metrics.risk_score < 70
                                         ? 'bg-yellow-100 text-yellow-700'
                                         : 'bg-red-100 text-red-700'
                                     )}
                                   >
-                                    {s.metrics.riskScore}
+                                    {s.metrics.risk_score}
                                   </span>
                                 </td>
                               ))}
@@ -498,16 +420,16 @@ export default function ScenariosPage() {
                             <tr className="border-b hover:bg-gray-50">
                               <td className="p-3">Debt Coverage</td>
                               {selectedScenariosData.map((s) => (
-                                <td key={s.id} className="text-center p-3">
-                                  {s.metrics.debtCoverage.toFixed(1)}x
+                                <td key={s.scenario_id} className="text-center p-3">
+                                  {s.metrics.debt_coverage_ratio.toFixed(1)}x
                                 </td>
                               ))}
                             </tr>
                             <tr className="border-b hover:bg-gray-50">
                               <td className="p-3">P(Recoupment)</td>
                               {selectedScenariosData.map((s) => (
-                                <td key={s.id} className="text-center p-3">
-                                  {formatPercentage(s.metrics.probabilityRecoupment)}
+                                <td key={s.scenario_id} className="text-center p-3">
+                                  {formatPercentage(s.metrics.probability_of_recoupment)}
                                 </td>
                               ))}
                             </tr>
@@ -518,9 +440,9 @@ export default function ScenariosPage() {
                       {/* Strengths & Weaknesses */}
                       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mt-6">
                         {selectedScenariosData.map((scenario) => (
-                          <Card key={scenario.id} className="border-2">
+                          <Card key={scenario.scenario_id} className="border-2">
                             <CardHeader className="pb-3">
-                              <CardTitle className="text-sm">{scenario.name}</CardTitle>
+                              <CardTitle className="text-sm">{scenario.scenario_name}</CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-3">
                               <div>
@@ -586,9 +508,9 @@ export default function ScenariosPage() {
                           <PolarRadiusAxis angle={90} domain={[0, 100]} />
                           {selectedScenariosData.map((scenario, index) => (
                             <Radar
-                              key={scenario.id}
-                              name={scenario.name}
-                              dataKey={scenario.name}
+                              key={scenario.scenario_id}
+                              name={scenario.scenario_name}
+                              dataKey={scenario.scenario_name}
                               stroke={COLORS[index]}
                               fill={COLORS[index]}
                               fillOpacity={0.3}
