@@ -23,6 +23,8 @@ import {
   Percent,
 } from 'lucide-react';
 import { formatCurrency, formatPercentage } from '@/lib/utils';
+import { calculateIncentives as calculateIncentivesAPI } from '@/lib/api/services';
+import type { IncentiveCalculationResponse } from '@/lib/api/types';
 
 interface JurisdictionSpend {
   id: string;
@@ -42,8 +44,9 @@ export default function IncentivesPage() {
     },
   ]);
 
-  const [results, setResults] = useState<any>(null);
+  const [results, setResults] = useState<IncentiveCalculationResponse | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const addJurisdiction = () => {
     setJurisdictions([
@@ -73,45 +76,27 @@ export default function IncentivesPage() {
 
   const calculateIncentives = async () => {
     setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      // Mock results
-      const mockResults = {
-        totalGrossCredit: 5790000,
-        totalNetBenefit: 4632000,
-        effectiveRate: 15.44,
-        jurisdictionBreakdown: [
-          {
-            jurisdiction: 'Quebec, Canada',
-            grossCredit: 5790000,
-            policies: [
-              {
-                name: 'Canadian Film or Video Production Tax Credit (CPTC)',
-                credit: 3000000,
-                rate: 25,
-              },
-              {
-                name: 'Quebec Production Services Tax Credit (PSTC)',
-                credit: 2790000,
-                rate: 20,
-              },
-            ],
-          },
-        ],
-        cashFlowProjection: [
-          { quarter: 1, amount: 0 },
-          { quarter: 2, amount: 0 },
-          { quarter: 3, amount: 0 },
-          { quarter: 4, amount: 0 },
-          { quarter: 5, amount: 0 },
-          { quarter: 6, amount: 2316000 },
-          { quarter: 7, amount: 2316000 },
-          { quarter: 8, amount: 0 },
-        ],
-      };
-      setResults(mockResults);
+    setError(null);
+
+    try {
+      const response = await calculateIncentivesAPI({
+        project_id: `proj_${Date.now()}`,
+        project_name: 'Film Project',
+        total_budget: totalBudget,
+        jurisdiction_spends: jurisdictions.map((j) => ({
+          jurisdiction: j.jurisdiction,
+          qualified_spend: j.qualifiedSpend,
+          labor_spend: j.laborSpend,
+        })),
+      });
+
+      setResults(response);
+    } catch (err: any) {
+      setError(err.message || 'Failed to calculate incentives');
+      console.error('Error calculating incentives:', err);
+    } finally {
       setLoading(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -264,7 +249,7 @@ export default function IncentivesPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold">
-                    {formatCurrency(results.totalGrossCredit)}
+                    {formatCurrency(results.total_gross_credit)}
                   </div>
                   <p className="text-sm text-blue-100 mt-2">
                     Before monetization
@@ -281,7 +266,7 @@ export default function IncentivesPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold">
-                    {formatCurrency(results.totalNetBenefit)}
+                    {formatCurrency(results.total_net_benefit)}
                   </div>
                   <p className="text-sm text-green-100 mt-2">
                     After 20% discount
@@ -298,7 +283,7 @@ export default function IncentivesPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold">
-                    {formatPercentage(results.effectiveRate)}
+                    {formatPercentage(results.effective_rate)}
                   </div>
                   <p className="text-sm text-purple-100 mt-2">
                     Of total budget
@@ -332,19 +317,19 @@ export default function IncentivesPage() {
                 </TabsList>
 
                 <TabsContent value="breakdown" className="space-y-4">
-                  {results.jurisdictionBreakdown.map((jb: any, idx: number) => (
+                  {results.jurisdiction_breakdown.map((jb, idx: number) => (
                     <Card key={idx} className="border-2">
                       <CardHeader>
                         <CardTitle className="text-lg">
                           {jb.jurisdiction}
                         </CardTitle>
                         <CardDescription>
-                          Total Credit: {formatCurrency(jb.grossCredit)}
+                          Total Credit: {formatCurrency(jb.gross_credit)}
                         </CardDescription>
                       </CardHeader>
                       <CardContent>
                         <div className="space-y-3">
-                          {jb.policies.map((policy: any, pidx: number) => (
+                          {jb.policies.map((policy, pidx: number) => (
                             <div
                               key={pidx}
                               className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
@@ -354,12 +339,12 @@ export default function IncentivesPage() {
                                   {policy.name}
                                 </p>
                                 <p className="text-xs text-gray-500">
-                                  {formatPercentage(policy.rate, 0)} rate
+                                  {formatPercentage(policy.credit_rate, 0)} rate
                                 </p>
                               </div>
                               <div className="text-right">
                                 <p className="font-bold text-lg">
-                                  {formatCurrency(policy.credit)}
+                                  {formatCurrency(policy.credit_amount)}
                                 </p>
                               </div>
                             </div>
@@ -373,7 +358,7 @@ export default function IncentivesPage() {
                 <TabsContent value="cashflow">
                   <div className="space-y-4">
                     <div className="grid grid-cols-8 gap-2">
-                      {results.cashFlowProjection.map((cf: any) => (
+                      {results.cash_flow_projection.map((cf) => (
                         <div
                           key={cf.quarter}
                           className="text-center p-3 bg-gray-50 rounded-lg"
@@ -407,7 +392,7 @@ export default function IncentivesPage() {
                       </CardHeader>
                       <CardContent>
                         <div className="text-2xl font-bold text-blue-600 mb-2">
-                          {formatCurrency(results.totalGrossCredit)}
+                          {formatCurrency(results.monetization_options.direct_receipt)}
                         </div>
                         <p className="text-sm text-gray-600 mb-4">
                           Wait 18-24 months for full credit
@@ -426,7 +411,7 @@ export default function IncentivesPage() {
                       </CardHeader>
                       <CardContent>
                         <div className="text-2xl font-bold text-green-600 mb-2">
-                          {formatCurrency(results.totalGrossCredit * 0.85)}
+                          {formatCurrency(results.monetization_options.bank_loan)}
                         </div>
                         <p className="text-sm text-gray-600 mb-4">
                           Immediate cash, repay from credit
@@ -445,7 +430,7 @@ export default function IncentivesPage() {
                       </CardHeader>
                       <CardContent>
                         <div className="text-2xl font-bold text-purple-600 mb-2">
-                          {formatCurrency(results.totalGrossCredit * 0.8)}
+                          {formatCurrency(results.monetization_options.broker_sale)}
                         </div>
                         <p className="text-sm text-gray-600 mb-4">
                           Immediate sale at discount
