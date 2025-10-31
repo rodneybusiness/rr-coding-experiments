@@ -254,36 +254,36 @@ class StakeholderAnalyzer:
         if not (has_negative and has_positive):
             return None
 
-        # Convert to annual cash flows (quarters → years)
-        cash_flows_years = [(Decimal(str(q)) / Decimal("4"), amt) for q, amt in cash_flows]
+        # Convert to annual cash flows (quarters → years) and to float for calculation
+        cash_flows_years = [(float(q) / 4.0, float(amt)) for q, amt in cash_flows]
 
-        # Newton-Raphson iteration
-        r = Decimal("0.10")  # Initial guess: 10%
+        # Newton-Raphson iteration (use float for numerical stability)
+        r = 0.10  # Initial guess: 10%
         max_iterations = 100
-        precision = Decimal("0.00001")
+        precision = 0.00001
 
         for i in range(max_iterations):
             # Calculate NPV at current r
-            npv = sum(amt / (Decimal("1") + r) ** float(t) for t, amt in cash_flows_years)
+            npv = sum(amt / (1 + r) ** t for t, amt in cash_flows_years)
 
             # Calculate derivative (NPV')
-            npv_prime = sum(-float(t) * amt / (Decimal("1") + r) ** (float(t) + 1) for t, amt in cash_flows_years)
+            npv_prime = sum(-t * amt / (1 + r) ** (t + 1) for t, amt in cash_flows_years)
 
-            if abs(npv_prime) < float(precision):
+            if abs(npv_prime) < precision:
                 return None  # Can't converge
 
             # Newton-Raphson step
-            r_new = r - (npv / Decimal(str(npv_prime)))
+            r_new = r - (npv / npv_prime)
 
             # Check convergence
             if abs(r_new - r) < precision:
-                # Converged
-                return r_new if r_new > Decimal("-1.0") else None  # IRR must be > -100%
+                # Converged - convert back to Decimal
+                return Decimal(str(r_new)) if r_new > -1.0 else None  # IRR must be > -100%
 
             r = r_new
 
             # Prevent divergence
-            if abs(r) > Decimal("10.0"):  # IRR > 1000% or < -1000%
+            if abs(r) > 10.0:  # IRR > 1000% or < -1000%
                 return None
 
         return None  # Didn't converge
@@ -305,13 +305,14 @@ class StakeholderAnalyzer:
         Returns:
             NPV in currency units
         """
-        # Convert quarters to years
-        cash_flows_years = [(Decimal(str(q)) / Decimal("4"), amt) for q, amt in cash_flows]
+        # Convert quarters to years and to float for calculation
+        cash_flows_years = [(float(q) / 4.0, float(amt)) for q, amt in cash_flows]
 
-        # Calculate NPV
-        npv = sum(amt / (Decimal("1") + discount_rate) ** float(t) for t, amt in cash_flows_years)
+        # Calculate NPV (use float for numerical operations)
+        npv_float = sum(amt / (1 + float(discount_rate)) ** t for t, amt in cash_flows_years)
 
-        return npv
+        # Convert result back to Decimal
+        return Decimal(str(npv_float))
 
     def calculate_payback_period(
         self,

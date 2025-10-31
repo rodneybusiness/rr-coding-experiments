@@ -351,8 +351,8 @@ class ScenarioEvaluator:
                 weighted_cost += weight * cost
 
             elif isinstance(instrument, PreSale):
-                # Pre-sale cost = discount rate
-                cost = instrument.discount_rate
+                # Pre-sale cost = sales agent commission
+                cost = instrument.sales_agent_commission if hasattr(instrument, 'sales_agent_commission') else Decimal("15.0")
                 weighted_cost += weight * cost
 
             elif isinstance(instrument, TaxIncentive):
