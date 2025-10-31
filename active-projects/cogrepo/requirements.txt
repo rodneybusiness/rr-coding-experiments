@@ -1,16 +1,28 @@
 # CogRepo Requirements
-# Python standard library only - no external dependencies required
 
-# All imports are from Python standard library:
-# - json
-# - datetime
-# - pathlib
-# - sys
-# - collections
-# - http.server
-# - urllib.parse
-# - math
-# - os
-# - re
+# Core Dependencies (for import and enrichment)
+anthropic>=0.26.0          # Claude API for AI enrichment
+python-dateutil>=2.8.2     # Flexible date parsing
+pyyaml>=6.0                # Configuration file parsing
+python-dotenv>=1.0.0       # Load environment variables from .env file
 
-# No pip install needed for this project
+# Optional Dependencies (for advanced features)
+# beautifulsoup4>=4.12.0   # HTML parsing for Gemini Docs exports (optional)
+# lxml>=5.2.0              # XML/HTML parsing backend (optional)
+pandas>=2.2.0              # Parquet file generation
+pyarrow>=15.0.0            # Parquet backend
+
+# CLI and Progress
+tqdm>=4.66.0               # Progress bars for batch processing
+
+# Reliability
+tenacity>=8.2.3            # Retry logic with exponential backoff
+
+# Testing
+pytest>=8.1.0              # Testing framework
+pytest-mock>=3.14.0        # Mocking for tests
+
+# Python Standard Library (no install needed):
+# - json, datetime, pathlib, sys, collections
+# - http.server, urllib.parse, math, os, re
+# - hashlib, dataclasses, abc, typing

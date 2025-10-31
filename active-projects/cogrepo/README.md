@@ -16,24 +16,65 @@ A comprehensive system for capturing, processing, indexing, and searching throug
 ```
 cogrepo/
 ├── README.md                    # This documentation
+├── IMPORT_GUIDE.md             # 📖 Complete import/update guide
+├── INCREMENTAL_PROCESSING_PLAN.md  # 🏗️ Technical architecture
 ├── requirements.txt             # Python dependencies
-├── cogrepo_search.py           # 🔍 Main search tool
+│
+├── cogrepo_import.py           # 📥 Main import tool
+├── cogrepo_update.py           # ♻️  Incremental update command
+├── cogrepo_search.py           # 🔍 Keyword search tool
 ├── cogrepo_date_search.py      # 📅 Date-based search
+├── index_builder.py            # 🔨 Build search indexes
+│
+├── models.py                   # 📊 Data models
+├── state_manager.py            # 💾 Processing state tracking
+│
+├── parsers/                    # 🔧 Format parsers
+│   ├── chatgpt_parser.py       # ChatGPT conversations.json
+│   ├── claude_parser.py        # Claude JSON/JSONL
+│   └── gemini_parser.py        # Gemini JSON/HTML
+│
+├── enrichment/                 # 🤖 AI enrichment pipeline
+│   └── enrichment_pipeline.py  # Title, summary, tags, scoring
+│
+├── config/                     # ⚙️ Configuration
+│   └── enrichment_config.yaml  # Enrichment settings
+│
 ├── cogrepo-ui/                 # 🌐 Web interface
 │   ├── index.html              # Web UI for browsing conversations
-│   ├── server.py               # Backend API server
-│   └── package.json            # Node.js config for Claude Code
+│   └── server.py               # Backend API server
+│
 └── data/                       # 📊 Processed conversation data
     ├── enriched_repository.jsonl    # Main database (all conversations)
-    ├── focus_list.jsonl            # High-priority items (89MB)
-    ├── strategic_projects.json     # Key insights & opportunities
-    ├── repository.index            # Search embeddings
-    └── standardized_conversations.parquet  # Analysis-ready format
+    ├── focus_list.jsonl            # High-priority items
+    ├── repository.index.meta.json  # Search index metadata
+    ├── processing_state.json       # Import state tracking
+    └── strategic_projects.json     # Key insights & opportunities
 ```
 
 ## 🚀 Quick Start Guide
 
-### 1. **Search Your Conversations (Command Line)**
+### 1. **Import Your Conversations**
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Set your Anthropic API key (for AI enrichment)
+export ANTHROPIC_API_KEY="your-key-here"
+
+# Import ChatGPT conversations
+python cogrepo_import.py --source chatgpt --file conversations.json --enrich
+
+# Update with new conversations later
+python cogrepo_update.py --source chatgpt --file new_export.json
+
+# Build search indexes
+python index_builder.py --rebuild
+```
+
+**📖 See [IMPORT_GUIDE.md](IMPORT_GUIDE.md) for detailed instructions on exporting from ChatGPT, Claude, and Gemini**
+
+### 2. **Search Your Conversations (Command Line)**
 ```bash
 # Search for topics
 python cogrepo_search.py "family travel"
@@ -43,7 +84,7 @@ python cogrepo_search.py "creative projects"
 python cogrepo_date_search.py --start 2024-01-01 --end 2024-06-30
 ```
 
-### 2. **Browse with Web Interface**
+### 3. **Browse with Web Interface**
 ```bash
 # Start the web UI
 cd cogrepo-ui
@@ -53,7 +94,7 @@ python server.py
 # Use the web interface for visual exploration
 ```
 
-### 3. **Analyze Data Files**
+### 4. **Analyze Data Files**
 ```bash
 # View high-priority items
 head data/focus_list.jsonl
@@ -61,8 +102,8 @@ head data/focus_list.jsonl
 # Check strategic insights
 cat data/strategic_projects.json
 
-# Search raw data
-grep -i "animation" data/enriched_repository.jsonl
+# View processing statistics
+python index_builder.py --stats
 ```
 
 ## How It Works
