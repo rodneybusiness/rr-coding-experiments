@@ -18,6 +18,10 @@ from pathlib import Path
 from datetime import datetime
 from typing import List, Optional
 from tqdm import tqdm
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv(Path(__file__).parent / '.env')
 
 # Add parent directory to path
 sys.path.append(str(Path(__file__).parent))
