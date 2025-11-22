@@ -9,7 +9,7 @@ from datetime import date
 from decimal import Decimal
 from enum import Enum
 from typing import Optional, List, Dict, Any
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, ConfigDict, field_validator
 
 
 class IncentiveType(str, Enum):
@@ -26,8 +26,10 @@ class MonetizationMethod(str, Enum):
     """How the incentive is converted to cash"""
     DIRECT_CASH = "direct_cash"  # Refundable credits, rebates
     TRANSFER_SALE = "transfer_sale"  # Sold to third party
+    TRANSFER_TO_INVESTOR = "transfer_to_investor"  # Alias for transfer_sale in calculator logic
     TAX_LIABILITY_OFFSET = "tax_liability_offset"  # Offset against taxes owed
     LOAN_COLLATERAL = "loan_collateral"  # Used as security for loan
+    TAX_CREDIT_LOAN = "tax_credit_loan"  # Bridge/monetization loan against expected credit
 
 
 class QPECategory(str, Enum):
@@ -94,6 +96,24 @@ class CulturalTest(BaseModel):
 
 class IncentivePolicy(BaseModel):
     """Complete definition of a jurisdictional tax incentive program"""
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "policy_id": "UK-AVEC-2025",
+                "jurisdiction": "United Kingdom",
+                "program_name": "Audio-Visual Expenditure Credit (AVEC)",
+                "headline_rate": "34",
+                "incentive_type": "refundable_tax_credit",
+                "qpe_definition": {
+                    "included_categories": ["labor_resident", "goods_services_local"],
+                    "excludes_financing_costs": True
+                },
+                "monetization_methods": ["direct_cash", "loan_collateral"],
+                "last_updated": "2025-10-31"
+            }
+        }
+    )
 
     # Identification
     policy_id: str = Field(..., description="Unique identifier")
@@ -182,7 +202,7 @@ class IncentivePolicy(BaseModel):
 
         # Calculate discount if transferring
         discount_amount = Decimal("0")
-        if monetization_method == MonetizationMethod.TRANSFER_SALE:
+        if monetization_method in (MonetizationMethod.TRANSFER_SALE, MonetizationMethod.TRANSFER_TO_INVESTOR):
             if transfer_discount is None:
                 # Use midpoint of typical range
                 if self.typical_transfer_discount_low and self.typical_transfer_discount_high:
@@ -190,6 +210,12 @@ class IncentivePolicy(BaseModel):
                 else:
                     raise ValueError("Transfer discount must be provided for transfer sale")
 
+            discount_amount = gross_credit * (transfer_discount / 100)
+
+        # Bridge loan treatment: treat transfer_discount as financing cost (simple proxy)
+        if monetization_method in (MonetizationMethod.TAX_CREDIT_LOAN, MonetizationMethod.LOAN_COLLATERAL):
+            if transfer_discount is None:
+                transfer_discount = Decimal("0")
             discount_amount = gross_credit * (transfer_discount / 100)
 
         net_credit = gross_credit - discount_amount
@@ -218,21 +244,4 @@ class IncentivePolicy(BaseModel):
             "audit_cost": self.audit_cost_typical or Decimal("0"),
             "net_cash_benefit": net_cash_benefit,
             "effective_rate": (net_cash_benefit / qualified_spend * 100) if qualified_spend > 0 else Decimal("0")
-        }
-
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "policy_id": "UK-AVEC-2025",
-                "jurisdiction": "United Kingdom",
-                "program_name": "Audio-Visual Expenditure Credit (AVEC)",
-                "headline_rate": "34",
-                "incentive_type": "refundable_tax_credit",
-                "qpe_definition": {
-                    "included_categories": ["labor_resident", "goods_services_local"],
-                    "excludes_financing_costs": True
-                },
-                "monetization_methods": ["direct_cash", "loan_collateral"],
-                "last_updated": "2025-10-31"
-            }
         }

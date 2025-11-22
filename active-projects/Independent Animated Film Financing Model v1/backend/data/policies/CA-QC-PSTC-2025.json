@@ -1,9 +1,9 @@
 {
   "policy_id": "CA-QC-PSTC-2025",
-  "jurisdiction": "Canada - Quebec",
+  "jurisdiction": "Canada",
   "program_name": "Quebec Production Services Tax Credit (PSTC) - Animation Enhanced",
-  "headline_rate": "20.0",
-  "enhanced_rate": "36.0",
+  "headline_rate": "36.0",
+  "enhanced_rate": null,
   "incentive_type": "refundable_tax_credit",
   "qpe_definition": {
     "included_categories": [

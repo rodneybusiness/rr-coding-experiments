@@ -8,7 +8,7 @@ from datetime import date
 from decimal import Decimal
 from enum import Enum
 from typing import Optional, List, Dict
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class ProjectType(str, Enum):
@@ -80,6 +80,30 @@ class StrategicPathway(str, Enum):
 
 class ProjectProfile(BaseModel):
     """Complete profile of an animated project"""
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "project_id": "PROJ-001",
+                "project_name": "The Animated Adventure",
+                "project_type": "feature_film",
+                "animation_technique": "cgi_3d",
+                "target_audience": "family",
+                "target_runtime_minutes": 90,
+                "total_budget": "25000000",
+                "development_status": "packaged",
+                "strategic_pathway": "independent_patchwork",
+                "production_jurisdictions": [
+                    {
+                        "country": "Canada",
+                        "state_province": "Quebec",
+                        "estimated_spend_percentage": "60",
+                        "estimated_local_labor_percentage": "75"
+                    }
+                ]
+            }
+        }
+    )
 
     # Identification
     project_id: str = Field(..., description="Unique project identifier")
@@ -156,26 +180,3 @@ class ProjectProfile(BaseModel):
         if not self.production_jurisdictions:
             return None
         return max(self.production_jurisdictions, key=lambda x: x.estimated_spend_percentage)
-
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "project_id": "PROJ-001",
-                "project_name": "The Animated Adventure",
-                "project_type": "feature_film",
-                "animation_technique": "cgi_3d",
-                "target_audience": "family",
-                "target_runtime_minutes": 90,
-                "total_budget": "25000000",
-                "development_status": "packaged",
-                "strategic_pathway": "independent_patchwork",
-                "production_jurisdictions": [
-                    {
-                        "country": "Canada",
-                        "state_province": "Quebec",
-                        "estimated_spend_percentage": "60",
-                        "estimated_local_labor_percentage": "75"
-                    }
-                ]
-            }
-        }

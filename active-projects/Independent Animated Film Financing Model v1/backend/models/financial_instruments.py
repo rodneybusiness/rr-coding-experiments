@@ -9,7 +9,9 @@ from datetime import date
 from decimal import Decimal
 from enum import Enum
 from typing import Optional, Dict, Any
-from pydantic import BaseModel, Field, field_validator
+
+from pydantic import BaseModel, Field, ConfigDict, field_validator
+from backend.models.waterfall import RecoupmentPriority
 
 
 class InstrumentType(str, Enum):
@@ -26,17 +28,20 @@ class InstrumentType(str, Enum):
     SUBSIDY = "subsidy"
 
 
-class RecoupmentPriority(int, Enum):
-    """Priority levels for recoupment (lower number = higher priority)"""
-    SENIOR_DEBT = 1
-    MEZZANINE_DEBT = 2
-    EQUITY = 3
-    DEFERRED_FEES = 4
-    PROFIT_PARTICIPATION = 5
-
-
 class FinancialInstrument(BaseModel):
     """Base class for all financial instruments"""
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "instrument_id": "INS-001",
+                "instrument_type": "equity",
+                "amount": "5000000.00",
+                "currency": "USD",
+                "provider_name": "Film Investment Fund LP"
+            }
+        }
+    )
 
     instrument_id: str = Field(default_factory=lambda: f"INS-{id(object())}", description="Unique identifier for this instrument")
     instrument_type: InstrumentType
@@ -86,17 +91,6 @@ class FinancialInstrument(BaseModel):
             raise ValueError(f"Drawdown schedule must sum to 100%, got {total_percentage}%")
 
         return v
-
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "instrument_id": "INS-001",
-                "instrument_type": "equity",
-                "amount": "5000000.00",
-                "currency": "USD",
-                "provider_name": "Film Investment Fund LP"
-            }
-        }
 
 
 class Equity(FinancialInstrument):
