@@ -227,8 +227,11 @@ class IncentiveCalculator:
 
         warnings = []
 
+        # Normalize monetization method to allow aliases/derived strategies
+        normalized_method = self._normalize_monetization_method(monetization_method, policy)
+
         # Validate monetization method is supported
-        if monetization_method not in policy.monetization_methods:
+        if normalized_method not in policy.monetization_methods and monetization_method not in policy.monetization_methods:
             raise ValueError(
                 f"Monetization method {monetization_method.value} not supported by "
                 f"policy {policy_id}. Supported methods: "
@@ -271,7 +274,7 @@ class IncentiveCalculator:
         # Calculate gross credit using policy method
         calc_result = policy.calculate_net_benefit(
             qualified_spend=calc_spend,
-            monetization_method=monetization_method,
+            monetization_method=normalized_method,
             transfer_discount=transfer_discount
         )
 
@@ -333,6 +336,29 @@ class IncentiveCalculator:
                 "cap_applied": gross_credit == policy.per_project_cap if policy.per_project_cap else False
             }
         )
+
+    @staticmethod
+    def _normalize_monetization_method(
+        monetization_method: MonetizationMethod,
+        policy: IncentivePolicy
+    ) -> MonetizationMethod:
+        """
+        Map alias/derived monetization methods to supported base methods for validation.
+
+        TRANSFER_TO_INVESTOR → TRANSFER_SALE for transferable credits.
+        TAX_CREDIT_LOAN → LOAN_COLLATERAL if explicitly supported, otherwise
+        fall back to TRANSFER_SALE when transferable credits can be bridged.
+        """
+        if monetization_method == MonetizationMethod.TRANSFER_TO_INVESTOR:
+            return MonetizationMethod.TRANSFER_SALE
+
+        if monetization_method == MonetizationMethod.TAX_CREDIT_LOAN:
+            if MonetizationMethod.LOAN_COLLATERAL in policy.monetization_methods:
+                return MonetizationMethod.LOAN_COLLATERAL
+            if MonetizationMethod.TRANSFER_SALE in policy.monetization_methods:
+                return MonetizationMethod.TRANSFER_SALE
+
+        return monetization_method
 
     def calculate_multi_jurisdiction(
         self,
