@@ -1,8 +1,10 @@
 import SwiftUI
 import CoreLocation
+import UIKit
 
 struct NowView: View {
     @ObservedObject var store: SpotStore
+    @ObservedObject var queryModel: SpotQueryModel
     var quickPresets: [SessionPreset] = [
         SessionPreset(title: "Deep Focus", description: "Quiet, power + focus heavy", tags: [.deepFocus, .powerHeavy], requiresOpenLate: false, prefersElite: false),
         SessionPreset(title: "Body Doubling", description: "Social energy, good wifi", tags: [.bodyDoubling], requiresOpenLate: false, prefersElite: false),
@@ -12,51 +14,64 @@ struct NowView: View {
 
     @State private var selectedPreset: SessionPreset?
     @State private var sort: SpotSort = .timeOfDay
+    @State private var showFullList = false
+    @State private var activeSpotID: LocationSpot.ID?
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                Text("Where should I go right now?")
-                    .font(.largeTitle.bold())
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Where should I go right now?")
+                        .font(.largeTitle.bold())
 
-                QuickActionsView(presets: quickPresets, selected: $selectedPreset)
+                    QuickActionsView(presets: quickPresets, selected: $selectedPreset) { preset in
+                        queryModel.applyPreset(preset)
+                    }
 
-                let query = queryFromPreset(selectedPreset)
-                let results = store.apply(query: query, sort: sort)
-                if let topThree = results.prefix(3).nilIfEmpty() {
-                    TabView {
-                        ForEach(topThree, id: \.id) { spot in
-                            SpotCard(
-                                spot: spot,
-                                distanceText: formattedDistance(for: spot),
-                                frictionBadge: frictionBadge(for: spot)
-                            )
+                    let results = store.apply(query: queryModel.query, sort: sort)
+                    if let topThree = results.prefix(3).nilIfEmpty() {
+                        TabView(selection: $activeSpotID) {
+                            ForEach(topThree, id: \.id) { spot in
+                                SpotCard(
+                                    spot: spot,
+                                    distanceText: formattedDistance(for: spot),
+                                    frictionBadge: frictionBadge(for: spot)
+                                )
+                                .tag(spot.id)
+                            }
+                        }
+                        .tabViewStyle(.page(indexDisplayMode: .always))
+                        .frame(height: 260)
+                        .animation(.easeInOut, value: selectedPreset?.id)
+                        .animation(.spring(response: 0.35, dampingFraction: 0.85), value: activeSpotID)
+                        .onAppear { activeSpotID = activeSpotID ?? topThree.first?.id }
+                        .onChange(of: topThree.map(\.id)) { ids in
+                            activeSpotID = ids.first
+                        }
+                        .onChange(of: activeSpotID) { _ in
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
                         }
                     }
-                    .tabViewStyle(.page(indexDisplayMode: .always))
-                    .frame(height: 260)
-                }
 
-                Button {
-                    // navigate to map/list in real app
-                } label: {
-                    Label("Show map & full list", systemImage: "map")
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 14).fill(Color.blue.opacity(0.15)))
+                    Button {
+                        if let preset = selectedPreset {
+                            queryModel.applyPreset(preset)
+                        }
+                        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                        showFullList = true
+                    } label: {
+                        Label("Show map & full list", systemImage: "map")
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(RoundedRectangle(cornerRadius: 14).fill(Color.blue.opacity(0.15)))
+                    }
                 }
+                .padding()
             }
-            .padding()
+            .navigationDestination(isPresented: $showFullList) {
+                SpotListView(store: store, queryModel: queryModel)
+            }
         }
-    }
-
-    private func queryFromPreset(_ preset: SessionPreset?) -> SpotQuery {
-        guard let preset else { return SpotQuery() }
-        var query = SpotQuery()
-        query.attributes = preset.tags
-        if preset.requiresOpenLate { query.openLate = true }
-        if preset.prefersElite { query.tiers.insert(.elite) }
-        return query
     }
 
     private func formattedDistance(for spot: LocationSpot) -> String? {
@@ -79,13 +94,18 @@ struct NowView: View {
 private struct QuickActionsView: View {
     let presets: [SessionPreset]
     @Binding var selected: SessionPreset?
+    var onSelect: (SessionPreset) -> Void
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 12) {
                 ForEach(presets) { preset in
                     Button {
-                        selected = preset
+                        withAnimation(.spring(response: 0.35, dampingFraction: 0.78)) {
+                            selected = preset
+                        }
+                        UISelectionFeedbackGenerator().selectionChanged()
+                        onSelect(preset)
                     } label: {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(preset.title)

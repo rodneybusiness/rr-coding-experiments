@@ -1,43 +1,59 @@
 import SwiftUI
 
 struct FiltersBar: View {
-    @Binding var query: SpotQuery
+    @ObservedObject var queryModel: SpotQueryModel
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 10) {
                 TogglePill(title: "Elite", isOn: Binding(
-                    get: { query.tiers.contains(.elite) },
+                    get: { queryModel.query.tiers.contains(.elite) },
                     set: { isOn in
-                        if isOn { query.tiers.insert(.elite) } else { query.tiers.remove(.elite) }
+                        updateQuery { query in
+                            if isOn { query.tiers.insert(.elite) } else { query.tiers.remove(.elite) }
+                        }
                     }
                 ))
                 TogglePill(title: "Reliable", isOn: Binding(
-                    get: { query.tiers.contains(.reliable) },
+                    get: { queryModel.query.tiers.contains(.reliable) },
                     set: { isOn in
-                        if isOn { query.tiers.insert(.reliable) } else { query.tiers.remove(.reliable) }
+                        updateQuery { query in
+                            if isOn { query.tiers.insert(.reliable) } else { query.tiers.remove(.reliable) }
+                        }
                     }
                 ))
                 TogglePill(title: "Open late", isOn: Binding(
-                    get: { query.openLate ?? false },
-                    set: { query.openLate = $0 }
+                    get: { queryModel.query.openLate ?? false },
+                    set: { isOn in
+                        updateQuery { query in query.openLate = isOn }
+                    }
                 ))
                 TogglePill(title: "Easy parking", isOn: Binding(
-                    get: { query.attributes.contains(.easyParking) },
+                    get: { queryModel.query.attributes.contains(.easyParking) },
                     set: { isOn in
-                        if isOn { query.attributes.insert(.easyParking) } else { query.attributes.remove(.easyParking) }
+                        updateQuery { query in
+                            if isOn { query.attributes.insert(.easyParking) } else { query.attributes.remove(.easyParking) }
+                        }
                     }
                 ))
                 TogglePill(title: "Deep focus", isOn: Binding(
-                    get: { query.attributes.contains(.deepFocus) },
+                    get: { queryModel.query.attributes.contains(.deepFocus) },
                     set: { isOn in
-                        if isOn { query.attributes.insert(.deepFocus) } else { query.attributes.remove(.deepFocus) }
+                        updateQuery { query in
+                            if isOn { query.attributes.insert(.deepFocus) } else { query.attributes.remove(.deepFocus) }
+                        }
                     }
                 ))
             }
             .padding(.vertical, 8)
             .padding(.horizontal, 4)
         }
+    }
+
+    private func updateQuery(_ mutate: (inout SpotQuery) -> Void) {
+        var updated = queryModel.query
+        mutate(&updated)
+        queryModel.query = updated
     }
 }
 

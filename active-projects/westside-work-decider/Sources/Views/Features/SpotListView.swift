@@ -2,12 +2,12 @@ import SwiftUI
 
 struct SpotListView: View {
     @ObservedObject var store: SpotStore
-    @State private var query = SpotQuery()
+    @ObservedObject var queryModel: SpotQueryModel
     @State private var sort: SpotSort = .distance
 
     var body: some View {
         VStack(alignment: .leading) {
-            FiltersBar(query: $query)
+            FiltersBar(queryModel: queryModel)
                 .padding(.horizontal)
             Picker("Sort", selection: $sort) {
                 Text("Distance").tag(SpotSort.distance)
@@ -18,7 +18,7 @@ struct SpotListView: View {
             .pickerStyle(.segmented)
             .padding(.horizontal)
 
-            List(store.apply(query: query, sort: sort), id: \.id) { spot in
+            List(store.apply(query: queryModel.query, sort: sort), id: \.id) { spot in
                 SpotCard(
                     spot: spot,
                     distanceText: formattedDistance(for: spot),
