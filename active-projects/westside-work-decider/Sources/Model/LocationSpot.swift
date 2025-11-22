@@ -43,7 +43,7 @@ enum AttributeTag: String, Codable, CaseIterable, Identifiable {
 }
 
 struct LocationSpot: Identifiable, Codable, Equatable {
-    var id: UUID = UUID()
+    let id: String
     let name: String
     let city: String
     let neighborhood: String
@@ -63,6 +63,7 @@ struct LocationSpot: Identifiable, Codable, Equatable {
     let status: String
     var isFavorite: Bool = false
     var userNotes: String? = nil
+    var lastVisited: Date? = nil
     var latitude: Double?
     var longitude: Double?
 
@@ -113,6 +114,7 @@ struct LocationSpot: Identifiable, Codable, Equatable {
         status = try container.decode(String.self, forKey: .status)
         latitude = try container.decodeIfPresent(Double.self, forKey: .latitude)
         longitude = try container.decodeIfPresent(Double.self, forKey: .longitude)
+        id = LocationSpot.makeID(name: name, neighborhood: neighborhood)
     }
 
     init(
@@ -135,9 +137,11 @@ struct LocationSpot: Identifiable, Codable, Equatable {
         status: String,
         isFavorite: Bool = false,
         userNotes: String? = nil,
+        lastVisited: Date? = nil,
         latitude: Double? = nil,
         longitude: Double? = nil
     ) {
+        self.id = LocationSpot.makeID(name: name, neighborhood: neighborhood)
         self.name = name
         self.city = city
         self.neighborhood = neighborhood
@@ -157,6 +161,7 @@ struct LocationSpot: Identifiable, Codable, Equatable {
         self.status = status
         self.isFavorite = isFavorite
         self.userNotes = userNotes
+        self.lastVisited = lastVisited
         self.latitude = latitude
         self.longitude = longitude
     }
@@ -172,9 +177,16 @@ struct LocationSpot: Identifiable, Codable, Equatable {
         let attrSet = Set(attributes)
         return tagFilters.isSubset(of: attrSet)
     }
+
+    static func makeID(name: String, neighborhood: String) -> String {
+        let slug = "\(name.lowercased())-\(neighborhood.lowercased())"
+            .replacingOccurrences(of: " ", with: "-")
+            .replacingOccurrences(of: ",", with: "")
+        return slug
+    }
 }
 
-struct SpotQuery {
+struct SpotQuery: Codable {
     var tiers: Set<Tier> = []
     var neighborhoods: Set<String> = []
     var placeTypes: Set<PlaceType> = []
@@ -186,6 +198,29 @@ struct SpotQuery {
     var walkingFriendlyLocation: Bool? = nil
     var exerciseWellnessAvailable: Bool? = nil
     var chargedLaptopBrickOnly: Bool? = nil
+
+    var hasFilters: Bool {
+        !tiers.isEmpty || !neighborhoods.isEmpty || !placeTypes.isEmpty || !attributes.isEmpty ||
+        openLate != nil || closeToHome != nil || closeToWork != nil || safeToLeaveComputer != nil ||
+        walkingFriendlyLocation != nil || exerciseWellnessAvailable != nil || chargedLaptopBrickOnly != nil
+    }
+
+    func summaryDescription() -> String? {
+        var parts: [String] = []
+        if !tiers.isEmpty { parts.append("Tier: \(tiers.map { $0.rawValue }.sorted().joined(separator: ", "))") }
+        if !neighborhoods.isEmpty { parts.append("Areas: \(neighborhoods.sorted().joined(separator: ", "))") }
+        if !placeTypes.isEmpty { parts.append("Types: \(placeTypes.map { $0.rawValue }.sorted().joined(separator: ", "))") }
+        if !attributes.isEmpty { parts.append("Tags: \(attributes.map { $0.rawValue }.sorted().joined(separator: ", "))") }
+        if openLate == true { parts.append("Open late") }
+        if closeToHome == true { parts.append("Near home") }
+        if closeToWork == true { parts.append("Near work") }
+        if safeToLeaveComputer == true { parts.append("Safe for laptop") }
+        if walkingFriendlyLocation == true { parts.append("Walkable") }
+        if exerciseWellnessAvailable == true { parts.append("Gym/wellness") }
+        if chargedLaptopBrickOnly == true { parts.append("Bring brick") }
+        guard !parts.isEmpty else { return nil }
+        return parts.joined(separator: " • ")
+    }
 }
 
 enum SpotSort: String, CaseIterable {
@@ -193,9 +228,18 @@ enum SpotSort: String, CaseIterable {
     case sentiment
     case tier
     case timeOfDay
+
+    var displayName: String {
+        switch self {
+        case .distance: return "Distance"
+        case .sentiment: return "Sentiment"
+        case .tier: return "Tier"
+        case .timeOfDay: return "Time of day"
+        }
+    }
 }
 
-struct SessionPreset: Identifiable {
+struct SessionPreset: Identifiable, Codable {
     let id = UUID()
     let title: String
     let description: String

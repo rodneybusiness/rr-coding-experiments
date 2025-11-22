@@ -3,6 +3,9 @@ import CoreLocation
 
 struct NowView: View {
     @ObservedObject var store: SpotStore
+    @ObservedObject var filters: QueryModel
+    var onShowMap: () -> Void
+    var onShowList: () -> Void
     var quickPresets: [SessionPreset] = [
         SessionPreset(title: "Deep Focus", description: "Quiet, power + focus heavy", tags: [.deepFocus, .powerHeavy], requiresOpenLate: false, prefersElite: false),
         SessionPreset(title: "Body Doubling", description: "Social energy, good wifi", tags: [.bodyDoubling], requiresOpenLate: false, prefersElite: false),
@@ -11,7 +14,6 @@ struct NowView: View {
     ]
 
     @State private var selectedPreset: SessionPreset?
-    @State private var sort: SpotSort = .timeOfDay
 
     var body: some View {
         ScrollView {
@@ -19,17 +21,25 @@ struct NowView: View {
                 Text("Where should I go right now?")
                     .font(.largeTitle.bold())
 
-                QuickActionsView(presets: quickPresets, selected: $selectedPreset)
+                ActiveFiltersSummary(query: filters.query, sort: filters.sort)
 
-                let query = queryFromPreset(selectedPreset)
-                let results = store.apply(query: query, sort: sort)
+                QuickActionsView(presets: quickPresets, selected: $selectedPreset)
+                    .onChange(of: selectedPreset) { _, newValue in
+                        filters.apply(preset: newValue)
+                    }
+
+                let query = presetAdjustedQuery(selectedPreset)
+                let results = store.apply(query: query, sort: filters.sort)
                 if let topThree = results.prefix(3).nilIfEmpty() {
                     TabView {
                         ForEach(topThree, id: \.id) { spot in
                             SpotCard(
                                 spot: spot,
-                                distanceText: formattedDistance(for: spot),
-                                frictionBadge: frictionBadge(for: spot)
+                                distanceText: formattedDistance(for: spot, query: query),
+                                frictionBadge: frictionBadge(for: spot),
+                                isFavorite: spot.isFavorite,
+                                onFavorite: { store.toggleFavorite(for: spot) },
+                                onTap: { store.markVisited(spot) }
                             )
                         }
                     }
@@ -38,29 +48,30 @@ struct NowView: View {
                 }
 
                 Button {
-                    // navigate to map/list in real app
+                    onShowMap()
                 } label: {
                     Label("Show map & full list", systemImage: "map")
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(RoundedRectangle(cornerRadius: 14).fill(Color.blue.opacity(0.15)))
                 }
+                .buttonStyle(.plain)
             }
             .padding()
         }
     }
 
-    private func queryFromPreset(_ preset: SessionPreset?) -> SpotQuery {
-        guard let preset else { return SpotQuery() }
-        var query = SpotQuery()
-        query.attributes = preset.tags
+    private func presetAdjustedQuery(_ preset: SessionPreset?) -> SpotQuery {
+        guard let preset else { return filters.query }
+        var query = filters.query
+        query.attributes.formUnion(preset.tags)
         if preset.requiresOpenLate { query.openLate = true }
         if preset.prefersElite { query.tiers.insert(.elite) }
         return query
     }
 
-    private func formattedDistance(for spot: LocationSpot) -> String? {
-        guard let distance = spot.distance(from: store.location) else { return nil }
+    private func formattedDistance(for spot: LocationSpot, query: SpotQuery) -> String? {
+        guard let distance = spot.distance(from: store.anchorLocation(for: query)) else { return nil }
         let miles = distance / 1609.34
         return String(format: "%.1f mi", miles)
     }

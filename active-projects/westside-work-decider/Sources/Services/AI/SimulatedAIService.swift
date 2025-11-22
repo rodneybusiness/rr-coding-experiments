@@ -13,9 +13,24 @@ struct SimulatedAIService: AIRecommendationService {
             query.openLate = true
         }
 
+        if request.userMessage.lowercased().contains("home") {
+            query.closeToHome = true
+        }
+        if request.userMessage.lowercased().contains("office") || request.userMessage.lowercased().contains("work") {
+            query.closeToWork = true
+        }
+
         let sort: SpotSort = request.userMessage.lowercased().contains("closest") ? .distance : .timeOfDay
 
-        let items = request.candidateSpots.prefix(5).map { spot in
+        let ranked = request.candidateSpots.sorted { lhs, rhs in
+            switch (lhs.distanceMeters, rhs.distanceMeters) {
+            case let (l?, r?): return l < r
+            case (.some, .none): return true
+            case (.none, .some): return false
+            default: return lhs.sentimentFallback > rhs.sentimentFallback
+            }
+        }
+        let items = ranked.prefix(5).map { spot in
             AIRecommendationItem(id: spot.id, reason: explanation(for: spot, tags: tags))
         }
 

@@ -10,7 +10,7 @@ struct AIRecommendationRequest: Codable {
 }
 
 struct SpotSummary: Codable, Identifiable {
-    let id: UUID
+    let id: String
     let name: String
     let neighborhood: String
     let tier: Tier
@@ -18,6 +18,8 @@ struct SpotSummary: Codable, Identifiable {
     let attributes: [AttributeTag]
     let criticalFieldNotes: String
     let distanceMeters: Double?
+
+    var sentimentFallback: Double { Double(attributes.count) }
 }
 
 struct AIRecommendationResponse: Codable {
@@ -28,7 +30,7 @@ struct AIRecommendationResponse: Codable {
 }
 
 struct AIRecommendationItem: Codable, Identifiable {
-    let id: UUID
+    let id: String
     let reason: String
 }
 
