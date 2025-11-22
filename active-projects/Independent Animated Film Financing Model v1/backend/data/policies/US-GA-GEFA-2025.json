@@ -41,7 +41,9 @@
   "requires_local_spv": false,
   "spv_requirements": null,
   "monetization_methods": [
+    "direct_cash",
     "transfer_sale",
+    "loan_collateral",
     "tax_liability_offset"
   ],
   "typical_transfer_discount_low": "8.0",

@@ -1,9 +1,9 @@
 {
   "policy_id": "UK-AVEC-2025",
   "jurisdiction": "United Kingdom",
-  "program_name": "Audio-Visual Expenditure Credit (AVEC) - Animation",
+  "program_name": "Audio-Visual Expenditure Credit (AVEC)",
   "headline_rate": "39.0",
-  "enhanced_rate": null,
+  "enhanced_rate": "34.0",
   "incentive_type": "refundable_tax_credit",
   "qpe_definition": {
     "included_categories": [
@@ -26,7 +26,7 @@
   "annual_program_cap": null,
   "per_applicant_annual_cap": null,
   "minimum_total_spend": null,
-  "minimum_local_spend": null,
+  "minimum_local_spend": "10000",
   "cultural_test": {
     "requires_cultural_test": true,
     "test_name": "BFI Cultural Test",
@@ -52,7 +52,7 @@
   "is_taxable_income_local": false,
   "federal_tax_rate": null,
   "local_tax_rate": null,
-  "audit_cost_typical": "35000",
+  "audit_cost_typical": null,
   "application_fee": null,
   "effective_date": "2025-04-01",
   "expiry_date": null,

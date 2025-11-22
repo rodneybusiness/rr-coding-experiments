@@ -226,6 +226,11 @@ class IncentiveCalculator:
             raise ValueError(f"Policy not found: {policy_id}")
 
         warnings = []
+        labor_cap_applied = False
+        labor_cap_basis = None
+
+        # Normalize monetization method to allow aliases/derived strategies
+        normalized_method = self._normalize_monetization_method(monetization_method, policy)
 
         # Normalize monetization method to allow aliases/derived strategies
         normalized_method = self._normalize_monetization_method(monetization_method, policy)
@@ -269,6 +274,15 @@ class IncentiveCalculator:
 
         # Special handling for Canada Federal (labor-only, capped at 15% of budget)
         if policy_id == "CA-FEDERAL-CPTC-2025":
+            labor_base = jurisdiction_spend.labor_spend
+            # QCLE cannot exceed 60% of total costs, implying max credit of 15% of budget
+            labor_cap = jurisdiction_spend.total_spend * Decimal("0.60")
+            labor_cap_basis = labor_cap
+            calc_spend = min(labor_base, labor_cap)
+            labor_cap_applied = calc_spend < labor_base
+
+        # Quebec PSTC animation uplift applies to labor-only base
+        if policy_id == "CA-QC-PSTC-2025":
             calc_spend = jurisdiction_spend.labor_spend
 
         # Calculate gross credit using policy method
@@ -333,7 +347,9 @@ class IncentiveCalculator:
             warnings=warnings,
             metadata={
                 "per_project_cap": str(policy.per_project_cap) if policy.per_project_cap else None,
-                "cap_applied": gross_credit == policy.per_project_cap if policy.per_project_cap else False
+                "cap_applied": gross_credit == policy.per_project_cap if policy.per_project_cap else False,
+                "labor_cap_basis": str(labor_cap_basis) if labor_cap_basis else None,
+                "labor_cap_applied": labor_cap_applied
             }
         )
 

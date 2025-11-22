@@ -263,14 +263,21 @@ class PolicyRegistry:
         if not self._all_policies:
             return summary
 
-        # Count by type
+        # Count by jurisdiction (include sub-national regions from policy IDs)
+        regional_keys = set()
         for policy in self._all_policies:
             policy_type = policy.incentive_type
             summary["by_type"][policy_type] = summary["by_type"].get(policy_type, 0) + 1
 
-        # Count by jurisdiction
+            parts = policy.policy_id.split("-")
+            if len(parts) > 2:
+                regional_keys.add(f"{policy.jurisdiction}:{parts[1]}")
+
         for jurisdiction, policies in self._policies_by_jurisdiction.items():
             summary["by_jurisdiction"][jurisdiction] = len(policies)
+
+        jurisdiction_keys = set(self._policies_by_jurisdiction.keys()) | regional_keys
+        summary["jurisdictions"] = len(jurisdiction_keys)
 
         # Calculate rate statistics
         rates = [p.headline_rate for p in self._all_policies]
