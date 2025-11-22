@@ -226,9 +226,14 @@ class IncentiveCalculator:
             raise ValueError(f"Policy not found: {policy_id}")
 
         warnings = []
+        labor_cap_applied = False
+        labor_cap_basis = None
+
+        # Normalize monetization method to allow aliases/derived strategies
+        normalized_method = self._normalize_monetization_method(monetization_method, policy)
 
         # Validate monetization method is supported
-        if monetization_method not in policy.monetization_methods:
+        if normalized_method not in policy.monetization_methods and monetization_method not in policy.monetization_methods:
             raise ValueError(
                 f"Monetization method {monetization_method.value} not supported by "
                 f"policy {policy_id}. Supported methods: "
@@ -266,12 +271,21 @@ class IncentiveCalculator:
 
         # Special handling for Canada Federal (labor-only, capped at 15% of budget)
         if policy_id == "CA-FEDERAL-CPTC-2025":
+            labor_base = jurisdiction_spend.labor_spend
+            # QCLE cannot exceed 60% of total costs, implying max credit of 15% of budget
+            labor_cap = jurisdiction_spend.total_spend * Decimal("0.60")
+            labor_cap_basis = labor_cap
+            calc_spend = min(labor_base, labor_cap)
+            labor_cap_applied = calc_spend < labor_base
+
+        # Quebec PSTC animation uplift applies to labor-only base
+        if policy_id == "CA-QC-PSTC-2025":
             calc_spend = jurisdiction_spend.labor_spend
 
         # Calculate gross credit using policy method
         calc_result = policy.calculate_net_benefit(
             qualified_spend=calc_spend,
-            monetization_method=monetization_method,
+            monetization_method=normalized_method,
             transfer_discount=transfer_discount
         )
 
@@ -330,9 +344,34 @@ class IncentiveCalculator:
             warnings=warnings,
             metadata={
                 "per_project_cap": str(policy.per_project_cap) if policy.per_project_cap else None,
-                "cap_applied": gross_credit == policy.per_project_cap if policy.per_project_cap else False
+                "cap_applied": gross_credit == policy.per_project_cap if policy.per_project_cap else False,
+                "labor_cap_basis": str(labor_cap_basis) if labor_cap_basis else None,
+                "labor_cap_applied": labor_cap_applied
             }
         )
+
+    @staticmethod
+    def _normalize_monetization_method(
+        monetization_method: MonetizationMethod,
+        policy: IncentivePolicy
+    ) -> MonetizationMethod:
+        """
+        Map alias/derived monetization methods to supported base methods for validation.
+
+        TRANSFER_TO_INVESTOR → TRANSFER_SALE for transferable credits.
+        TAX_CREDIT_LOAN → LOAN_COLLATERAL if explicitly supported, otherwise
+        fall back to TRANSFER_SALE when transferable credits can be bridged.
+        """
+        if monetization_method == MonetizationMethod.TRANSFER_TO_INVESTOR:
+            return MonetizationMethod.TRANSFER_SALE
+
+        if monetization_method == MonetizationMethod.TAX_CREDIT_LOAN:
+            if MonetizationMethod.LOAN_COLLATERAL in policy.monetization_methods:
+                return MonetizationMethod.LOAN_COLLATERAL
+            if MonetizationMethod.TRANSFER_SALE in policy.monetization_methods:
+                return MonetizationMethod.TRANSFER_SALE
+
+        return monetization_method
 
     def calculate_multi_jurisdiction(
         self,
