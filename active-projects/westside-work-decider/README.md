@@ -76,7 +76,7 @@ IDs are deterministic and derived from `Name + Neighborhood` so favorites/histor
 ## Run/Preview
 This repo only ships the Swift source and sample data. Create an Xcode project (iOS 17 target), drop the `Sources` folder and `data` assets into the project, and wire `SpotStore` into an `@MainActor` `AppModel` (examples provided in code).
 
-## What’s Next (short list)
+## What's Next (short list)
 * Ship end-to-end UI tests in Xcode CI (use the stubs in `Tests/WestsideWorkDeciderTests` as a starting point) to lock in presets, chat responses, and filter sharing.
-* Add user notes + “last meal/coffee order” stickers to cards, persisted alongside favorites/history.
-* Add directions handoff (Maps/Google Maps) and calendar drop-in (“block 90 minutes”) from SpotCard actions.
+* Add user notes + "last meal/coffee order" stickers to cards, persisted alongside favorites/history.
+* Add directions handoff (Maps/Google Maps) and calendar drop-in ("block 90 minutes") from SpotCard actions.
