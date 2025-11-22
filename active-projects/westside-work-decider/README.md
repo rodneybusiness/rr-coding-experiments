@@ -11,7 +11,7 @@ An ADHD-friendly iOS decision tool that recommends the best remote-work spot on 
 
 ## Architecture Overview
 - **UI (SwiftUI, iOS 17+)**
-  - Feature views: `NowView`, `MapView`, `ListView`, `ChatView`.
+  - Feature views: `NowView`, `SpotsMapView`, `ListView`, `ChatView`.
   - Shared components: `SpotCard`, `FilterPill`, `TagList`, `QuickActionGrid`.
   - Layout defaults to cards and horizontally scrolling pill filters.
 - **Domain Model**
@@ -20,6 +20,7 @@ An ADHD-friendly iOS decision tool that recommends the best remote-work spot on 
   - `SessionPreset` for ADHD-friendly quick filters (Deep Focus, Body Doubling, Quick Sprint, Late Night).
 - **Data Layer**
   - `SpotStore` loads bundled JSON/CSV, normalizes attributes into enums, and caches in-memory.
+  - `CompositeSpotLoader` tries bundle resources first and falls back to the repo path so previews/CLI tests can run without Xcode bundling.
   - `SpotRepository` exposes query APIs (`apply(query:context:)`) and computed distances via `CLLocation`.
   - **Sync boundary:** `SyncSource` protocol for future Google Sheets/Notion pull/push; current implementation is a stub.
 - **AI Layer**
@@ -27,14 +28,14 @@ An ADHD-friendly iOS decision tool that recommends the best remote-work spot on 
   - `SimulatedAIService` implements offline rule-based intent parsing (time-of-day + attribute heuristics) so the app works without an API key.
   - When networked, plug in an OpenAI-compatible client that receives compact spot summaries plus user context; the model returns filter/sort preferences only.
 - **Location & Distance**
-  - `LocationProvider` wraps `CLLocationManager`, publishes authorization state, and provides the latest coordinate.
-  - Distance computed via `CLLocation` from user position to cached spot coordinates (later swapped for geocoded lat/lng column or precomputed cache). Geocoder utility should run once and persist results to avoid runtime churn.
+  - `LocationProvider` wraps `CLLocationManager`, publishes authorization state, and provides the latest coordinate. `AppModel` wires it into `SpotStore` so distance sorts update as location changes.
+  - Distance computed via `CLLocation` from user position to cached spot coordinates; a geocoded `Latitude/Longitude` column now ships in the dataset so pins and distance sorts work out of the box. When location permission is missing, fall back to a Westchester/Sawtelle anchor or user “close to home/work” hints.
 
 ## Screens (first-pass)
 - **NowView**: top 1–3 recommendations for "right now" with swipeable cards, quick action buttons (Deep Focus, Body Doubling, Quick Sprint ≤90m, Late Night Work), and a "Show map" button.
-- **MapView**: MapKit pins filtered by the same pill filters; list drawer shows ranked nearby spots.
-- **ListView**: full catalog with sticky filter bar (Tier, Neighborhood, PlaceType, Attributes, booleans) and sort selector (Distance, SentimentScore, Tier, Time-of-day fit).
-- **ChatView**: chat-like UI; user query → AI intent → local filtering; responses cite attributes, distance, and `CriticalFieldNotes` and never invent new venues.
+- **MapView**: MapKit pins filtered by the same pill filters; list drawer shows ranked nearby spots, quick favorite toggles, and callouts with Tier/OpenLate badges.
+- **ListView**: full catalog with sticky filter bar (Tier, Neighborhood, PlaceType, Attributes, booleans) and sort selector (Distance, SentimentScore, Tier, Time-of-day fit) plus a filter summary/clear control.
+- **ChatView**: chat-like UI; user query → AI intent → local filtering; responses cite attributes, distance, and `CriticalFieldNotes` and never invent new venues. Recommendations render as cards with map/list deep links and show which filters/sorts were applied.
 
 ## Data Model Snapshot
 Core schema mirrors the CSV in `data/westside_remote_work_master_verified.csv`:
@@ -43,9 +44,10 @@ Core schema mirrors the CSV in `data/westside_remote_work_master_verified.csv`:
 - Booleans: `OpenLate`, `CloseToHome`, `CloseToWork`, `SafeToLeaveComputer`, `WalkingFriendlyLocation`, `ExerciseWellnessAvailable`, `ChargedLaptopBrickOnly`
 
 ## CSV/JSON ingestion strategy
-1. Bundle `westside_remote_work_master_verified.json` (already exported from the CSV) with the app.
-2. On first launch, decode into `LocationSpot` and store in memory (or Core Data/SQLite for persistence + favorites/history).
+1. Bundle `westside_remote_work_master_verified.json` (already exported from the CSV) with the app. The CSV now includes `Latitude`/`Longitude` columns; keep them in sync when editing.
+2. On first launch, decode into `LocationSpot` and store in memory (or Core Data/SQLite for persistence + favorites/history). User state (favorites/recents) is persisted to `spotstore_state.json` in the app Documents directory.
 3. Optionally convert CSV → JSON at build time using a small script; runtime only reads JSON.
+4. `AppExperienceView` wires `AppModel`, `QueryModel`, and the feature tabs (Now/Map/List/Chat) so shared filters and AI recommendations stay in sync.
 
 ## AI contract (extendable)
 - **Request**: user message, current time/day, coarse location (lat/lng), optional active filters, plus a small list of candidate spots (name, neighborhood, tier, attributes, critical notes, distance).
@@ -57,6 +59,8 @@ Core schema mirrors the CSV in `data/westside_remote_work_master_verified.csv`:
 2. Ensure columns follow the schema above; attributes should use the controlled emoji list.
 3. Re-run the CSV→JSON export (or copy/paste) so `westside_remote_work_master_verified.json` stays in sync.
 4. Avoid renaming columns; add new fields by extending `LocationSpot` and updating the CSV/JSON headers.
+
+IDs are deterministic and derived from `Name + Neighborhood` so favorites/history remain stable even if the data reloads.
 
 ## Adding new metadata safely
 - Add new columns to CSV/JSON; mark them as optional in `LocationSpot` with sensible defaults.
@@ -70,3 +74,8 @@ Core schema mirrors the CSV in `data/westside_remote_work_master_verified.csv`:
 
 ## Run/Preview
 This repo only ships the Swift source and sample data. Create an Xcode project (iOS 17 target), drop the `Sources` folder and `data` assets into the project, and wire `SpotStore` into an `@MainActor` `AppModel` (examples provided in code).
+
+## What’s Next (short list)
+* Wire an optional live LLM client to the `AIService` protocol and gate payload size when sharing spots (cap and compress to the filtered top-N before the call).
+* Add lightweight SwiftUI snapshots/UI tests for the Now, Map, List, and Chat surfaces to lock in the current flows and regression-test filter synchronization.
+* Refine map UX with accessibility: larger hit targets on pins/callouts, VoiceOver labels for badges, and a fallback text list when MapKit is unavailable.

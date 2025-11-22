@@ -2,14 +2,15 @@ import SwiftUI
 
 struct SpotListView: View {
     @ObservedObject var store: SpotStore
-    @State private var query = SpotQuery()
-    @State private var sort: SpotSort = .distance
+    @ObservedObject var filters: QueryModel
 
     var body: some View {
         VStack(alignment: .leading) {
-            FiltersBar(query: $query)
+            FiltersBar(query: $filters.query)
                 .padding(.horizontal)
-            Picker("Sort", selection: $sort) {
+            ActiveFiltersSummary(query: filters.query, sort: filters.sort)
+                .padding(.horizontal)
+            Picker("Sort", selection: $filters.sort) {
                 Text("Distance").tag(SpotSort.distance)
                 Text("Sentiment").tag(SpotSort.sentiment)
                 Text("Tier").tag(SpotSort.tier)
@@ -18,11 +19,14 @@ struct SpotListView: View {
             .pickerStyle(.segmented)
             .padding(.horizontal)
 
-            List(store.apply(query: query, sort: sort), id: \.id) { spot in
+            List(store.apply(query: filters.query, sort: filters.sort), id: \.id) { spot in
                 SpotCard(
                     spot: spot,
                     distanceText: formattedDistance(for: spot),
-                    frictionBadge: frictionBadge(for: spot)
+                    frictionBadge: frictionBadge(for: spot),
+                    isFavorite: spot.isFavorite,
+                    onFavorite: { store.toggleFavorite(for: spot) },
+                    onTap: { store.markVisited(spot) }
                 )
                 .listRowSeparator(.hidden)
             }
@@ -31,7 +35,7 @@ struct SpotListView: View {
     }
 
     private func formattedDistance(for spot: LocationSpot) -> String? {
-        guard let distance = spot.distance(from: store.location) else { return nil }
+        guard let distance = spot.distance(from: store.anchorLocation(for: filters.query)) else { return nil }
         let miles = distance / 1609.34
         return String(format: "%.1f mi", miles)
     }

@@ -34,6 +34,19 @@ struct FiltersBar: View {
                         if isOn { query.attributes.insert(.deepFocus) } else { query.attributes.remove(.deepFocus) }
                     }
                 ))
+
+                if query.hasFilters {
+                    Button {
+                        query = SpotQuery()
+                    } label: {
+                        Label("Clear", systemImage: "xmark.circle.fill")
+                            .font(.subheadline.weight(.semibold))
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .background(Capsule().fill(Color.red.opacity(0.12)))
+                    }
+                    .buttonStyle(.plain)
+                }
             }
             .padding(.vertical, 8)
             .padding(.horizontal, 4)

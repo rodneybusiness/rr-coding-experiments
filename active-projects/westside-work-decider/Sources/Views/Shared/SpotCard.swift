@@ -5,6 +5,9 @@ struct SpotCard: View {
     let spot: LocationSpot
     let distanceText: String?
     let frictionBadge: String?
+    var isFavorite: Bool = false
+    var onFavorite: (() -> Void)? = nil
+    var onTap: (() -> Void)? = nil
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -24,6 +27,13 @@ struct SpotCard: View {
                         .padding(8)
                         .background(Capsule().fill(.blue.opacity(0.12)))
                 }
+                if let onFavorite {
+                    Button(action: onFavorite) {
+                        Image(systemName: isFavorite ? "heart.fill" : "heart")
+                            .foregroundStyle(isFavorite ? .red : .primary)
+                    }
+                    .buttonStyle(.plain)
+                }
             }
 
             Text(spot.criticalFieldNotes)
@@ -41,6 +51,12 @@ struct SpotCard: View {
                 }
             }
 
+            if let lastVisited = spot.lastVisited {
+                Label("Visited \(RelativeDateTimeFormatter.friendly.localizedString(for: lastVisited, relativeTo: Date()))", systemImage: "clock.arrow.circlepath")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
             if let frictionBadge {
                 Label(frictionBadge, systemImage: "exclamationmark.triangle.fill")
                     .font(.caption)
@@ -50,5 +66,15 @@ struct SpotCard: View {
         .padding()
         .background(RoundedRectangle(cornerRadius: 16, style: .continuous).fill(Color(uiColor: .secondarySystemBackground)))
         .shadow(color: .black.opacity(0.05), radius: 4, x: 0, y: 2)
+        .contentShape(Rectangle())
+        .onTapGesture { onTap?() }
     }
+}
+
+private extension RelativeDateTimeFormatter {
+    static let friendly: RelativeDateTimeFormatter = {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .abbreviated
+        return formatter
+    }()
 }
