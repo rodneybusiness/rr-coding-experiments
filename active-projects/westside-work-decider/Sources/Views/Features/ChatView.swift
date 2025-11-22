@@ -56,7 +56,8 @@ struct ChatView: View {
 
         Task {
             let anchor = store.anchorLocation(for: filters.query)
-            let summaries = store.spots.map { spot in
+            let prioritized = store.apply(query: filters.query, sort: .distance)
+            let summaries = prioritized.prefix(40).map { spot in
                 SpotSummary(
                     id: spot.id,
                     name: spot.name,

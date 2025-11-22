@@ -26,6 +26,7 @@ An ADHD-friendly iOS decision tool that recommends the best remote-work spot on 
 - **AI Layer**
   - `AIRecommendationService` protocol with DTOs: `AIRecommendationRequest`, `AIRecommendationResponse`, `AIRecommendationItem`.
   - `SimulatedAIService` implements offline rule-based intent parsing (time-of-day + attribute heuristics) so the app works without an API key.
+  - `OpenAIService` is an optional live client; it caps the candidate payload (12 spots), emits a compact JSON context, and returns parsed `AIRecommendationResponse`. Provide `OPENAI_API_KEY` at runtime to use it; otherwise the app falls back to the simulated service.
   - When networked, plug in an OpenAI-compatible client that receives compact spot summaries plus user context; the model returns filter/sort preferences only.
 - **Location & Distance**
   - `LocationProvider` wraps `CLLocationManager`, publishes authorization state, and provides the latest coordinate. `AppModel` wires it into `SpotStore` so distance sorts update as location changes.
@@ -75,7 +76,7 @@ IDs are deterministic and derived from `Name + Neighborhood` so favorites/histor
 ## Run/Preview
 This repo only ships the Swift source and sample data. Create an Xcode project (iOS 17 target), drop the `Sources` folder and `data` assets into the project, and wire `SpotStore` into an `@MainActor` `AppModel` (examples provided in code).
 
-## What’s Next (short list)
-* Wire an optional live LLM client to the `AIService` protocol and gate payload size when sharing spots (cap and compress to the filtered top-N before the call).
-* Add lightweight SwiftUI snapshots/UI tests for the Now, Map, List, and Chat surfaces to lock in the current flows and regression-test filter synchronization.
-* Refine map UX with accessibility: larger hit targets on pins/callouts, VoiceOver labels for badges, and a fallback text list when MapKit is unavailable.
+## What's Next (short list)
+* Ship end-to-end UI tests in Xcode CI (use the stubs in `Tests/WestsideWorkDeciderTests` as a starting point) to lock in presets, chat responses, and filter sharing.
+* Add user notes + "last meal/coffee order" stickers to cards, persisted alongside favorites/history.
+* Add directions handoff (Maps/Google Maps) and calendar drop-in ("block 90 minutes") from SpotCard actions.

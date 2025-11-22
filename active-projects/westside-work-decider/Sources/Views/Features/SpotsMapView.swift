@@ -27,11 +27,23 @@ struct SpotsMapView: View {
             let mappedIDs = mappedSpots.map { $0.0.id }.joined(separator: ",")
 
             if mappedSpots.isEmpty {
-                ContentUnavailableView(
-                    "No map points yet",
-                    systemImage: "mappin.slash",
-                    description: Text("Add latitude/longitude to the dataset or run one-time geocoding to see pins.")
-                )
+                VStack(spacing: 12) {
+                    ContentUnavailableView(
+                        "No map points yet",
+                        systemImage: "mappin.slash",
+                        description: Text("Add latitude/longitude to the dataset or run one-time geocoding to see pins.")
+                    )
+                    List {
+                        ForEach(store.apply(query: filters.query, sort: filters.sort)) { spot in
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(spot.name).font(.headline)
+                                Text(spot.neighborhood).font(.subheadline).foregroundStyle(.secondary)
+                                Text(spot.criticalFieldNotes).font(.caption).lineLimit(2)
+                            }
+                        }
+                    }
+                    .accessibilityLabel("Text list fallback when map is unavailable")
+                }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
                 let sortedSpots = mappedSpots.sorted { lhs, rhs in
@@ -53,11 +65,13 @@ struct SpotsMapView: View {
                             ZStack {
                                 Circle()
                                     .fill(selectedSpotID == entry.0.id ? Color.blue : Color.accentColor)
-                                    .frame(width: 12, height: 12)
+                                    .frame(width: 18, height: 18)
                                 Circle()
                                     .stroke(Color.white, lineWidth: 2)
-                                    .frame(width: 16, height: 16)
+                                    .frame(width: 24, height: 24)
                             }
+                            .accessibilityLabel("\(entry.0.name), \(formattedDistance(entry.2) ?? "distance unknown")")
+                            .accessibilityHint("Double-tap to show details and favorite")
                         }
                         .tag(entry.0.id)
                     }
@@ -142,6 +156,8 @@ struct SpotsMapView: View {
         .padding(12)
         .background(RoundedRectangle(cornerRadius: 12).fill(Color(uiColor: .secondarySystemBackground)))
         .shadow(radius: 3)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(spot.name), \(spot.neighborhood), tier \(spot.tier.rawValue)")
     }
 
     private func formattedDistance(_ distance: CLLocationDistance?) -> String? {

@@ -4,7 +4,7 @@ struct AppExperienceView: View {
     @StateObject private var appModel = AppModel(loader: CompositeSpotLoader())
     @StateObject private var filters = QueryModel()
     @State private var selectedTab: Tab = .now
-    private let aiService: AIRecommendationService = SimulatedAIService()
+    private let aiService: AIRecommendationService = OpenAIService.makeDefault()
 
     var body: some View {
         NavigationStack {
