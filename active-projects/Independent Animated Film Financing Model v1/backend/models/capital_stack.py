@@ -7,7 +7,7 @@ to form the complete capital stack for a project.
 
 from decimal import Decimal
 from typing import List, Optional, Dict
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, ConfigDict, field_validator
 
 from .financial_instruments import FinancialInstrument, InstrumentType
 
@@ -31,6 +31,30 @@ class CapitalComponent(BaseModel):
 
 class CapitalStack(BaseModel):
     """Complete capital stack for a project"""
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "stack_id": "STACK-001",
+                "project_id": "PROJ-001",
+                "components": [
+                    {
+                        "component_id": "COMP-001",
+                        "position": 1,
+                        "is_committed": True,
+                        "instrument": {
+                            "instrument_id": "INS-001",
+                            "instrument_type": "equity",
+                            "amount": "5000000"
+                        }
+                    }
+                ],
+                "completion_bond_fee_percentage": "3.5",
+                "is_fully_financed": False,
+                "financing_gap": "2000000"
+            }
+        }
+    )
 
     stack_id: str = Field(default_factory=lambda: f"STACK-{id(object())}", description="Unique identifier for this capital structure")
     project_id: str = Field(default="", description="Reference to ProjectProfile")
@@ -137,27 +161,4 @@ class CapitalStack(BaseModel):
             "financing_gap": self.financing_gap,
             "debt_percentage": (self.total_debt() / self.total_capital_raised() * 100) if self.total_capital_raised() > 0 else Decimal("0"),
             "equity_percentage": (self.total_equity() / self.total_capital_raised() * 100) if self.total_capital_raised() > 0 else Decimal("0"),
-        }
-
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "stack_id": "STACK-001",
-                "project_id": "PROJ-001",
-                "components": [
-                    {
-                        "component_id": "COMP-001",
-                        "position": 1,
-                        "is_committed": True,
-                        "instrument": {
-                            "instrument_id": "INS-001",
-                            "instrument_type": "equity",
-                            "amount": "5000000"
-                        }
-                    }
-                ],
-                "completion_bond_fee_percentage": "3.5",
-                "is_fully_financed": False,
-                "financing_gap": "2000000"
-            }
         }

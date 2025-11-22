@@ -166,7 +166,12 @@ class MonetizationComparator:
         scenarios = []
 
         for method in strategies:
-            if method not in policy.monetization_methods:
+            normalized_method = self.calculator._normalize_monetization_method(method, policy)
+
+            if (
+                normalized_method not in policy.monetization_methods
+                and method not in policy.monetization_methods
+            ):
                 logger.warning(
                     f"Skipping {method.value} - not supported by policy {policy_id}"
                 )

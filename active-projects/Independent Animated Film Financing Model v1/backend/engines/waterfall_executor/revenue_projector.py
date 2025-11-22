@@ -6,6 +6,7 @@ timing for theatrical, PVOD, EST, SVOD, AVOD, and TV windows.
 """
 
 import logging
+from copy import deepcopy
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Any
 from decimal import Decimal
@@ -158,9 +159,11 @@ class RevenueProjector:
 
         # Use custom windows or template
         if custom_windows:
-            windows = custom_windows
+            windows = deepcopy(custom_windows)
         else:
-            windows = self.window_templates.get(release_strategy, self.window_templates["wide_theatrical"])
+            windows = deepcopy(self.window_templates.get(release_strategy, self.window_templates["wide_theatrical"]))
+
+        windows = self._normalize_window_percentages(windows)
 
         # Adjust windows based on known values
         if theatrical_box_office:
@@ -182,6 +185,13 @@ class RevenueProjector:
 
             for quarter, amount in quarterly_distribution.items():
                 quarterly_revenue[quarter] = quarterly_revenue.get(quarter, Decimal("0")) + amount
+
+        # Ensure totals reconcile exactly to the requested ultimate revenue
+        total_reconciled = sum(quarterly_revenue.values())
+        remainder = total_ultimate_revenue - total_reconciled
+        if remainder != 0 and quarterly_revenue:
+            last_quarter = max(quarterly_revenue.keys())
+            quarterly_revenue[last_quarter] += remainder
 
         # Calculate cumulative
         cumulative_revenue: Dict[int, Decimal] = {}
@@ -301,6 +311,32 @@ class RevenueProjector:
 
         return templates
 
+    def _normalize_window_percentages(self, windows: List[DistributionWindow]) -> List[DistributionWindow]:
+        """Scale window percentages to ensure they sum to 100%."""
+        total_pct = sum((w.revenue_percentage for w in windows), Decimal("0"))
+
+        if total_pct == 0:
+            return windows
+
+        if total_pct == Decimal("100"):
+            return windows
+
+        scale = Decimal("100") / total_pct
+        normalized: List[DistributionWindow] = []
+        for window in windows:
+            normalized.append(
+                DistributionWindow(
+                    window.window_type,
+                    window.start_quarter,
+                    window.duration_quarters,
+                    window.revenue_percentage * scale,
+                    window.timing_profile,
+                    window.metadata
+                )
+            )
+
+        return normalized
+
     def _apply_timing_profile(
         self,
         window: DistributionWindow,
@@ -325,13 +361,16 @@ class RevenueProjector:
         elif window.timing_profile == "front_loaded":
             # Theatrical and PVOD: heavy first quarters
             # 60% Q1, 25% Q2, 10% Q3, 5% Q4
-            weights = [Decimal("0.60"), Decimal("0.25"), Decimal("0.10"), Decimal("0.05")]
-            for i in range(window.duration_quarters):
-                if i < len(weights):
-                    weight = weights[i]
-                else:
-                    weight = Decimal("0")
+            base_weights = [Decimal("0.60"), Decimal("0.25"), Decimal("0.10"), Decimal("0.05")]
 
+            if window.duration_quarters > len(base_weights):
+                base_weights = base_weights + [base_weights[-1]] * (window.duration_quarters - len(base_weights))
+
+            selected_weights = base_weights[: window.duration_quarters]
+            total_weight = sum(selected_weights)
+            scaled_weights = [w / total_weight for w in selected_weights]
+
+            for i, weight in enumerate(scaled_weights):
                 quarter = window.start_quarter + i
                 quarterly_distribution[quarter] = total_revenue * weight
 
