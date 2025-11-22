@@ -74,3 +74,8 @@ IDs are deterministic and derived from `Name + Neighborhood` so favorites/histor
 
 ## Run/Preview
 This repo only ships the Swift source and sample data. Create an Xcode project (iOS 17 target), drop the `Sources` folder and `data` assets into the project, and wire `SpotStore` into an `@MainActor` `AppModel` (examples provided in code).
+
+## What’s Next (short list)
+* Wire an optional live LLM client to the `AIService` protocol and gate payload size when sharing spots (cap and compress to the filtered top-N before the call).
+* Add lightweight SwiftUI snapshots/UI tests for the Now, Map, List, and Chat surfaces to lock in the current flows and regression-test filter synchronization.
+* Refine map UX with accessibility: larger hit targets on pins/callouts, VoiceOver labels for badges, and a fallback text list when MapKit is unavailable.
