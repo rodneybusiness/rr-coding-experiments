@@ -9,7 +9,9 @@ from datetime import date
 from decimal import Decimal
 from enum import Enum
 from typing import Optional, Dict, Any
+
 from pydantic import BaseModel, Field, field_validator
+from backend.models.waterfall import RecoupmentPriority
 
 
 class InstrumentType(str, Enum):
@@ -24,15 +26,6 @@ class InstrumentType(str, Enum):
     NEGATIVE_PICKUP = "negative_pickup"
     GRANT = "grant"
     SUBSIDY = "subsidy"
-
-
-class RecoupmentPriority(int, Enum):
-    """Priority levels for recoupment (lower number = higher priority)"""
-    SENIOR_DEBT = 1
-    MEZZANINE_DEBT = 2
-    EQUITY = 3
-    DEFERRED_FEES = 4
-    PROFIT_PARTICIPATION = 5
 
 
 class FinancialInstrument(BaseModel):
