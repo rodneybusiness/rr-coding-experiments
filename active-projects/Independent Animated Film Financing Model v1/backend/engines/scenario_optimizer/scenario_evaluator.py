@@ -574,3 +574,276 @@ class ScenarioEvaluator:
 
         evaluation.strengths = strengths
         evaluation.weaknesses = weaknesses
+
+    def evaluate_for_program(
+        self,
+        capital_stack: CapitalStack,
+        waterfall_structure: WaterfallStructure,
+        program_context: "CapitalProgramContext",
+        deal_blocks: Optional[List[DealBlock]] = None,
+        run_monte_carlo: bool = True,
+        num_simulations: int = 1000
+    ) -> "ProgramScenarioEvaluation":
+        """
+        Evaluate a financing scenario in the context of a capital program.
+
+        Extends standard evaluation with program-specific considerations:
+        - Constraint compliance checking
+        - Portfolio fit analysis
+        - Source selection optimization
+        - Risk contribution to portfolio
+
+        Args:
+            capital_stack: CapitalStack to evaluate
+            waterfall_structure: WaterfallStructure for distributions
+            program_context: Context including program constraints and portfolio state
+            deal_blocks: Optional list of DealBlocks for ownership/control scoring
+            run_monte_carlo: Whether to run Monte Carlo simulation
+            num_simulations: Number of Monte Carlo scenarios
+
+        Returns:
+            ProgramScenarioEvaluation with standard metrics plus program-specific analysis
+        """
+        # First, run standard evaluation
+        base_evaluation = self.evaluate(
+            capital_stack=capital_stack,
+            waterfall_structure=waterfall_structure,
+            revenue_projection=program_context.expected_revenue,
+            run_monte_carlo=run_monte_carlo,
+            num_simulations=num_simulations,
+            deal_blocks=deal_blocks
+        )
+
+        # Check program constraints
+        constraint_violations = []
+        constraint_warnings = []
+
+        if program_context.constraints:
+            constraints = program_context.constraints
+
+            # Check single project concentration
+            if program_context.total_committed > 0:
+                project_pct = (capital_stack.project_budget / program_context.total_committed) * Decimal("100")
+                if project_pct > constraints.get("max_single_project_pct", Decimal("100")):
+                    constraint_violations.append({
+                        "constraint": "max_single_project_pct",
+                        "current": str(project_pct),
+                        "limit": str(constraints.get("max_single_project_pct")),
+                        "blocking": True
+                    })
+
+            # Check budget range
+            min_budget = constraints.get("min_project_budget")
+            max_budget = constraints.get("max_project_budget")
+            if min_budget and capital_stack.project_budget < min_budget:
+                constraint_violations.append({
+                    "constraint": "min_project_budget",
+                    "current": str(capital_stack.project_budget),
+                    "limit": str(min_budget),
+                    "blocking": True
+                })
+            if max_budget and capital_stack.project_budget > max_budget:
+                constraint_violations.append({
+                    "constraint": "max_project_budget",
+                    "current": str(capital_stack.project_budget),
+                    "limit": str(max_budget),
+                    "blocking": True
+                })
+
+            # Check prohibited jurisdictions
+            prohibited = constraints.get("prohibited_jurisdictions", [])
+            if program_context.jurisdiction and program_context.jurisdiction in prohibited:
+                constraint_violations.append({
+                    "constraint": "prohibited_jurisdiction",
+                    "current": program_context.jurisdiction,
+                    "limit": str(prohibited),
+                    "blocking": True
+                })
+
+            # Check development stage limits (soft constraint / warning)
+            if program_context.is_development:
+                max_dev_pct = constraints.get("max_development_pct", Decimal("100"))
+                current_dev_pct = program_context.current_development_pct or Decimal("0")
+                if current_dev_pct >= max_dev_pct:
+                    constraint_warnings.append(
+                        f"Development allocation at limit ({current_dev_pct}% of {max_dev_pct}% max)"
+                    )
+
+        # Calculate portfolio fit score
+        portfolio_fit_score = self._calculate_portfolio_fit(
+            base_evaluation, program_context
+        )
+
+        # Recommend optimal source
+        recommended_source = None
+        source_rationale = None
+        if program_context.available_sources:
+            recommended_source, source_rationale = self._recommend_source(
+                capital_stack, program_context
+            )
+
+        return ProgramScenarioEvaluation(
+            base_evaluation=base_evaluation,
+            program_id=program_context.program_id,
+            constraint_violations=constraint_violations,
+            constraint_warnings=constraint_warnings,
+            passes_hard_constraints=len(constraint_violations) == 0,
+            portfolio_fit_score=portfolio_fit_score,
+            recommended_source_id=recommended_source,
+            source_selection_rationale=source_rationale,
+            expected_portfolio_contribution={
+                "irr_contribution": base_evaluation.equity_irr or Decimal("0"),
+                "risk_contribution": Decimal("100") - base_evaluation.probability_of_equity_recoupment * Decimal("100"),
+                "strategic_contribution": base_evaluation.strategic_composite_score or Decimal("50")
+            }
+        )
+
+    def _calculate_portfolio_fit(
+        self,
+        evaluation: ScenarioEvaluation,
+        context: "CapitalProgramContext"
+    ) -> Decimal:
+        """
+        Calculate how well this project fits the portfolio.
+
+        Considers:
+        - Return profile alignment with targets
+        - Risk diversification benefit
+        - Strategic value add
+        """
+        fit_score = Decimal("50")  # Base score
+
+        # Return alignment (+/- 25 points)
+        if context.target_irr and evaluation.equity_irr:
+            irr_diff = abs(evaluation.equity_irr - context.target_irr)
+            if irr_diff <= Decimal("5"):
+                fit_score += Decimal("25")
+            elif irr_diff <= Decimal("10"):
+                fit_score += Decimal("15")
+            else:
+                fit_score -= Decimal("10")
+
+        # Risk contribution (+/- 15 points)
+        if evaluation.probability_of_equity_recoupment >= Decimal("0.80"):
+            fit_score += Decimal("15")
+        elif evaluation.probability_of_equity_recoupment < Decimal("0.50"):
+            fit_score -= Decimal("15")
+
+        # Strategic value (+/- 10 points)
+        if evaluation.strategic_composite_score:
+            if evaluation.strategic_composite_score >= Decimal("70"):
+                fit_score += Decimal("10")
+            elif evaluation.strategic_composite_score < Decimal("40"):
+                fit_score -= Decimal("10")
+
+        return max(Decimal("0"), min(Decimal("100"), fit_score))
+
+    def _recommend_source(
+        self,
+        capital_stack: CapitalStack,
+        context: "CapitalProgramContext"
+    ) -> tuple:
+        """
+        Recommend the best capital source for this project.
+
+        Selection criteria:
+        1. Geographic restrictions match
+        2. Budget range fit
+        3. Available capacity
+        4. Cost of capital
+        """
+        if not context.available_sources:
+            return None, None
+
+        best_source = None
+        best_score = Decimal("-999")
+        best_rationale = None
+
+        for source in context.available_sources:
+            score = Decimal("0")
+            rationale_parts = []
+
+            # Check geographic restrictions
+            if source.get("geographic_restrictions"):
+                if context.jurisdiction in source["geographic_restrictions"]:
+                    score += Decimal("30")
+                    rationale_parts.append("Jurisdiction match")
+                else:
+                    score -= Decimal("100")  # Disqualify
+                    continue
+
+            # Check budget range
+            min_budget = source.get("budget_range_min")
+            max_budget = source.get("budget_range_max")
+            if min_budget and capital_stack.project_budget < min_budget:
+                continue
+            if max_budget and capital_stack.project_budget > max_budget:
+                continue
+            rationale_parts.append("Budget in range")
+            score += Decimal("20")
+
+            # Check available capacity
+            available = source.get("available_amount", Decimal("0"))
+            if available >= capital_stack.project_budget:
+                score += Decimal("25")
+                rationale_parts.append("Full capacity available")
+            elif available >= capital_stack.project_budget * Decimal("0.5"):
+                score += Decimal("10")
+                rationale_parts.append("Partial capacity available")
+
+            # Prefer lower cost sources
+            interest_rate = source.get("interest_rate", Decimal("10"))
+            if interest_rate <= Decimal("8"):
+                score += Decimal("15")
+                rationale_parts.append("Competitive cost")
+
+            if score > best_score:
+                best_score = score
+                best_source = source.get("source_id")
+                best_rationale = "; ".join(rationale_parts)
+
+        return best_source, best_rationale
+
+
+@dataclass
+class CapitalProgramContext:
+    """
+    Context for evaluating a scenario within a capital program.
+    """
+    program_id: str
+    program_name: str
+    total_committed: Decimal = Decimal("0")
+    total_deployed: Decimal = Decimal("0")
+    target_irr: Optional[Decimal] = None
+    constraints: Optional[Dict[str, Any]] = None
+    available_sources: Optional[List[Dict[str, Any]]] = None
+    jurisdiction: Optional[str] = None
+    genre: Optional[str] = None
+    is_development: bool = False
+    is_first_time_director: bool = False
+    current_development_pct: Optional[Decimal] = None
+    expected_revenue: Optional[Decimal] = None
+
+
+@dataclass
+class ProgramScenarioEvaluation:
+    """
+    Extended evaluation result including program-specific analysis.
+    """
+    base_evaluation: ScenarioEvaluation
+    program_id: str
+
+    # Constraint analysis
+    constraint_violations: List[Dict[str, Any]] = field(default_factory=list)
+    constraint_warnings: List[str] = field(default_factory=list)
+    passes_hard_constraints: bool = True
+
+    # Portfolio analysis
+    portfolio_fit_score: Decimal = Decimal("50")
+
+    # Source recommendation
+    recommended_source_id: Optional[str] = None
+    source_selection_rationale: Optional[str] = None
+
+    # Portfolio contribution
+    expected_portfolio_contribution: Dict[str, Decimal] = field(default_factory=dict)

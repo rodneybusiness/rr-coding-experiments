@@ -13,6 +13,15 @@ import type {
   OwnershipScoreRequest,
   OwnershipScoreResponse,
   DealTemplate,
+  CapitalProgramInput,
+  CapitalProgramResponse,
+  CapitalProgramListResponse,
+  CapitalSourceInput,
+  CapitalSourceResponse,
+  AllocationRequestInput,
+  AllocationResultResponse,
+  PortfolioMetricsResponse,
+  ProgramTypesResponse,
 } from './types';
 
 // Engine 1: Tax Incentives
@@ -126,5 +135,117 @@ export const getDefaultWeights = async (): Promise<Record<string, number>> => {
 
 export const getDimensionInfo = async (): Promise<Record<string, any>> => {
   const response = await apiClient.get('/api/v1/ownership/dimensions');
+  return response.data;
+};
+
+// Engine 5: Capital Programs
+
+export const createCapitalProgram = async (
+  request: CapitalProgramInput
+): Promise<CapitalProgramResponse> => {
+  const response = await apiClient.post<CapitalProgramResponse>(
+    '/api/v1/capital-programs',
+    request
+  );
+  return response.data;
+};
+
+export const getCapitalProgram = async (
+  programId: string
+): Promise<CapitalProgramResponse> => {
+  const response = await apiClient.get<CapitalProgramResponse>(
+    `/api/v1/capital-programs/${encodeURIComponent(programId)}`
+  );
+  return response.data;
+};
+
+export const listCapitalPrograms = async (
+  programType?: string,
+  status?: string
+): Promise<CapitalProgramListResponse> => {
+  const params = new URLSearchParams();
+  if (programType) params.append('program_type', programType);
+  if (status) params.append('status', status);
+  const queryString = params.toString();
+  const url = queryString
+    ? `/api/v1/capital-programs?${queryString}`
+    : '/api/v1/capital-programs';
+  const response = await apiClient.get<CapitalProgramListResponse>(url);
+  return response.data;
+};
+
+export const deleteCapitalProgram = async (programId: string): Promise<void> => {
+  await apiClient.delete(`/api/v1/capital-programs/${encodeURIComponent(programId)}`);
+};
+
+export const getProgramTypes = async (): Promise<ProgramTypesResponse> => {
+  const response = await apiClient.get<ProgramTypesResponse>(
+    '/api/v1/capital-programs/types'
+  );
+  return response.data;
+};
+
+export const addCapitalSource = async (
+  programId: string,
+  source: CapitalSourceInput
+): Promise<CapitalSourceResponse> => {
+  const response = await apiClient.post<CapitalSourceResponse>(
+    `/api/v1/capital-programs/${encodeURIComponent(programId)}/sources`,
+    source
+  );
+  return response.data;
+};
+
+export const removeCapitalSource = async (
+  programId: string,
+  sourceId: string
+): Promise<void> => {
+  await apiClient.delete(
+    `/api/v1/capital-programs/${encodeURIComponent(programId)}/sources/${encodeURIComponent(sourceId)}`
+  );
+};
+
+export const allocateCapital = async (
+  programId: string,
+  allocation: AllocationRequestInput
+): Promise<AllocationResultResponse> => {
+  const response = await apiClient.post<AllocationResultResponse>(
+    `/api/v1/capital-programs/${encodeURIComponent(programId)}/allocate`,
+    allocation
+  );
+  return response.data;
+};
+
+export const fundDeployment = async (
+  programId: string,
+  deploymentId: string,
+  amount?: number
+): Promise<any> => {
+  const response = await apiClient.post(
+    `/api/v1/capital-programs/${encodeURIComponent(programId)}/deployments/${encodeURIComponent(deploymentId)}/fund`,
+    amount ? { amount } : {}
+  );
+  return response.data;
+};
+
+export const recordRecoupment = async (
+  programId: string,
+  deploymentId: string,
+  recoupedAmount: number,
+  profitAmount: number = 0
+): Promise<any> => {
+  const response = await apiClient.post(
+    `/api/v1/capital-programs/${encodeURIComponent(programId)}/deployments/${encodeURIComponent(deploymentId)}/recoup`,
+    { recouped_amount: recoupedAmount, profit_amount: profitAmount }
+  );
+  return response.data;
+};
+
+export const getPortfolioMetrics = async (
+  programId: string
+): Promise<PortfolioMetricsResponse> => {
+  const response = await apiClient.get<PortfolioMetricsResponse>(
+    `/api/v1/capital-programs/${encodeURIComponent(programId)}/metrics`
+  );
   return response.data;
 };
