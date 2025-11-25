@@ -30,13 +30,7 @@ from app.schemas.capital_programs import (
     BatchAllocationResponse,
 )
 
-# Import models and engine
-import sys
-from pathlib import Path
-
-backend_root = Path(__file__).parent.parent.parent.parent.parent
-sys.path.insert(0, str(backend_root))
-
+# Import models and engine (path setup done in api.py)
 from models.capital_program import (
     CapitalProgram,
     CapitalSource,

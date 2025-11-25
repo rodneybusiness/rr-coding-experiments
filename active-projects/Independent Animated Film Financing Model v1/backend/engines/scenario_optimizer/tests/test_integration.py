@@ -96,7 +96,7 @@ class TestScenarioGenerator:
         assert len(stack.components) > 0
 
         # Verify debt-heavy structure (should have significant debt)
-        from backend.models.financial_instruments import Debt
+        from models.financial_instruments import Debt
         debt_amount = sum(
             c.instrument.amount for c in stack.components
             if isinstance(c.instrument, Debt)
@@ -114,7 +114,7 @@ class TestScenarioGenerator:
         assert stack is not None
 
         # Verify equity-heavy structure
-        from backend.models.financial_instruments import Equity
+        from models.financial_instruments import Equity
         equity_amount = sum(
             c.instrument.amount for c in stack.components
             if isinstance(c.instrument, Equity)
@@ -132,7 +132,7 @@ class TestScenarioGenerator:
         assert stack is not None
 
         # Verify high tax incentives
-        from backend.models.financial_instruments import TaxIncentive
+        from models.financial_instruments import TaxIncentive
         incentive_amount = sum(
             c.instrument.amount for c in stack.components
             if isinstance(c.instrument, TaxIncentive)
@@ -152,7 +152,7 @@ class TestScenarioGenerator:
 
     def test_custom_template(self):
         """Test adding and using custom template."""
-        from backend.engines.scenario_optimizer.scenario_generator import FinancingTemplate
+        from engines.scenario_optimizer.scenario_generator import FinancingTemplate
 
         generator = ScenarioGenerator()
 
@@ -207,8 +207,8 @@ class TestConstraintManager:
         manager = ConstraintManager()
 
         # Create stack with <15% equity (violates hard constraint)
-        from backend.models.capital_stack import CapitalComponent
-        from backend.models.financial_instruments import Equity, SeniorDebt
+        from models.capital_stack import CapitalComponent
+        from models.financial_instruments import Equity, SeniorDebt
 
         equity = Equity(amount=Decimal("3000000"), ownership_percentage=Decimal("100"))  # 10%
         debt = SeniorDebt(amount=Decimal("27000000"), interest_rate=Decimal("8.0"), term_months=24)
@@ -389,8 +389,8 @@ class TestCapitalStackOptimizer:
 
     def test_structural_validation(self):
         """Test structural validation rules."""
-        from backend.models.capital_stack import CapitalComponent
-        from backend.models.financial_instruments import Equity, GapFinancing
+        from models.capital_stack import CapitalComponent
+        from models.financial_instruments import Equity, GapFinancing
 
         optimizer = CapitalStackOptimizer()
 

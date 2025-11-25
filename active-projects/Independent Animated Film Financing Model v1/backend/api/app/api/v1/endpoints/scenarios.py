@@ -21,14 +21,7 @@ from app.schemas.scenarios import (
 )
 from app.schemas.deals import DealBlockInput
 
-# Import Engine 3 & Engine 4
-import sys
-from pathlib import Path
-
-# Add backend root to path
-backend_root = Path(__file__).parent.parent.parent.parent.parent
-sys.path.insert(0, str(backend_root))
-
+# Import Engine 3 & Engine 4 (path setup done in api.py)
 from engines.scenario_optimizer.scenario_generator import ScenarioGenerator
 from engines.scenario_optimizer.scenario_evaluator import ScenarioEvaluator
 from models.waterfall import WaterfallStructure, WaterfallNode, PayeeType, RecoupmentPriority, RecoupmentBasis

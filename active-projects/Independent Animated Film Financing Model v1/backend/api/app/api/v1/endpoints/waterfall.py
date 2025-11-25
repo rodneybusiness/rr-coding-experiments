@@ -16,14 +16,7 @@ from app.schemas.waterfall import (
     MonteCarloPercentiles,
 )
 
-# Import Engine 2
-import sys
-from pathlib import Path
-
-# Add backend root to path
-backend_root = Path(__file__).parent.parent.parent.parent.parent
-sys.path.insert(0, str(backend_root))
-
+# Import Engine 2 (path setup done in api.py)
 from engines.waterfall_executor.waterfall_executor import WaterfallExecutor
 from engines.waterfall_executor.stakeholder_analyzer import StakeholderAnalyzer
 from engines.waterfall_executor.monte_carlo_simulator import MonteCarloSimulator

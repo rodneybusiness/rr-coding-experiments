@@ -20,12 +20,7 @@ from app.schemas.ownership import (
     ScenarioComparisonResponse,
 )
 
-# Add backend root to path for engine/model imports
-import sys
-from pathlib import Path
-backend_root = Path(__file__).parent.parent.parent.parent.parent
-sys.path.insert(0, str(backend_root))
-
+# Import models and engine (path setup done in api.py)
 from models.deal_block import (
     DealBlock,
     DealType,

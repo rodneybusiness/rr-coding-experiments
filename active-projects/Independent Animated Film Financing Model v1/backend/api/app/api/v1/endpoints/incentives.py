@@ -13,15 +13,9 @@ from app.schemas.incentives import (
     PolicyCredit,
     CashFlowQuarter,
 )
+from app.core.path_setup import BACKEND_ROOT
 
-# Import Engine 1
-import sys
-from pathlib import Path
-
-# Add backend root to path (6 levels up from endpoints/incentives.py)
-backend_root = Path(__file__).parent.parent.parent.parent.parent.parent
-sys.path.insert(0, str(backend_root))
-
+# Import Engine 1 (path setup done in api.py)
 from engines.incentive_calculator.calculator import IncentiveCalculator, JurisdictionSpend
 from engines.incentive_calculator.policy_loader import PolicyLoader
 from engines.incentive_calculator.policy_registry import PolicyRegistry
@@ -30,7 +24,7 @@ from models.incentive_policy import MonetizationMethod
 router = APIRouter()
 
 # Initialize policy loader, registry, and calculator
-policies_dir = backend_root / "data" / "policies"
+policies_dir = BACKEND_ROOT / "data" / "policies"
 policy_loader = PolicyLoader(policies_dir)
 policy_registry = PolicyRegistry(policy_loader)
 calculator = IncentiveCalculator(policy_registry)
