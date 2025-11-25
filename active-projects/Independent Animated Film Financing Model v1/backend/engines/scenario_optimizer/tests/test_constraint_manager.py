@@ -550,17 +550,19 @@ class TestConstraintManager:
     # Edge Cases
 
     def test_validate_empty_stack(self, manager):
-        """Test validating empty capital stack."""
-        empty_stack = CapitalStack(
-            stack_name="empty",
-            project_budget=Decimal("30000000"),
-            components=[]
-        )
+        """Test validating empty capital stack - Pydantic now rejects empty stacks."""
+        from pydantic import ValidationError
 
-        result = manager.validate(empty_stack)
+        # CapitalStack now requires at least one component (Pydantic validation)
+        with pytest.raises(ValidationError) as exc_info:
+            CapitalStack(
+                stack_name="empty",
+                project_budget=Decimal("30000000"),
+                components=[]
+            )
 
-        # Should fail budget sum constraint
-        assert not result.is_valid
+        # Verify it's the right validation error
+        assert "at least 1 item" in str(exc_info.value)
 
     def test_validate_single_instrument_stack(self, manager):
         """Test validating stack with single instrument."""

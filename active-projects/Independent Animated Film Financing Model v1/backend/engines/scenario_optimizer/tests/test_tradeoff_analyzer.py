@@ -14,7 +14,15 @@ from engines.scenario_optimizer import (
 )
 from engines.scenario_optimizer.tradeoff_analyzer import TradeOffAnalysis
 from engines.scenario_optimizer.scenario_evaluator import ScenarioEvaluation
-from models.capital_stack import CapitalStack
+from models.capital_stack import CapitalStack, CapitalComponent
+from models.financial_instruments import Equity
+
+
+def create_minimal_capital_stack(name: str = "test", budget: Decimal = Decimal("30000000")) -> CapitalStack:
+    """Create a minimal valid capital stack with one equity component for testing."""
+    equity = Equity(amount=budget, ownership_percentage=Decimal("100.0"))
+    component = CapitalComponent(instrument=equity, position=1)
+    return CapitalStack(stack_name=name, project_budget=budget, components=[component])
 
 
 class TestTradeOffAnalyzer:
@@ -31,7 +39,7 @@ class TestTradeOffAnalyzer:
         # Scenario 1: High returns, low safety
         eval1 = ScenarioEvaluation(
             scenario_name="high_risk_high_return",
-            capital_stack=CapitalStack(stack_name="test1", project_budget=Decimal("30000000"), components=[]),
+            capital_stack=create_minimal_capital_stack("test1"),
             equity_irr=Decimal("25.0"),
             probability_of_equity_recoupment=Decimal("0.50"),
             tax_incentive_effective_rate=Decimal("15.0"),
@@ -43,7 +51,7 @@ class TestTradeOffAnalyzer:
         # Scenario 2: Medium returns, high safety
         eval2 = ScenarioEvaluation(
             scenario_name="balanced",
-            capital_stack=CapitalStack(stack_name="test2", project_budget=Decimal("30000000"), components=[]),
+            capital_stack=create_minimal_capital_stack("test2"),
             equity_irr=Decimal("18.0"),
             probability_of_equity_recoupment=Decimal("0.80"),
             tax_incentive_effective_rate=Decimal("20.0"),
@@ -55,7 +63,7 @@ class TestTradeOffAnalyzer:
         # Scenario 3: Low returns, very high safety
         eval3 = ScenarioEvaluation(
             scenario_name="low_risk_low_return",
-            capital_stack=CapitalStack(stack_name="test3", project_budget=Decimal("30000000"), components=[]),
+            capital_stack=create_minimal_capital_stack("test3"),
             equity_irr=Decimal("12.0"),
             probability_of_equity_recoupment=Decimal("0.90"),
             tax_incentive_effective_rate=Decimal("25.0"),
@@ -67,7 +75,7 @@ class TestTradeOffAnalyzer:
         # Scenario 4: Dominated scenario (worse on both dimensions)
         eval4 = ScenarioEvaluation(
             scenario_name="dominated",
-            capital_stack=CapitalStack(stack_name="test4", project_budget=Decimal("30000000"), components=[]),
+            capital_stack=create_minimal_capital_stack("test4"),
             equity_irr=Decimal("10.0"),
             probability_of_equity_recoupment=Decimal("0.40"),
             tax_incentive_effective_rate=Decimal("10.0"),
@@ -336,7 +344,7 @@ class TestTradeOffAnalyzer:
             scenario_name="test",
             evaluation=ScenarioEvaluation(
                 scenario_name="test",
-                capital_stack=CapitalStack(stack_name="test", project_budget=Decimal("30000000"), components=[])
+                capital_stack=create_minimal_capital_stack()
             ),
             objective_1_value=Decimal("20.0"),
             objective_2_value=Decimal("0.75")
@@ -395,7 +403,7 @@ class TestTradeOffDataClasses:
         """Test creating a trade-off point."""
         evaluation = ScenarioEvaluation(
             scenario_name="test",
-            capital_stack=CapitalStack(stack_name="test", project_budget=Decimal("30000000"), components=[])
+            capital_stack=create_minimal_capital_stack()
         )
 
         point = TradeOffPoint(
@@ -416,7 +424,7 @@ class TestTradeOffDataClasses:
         """Test trade-off point with domination info."""
         evaluation = ScenarioEvaluation(
             scenario_name="test",
-            capital_stack=CapitalStack(stack_name="test", project_budget=Decimal("30000000"), components=[])
+            capital_stack=create_minimal_capital_stack()
         )
 
         point = TradeOffPoint(
@@ -436,7 +444,7 @@ class TestTradeOffDataClasses:
         """Test creating a Pareto frontier."""
         evaluation = ScenarioEvaluation(
             scenario_name="test",
-            capital_stack=CapitalStack(stack_name="test", project_budget=Decimal("30000000"), components=[])
+            capital_stack=create_minimal_capital_stack()
         )
 
         point1 = TradeOffPoint(
@@ -471,7 +479,7 @@ class TestTradeOffDataClasses:
         """Test that Pareto frontier auto-sorts points by objective 1."""
         evaluation = ScenarioEvaluation(
             scenario_name="test",
-            capital_stack=CapitalStack(stack_name="test", project_budget=Decimal("30000000"), components=[])
+            capital_stack=create_minimal_capital_stack()
         )
 
         point1 = TradeOffPoint(

@@ -645,10 +645,10 @@ class CapitalStackOptimizer:
         amounts = [c.instrument.amount for c in stack.components]
         total = sum(amounts)
 
-        # Add random noise
+        # Add random noise (FIX: Convert float to Decimal for type compatibility)
         perturbed_amounts = []
         for amount in amounts:
-            pct = amount / total
+            pct = float(amount / total)  # Convert to float for uniform operations
             noise = random.uniform(-perturbation, perturbation)
             new_pct = max(0.01, pct + noise)  # Ensure positive
             perturbed_amounts.append(new_pct)
