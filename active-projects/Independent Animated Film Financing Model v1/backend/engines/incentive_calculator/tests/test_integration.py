@@ -9,7 +9,7 @@ import pytest
 from pathlib import Path
 from decimal import Decimal
 
-from backend.engines.incentive_calculator import (
+from engines.incentive_calculator import (
     PolicyLoader,
     PolicyRegistry,
     IncentiveCalculator,
@@ -17,7 +17,7 @@ from backend.engines.incentive_calculator import (
     CashFlowProjector,
     MonetizationComparator,
 )
-from backend.models.incentive_policy import MonetizationMethod
+from models.incentive_policy import MonetizationMethod
 
 
 @pytest.fixture

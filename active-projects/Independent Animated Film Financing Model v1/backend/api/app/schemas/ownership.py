@@ -6,7 +6,7 @@ Pydantic schemas for ownership/control scoring API requests and responses.
 
 from typing import List, Optional, Dict, Any
 from decimal import Decimal
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class ScoreWeights(BaseModel):
@@ -56,8 +56,8 @@ class OwnershipScoreResponse(BaseModel):
     # Quick flags
     flags: ScoringFlagsResponse
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "ownership_score": "72.0",
                 "control_score": "65.0",
@@ -85,6 +85,7 @@ class OwnershipScoreResponse(BaseModel):
                 }
             }
         }
+    )
 
 
 class ScoreDealBlockInput(BaseModel):
@@ -130,8 +131,8 @@ class OwnershipScoreRequest(BaseModel):
     deal_blocks: List[ScoreDealBlockInput] = Field(..., min_length=1)
     weights: Optional[ScoreWeights] = None
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "deal_blocks": [
                     {
@@ -153,6 +154,7 @@ class OwnershipScoreRequest(BaseModel):
                 }
             }
         }
+    )
 
 
 class ScenarioComparisonRequest(BaseModel):

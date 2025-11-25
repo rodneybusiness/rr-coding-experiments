@@ -10,20 +10,20 @@ multi-jurisdiction film productions, including:
 - Monetization strategy comparisons
 """
 
-from backend.engines.incentive_calculator.policy_loader import PolicyLoader
-from backend.engines.incentive_calculator.policy_registry import PolicyRegistry
-from backend.engines.incentive_calculator.calculator import (
+from .policy_loader import PolicyLoader
+from .policy_registry import PolicyRegistry
+from .calculator import (
     IncentiveCalculator,
     JurisdictionSpend,
     IncentiveResult,
     MultiJurisdictionResult,
 )
-from backend.engines.incentive_calculator.cash_flow_projector import (
+from .cash_flow_projector import (
     CashFlowProjector,
     CashFlowEvent,
     CashFlowProjection,
 )
-from backend.engines.incentive_calculator.monetization_comparator import (
+from .monetization_comparator import (
     MonetizationComparator,
     MonetizationScenario,
     MonetizationComparison,

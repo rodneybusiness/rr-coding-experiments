@@ -10,7 +10,7 @@ from decimal import Decimal
 from enum import Enum
 from typing import Optional, Dict, Any
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 from models.waterfall import RecoupmentPriority
 
 
@@ -80,8 +80,8 @@ class FinancialInstrument(BaseModel):
 
         return v
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "instrument_id": "INS-001",
                 "instrument_type": "equity",
@@ -90,6 +90,7 @@ class FinancialInstrument(BaseModel):
                 "provider_name": "Film Investment Fund LP"
             }
         }
+    )
 
 
 class Equity(FinancialInstrument):

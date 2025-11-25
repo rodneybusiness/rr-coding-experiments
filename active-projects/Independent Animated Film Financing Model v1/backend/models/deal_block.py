@@ -9,7 +9,7 @@ from enum import Enum
 from typing import List, Optional, Dict, Any
 from decimal import Decimal
 from datetime import date
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 
 
 class DealType(str, Enum):
@@ -38,6 +38,9 @@ class DealType(str, Enum):
     # Soft Money
     GRANT = "grant"
     TAX_INCENTIVE = "tax_incentive"
+
+    # Fallback
+    OTHER = "other"
 
 
 class DealStatus(str, Enum):
@@ -454,8 +457,8 @@ class DealBlock(BaseModel):
             "expected_close_date": self.expected_close_date.isoformat() if self.expected_close_date else None,
         }
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "deal_id": "DEAL-001",
                 "deal_name": "North America Theatrical Distribution",
@@ -472,6 +475,7 @@ class DealBlock(BaseModel):
                 "ip_ownership": "producer"
             }
         }
+    )
 
 
 # === DEAL BLOCK TEMPLATES ===

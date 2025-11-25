@@ -8,11 +8,11 @@ import pytest
 from pathlib import Path
 from decimal import Decimal
 
-from backend.engines.incentive_calculator.policy_loader import (
+from engines.incentive_calculator.policy_loader import (
     PolicyLoader,
     PolicyLoadError
 )
-from backend.models.incentive_policy import IncentivePolicy
+from models.incentive_policy import IncentivePolicy
 
 
 # Fixture for policies directory

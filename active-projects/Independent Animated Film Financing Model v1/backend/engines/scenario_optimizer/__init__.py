@@ -5,14 +5,14 @@ Generates and evaluates diverse financing scenarios, identifying optimal
 capital stack structures based on investor constraints and project requirements.
 """
 
-from backend.engines.scenario_optimizer.scenario_generator import (
+from .scenario_generator import (
     FinancingTemplate,
     ScenarioConfig,
     ScenarioGenerator,
     DEFAULT_TEMPLATES
 )
 
-from backend.engines.scenario_optimizer.constraint_manager import (
+from .constraint_manager import (
     Constraint,
     HardConstraint,
     SoftConstraint,
@@ -23,30 +23,30 @@ from backend.engines.scenario_optimizer.constraint_manager import (
     ConstraintValidationResult
 )
 
-from backend.engines.scenario_optimizer.capital_stack_optimizer import (
+from .capital_stack_optimizer import (
     OptimizationObjective,
     OptimizationResult,
     CapitalStackOptimizer
 )
 
-from backend.engines.scenario_optimizer.scenario_evaluator import (
+from .scenario_evaluator import (
     ScenarioEvaluation,
     ScenarioEvaluator
 )
 
-from backend.engines.scenario_optimizer.scenario_comparator import (
+from .scenario_comparator import (
     RankingCriterion,
     ScenarioRanking,
     ScenarioComparator
 )
 
-from backend.engines.scenario_optimizer.tradeoff_analyzer import (
+from .tradeoff_analyzer import (
     TradeOffPoint,
     ParetoFrontier,
     TradeOffAnalyzer
 )
 
-from backend.engines.scenario_optimizer.ownership_control_scorer import (
+from .ownership_control_scorer import (
     ControlImpact,
     OwnershipControlResult,
     OwnershipControlScorer

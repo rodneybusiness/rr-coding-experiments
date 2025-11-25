@@ -2,16 +2,56 @@
 Database Base Configuration
 
 Sets up SQLAlchemy declarative base and common model utilities.
+Supports both PostgreSQL (production) and SQLite (development/testing).
 """
 
 from typing import Any
 from datetime import datetime
 import uuid
 
-from sqlalchemy import Column, DateTime
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Column, DateTime, String
+from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.types import TypeDecorator, CHAR
+
+
+class GUID(TypeDecorator):
+    """Platform-independent GUID type.
+
+    Uses PostgreSQL's UUID type when available, otherwise stores as
+    CHAR(32) in other databases (e.g., SQLite).
+    """
+    impl = CHAR
+    cache_ok = True
+
+    def load_dialect_impl(self, dialect):
+        if dialect.name == 'postgresql':
+            return dialect.type_descriptor(PG_UUID(as_uuid=True))
+        else:
+            return dialect.type_descriptor(CHAR(32))
+
+    def process_bind_param(self, value, dialect):
+        if value is None:
+            return value
+        elif dialect.name == 'postgresql':
+            return value
+        else:
+            if isinstance(value, uuid.UUID):
+                return value.hex
+            else:
+                return uuid.UUID(value).hex
+
+    def process_result_value(self, value, dialect):
+        if value is None:
+            return value
+        elif dialect.name == 'postgresql':
+            return value
+        else:
+            if isinstance(value, uuid.UUID):
+                return value
+            else:
+                return uuid.UUID(value)
 
 
 class Base(DeclarativeBase):
@@ -41,10 +81,10 @@ class TimestampMixin:
 
 
 class UUIDMixin:
-    """Mixin for UUID primary key."""
+    """Mixin for UUID primary key. Works with PostgreSQL and SQLite."""
 
     id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),
+        GUID(),
         primary_key=True,
         default=uuid.uuid4,
         nullable=False

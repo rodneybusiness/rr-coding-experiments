@@ -9,12 +9,12 @@ import pytest
 from pathlib import Path
 from decimal import Decimal
 
-from backend.models.waterfall import (
+from models.waterfall import (
     WaterfallStructure, WaterfallNode, RecoupmentPriority, PayeeType, RecoupmentBasis
 )
-from backend.models.capital_stack import CapitalStack
+from models.capital_stack import CapitalStack
 
-from backend.engines.scenario_optimizer import (
+from engines.scenario_optimizer import (
     ScenarioGenerator,
     ConstraintManager,
     CapitalStackOptimizer,
@@ -807,7 +807,7 @@ logger = logging.getLogger(__name__)
 # DealBlock + ScenarioEvaluator Integration Tests
 # ============================================================================
 
-from backend.models.deal_block import (
+from models.deal_block import (
     DealBlock,
     DealType,
     ApprovalRight,

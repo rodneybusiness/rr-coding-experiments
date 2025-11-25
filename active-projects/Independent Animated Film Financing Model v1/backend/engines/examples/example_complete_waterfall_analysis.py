@@ -13,11 +13,11 @@ This example uses "The Dragon's Quest" - a $30M animated feature film.
 from pathlib import Path
 from decimal import Decimal
 
-from backend.models.waterfall import WaterfallStructure, WaterfallNode, RecoupmentPriority
-from backend.models.capital_stack import CapitalStack, CapitalComponent
-from backend.models.financial_instruments import Equity, SeniorDebt, GapDebt, PreSale
+from models.waterfall import WaterfallStructure, WaterfallNode, RecoupmentPriority
+from models.capital_stack import CapitalStack, CapitalComponent
+from models.financial_instruments import Equity, SeniorDebt, GapDebt, PreSale
 
-from backend.engines.waterfall_executor import (
+from engines.waterfall_executor import (
     RevenueProjector,
     WaterfallExecutor,
     StakeholderAnalyzer,

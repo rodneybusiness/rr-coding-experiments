@@ -8,7 +8,7 @@ how gross receipts flow to various stakeholders (IPA/CAMA logic).
 from decimal import Decimal
 from enum import Enum
 from typing import List, Optional, Dict, Any
-from pydantic import BaseModel, Field, root_validator
+from pydantic import BaseModel, Field, model_validator, ConfigDict
 
 
 class RecoupmentPriority(int, Enum):
@@ -89,9 +89,14 @@ class WaterfallNode(BaseModel):
 
     notes: Optional[str] = None
 
-    @root_validator(pre=True)
+    model_config = ConfigDict(populate_by_name=True)
+
+    @model_validator(mode='before')
+    @classmethod
     def populate_defaults(cls, values: Dict[str, Any]) -> Dict[str, Any]:
         """Provide sensible defaults and aliases for simplified test fixtures."""
+        if not isinstance(values, dict):
+            return values
         payee = values.get("payee") or values.get("payee_name")
         priority = values.get("priority")
 
@@ -111,9 +116,6 @@ class WaterfallNode(BaseModel):
             values["node_id"] = f"{priority.value}_{payee}"
 
         return values
-
-    class Config:
-        allow_population_by_field_name = True
 
     def calculate_payment(
         self,
@@ -185,9 +187,12 @@ class WaterfallStructure(BaseModel):
     effective_date: Optional[str] = None
     notes: Optional[str] = None
 
-    @root_validator(pre=True)
+    @model_validator(mode='before')
+    @classmethod
     def populate_structure_defaults(cls, values: Dict[str, Any]) -> Dict[str, Any]:
         """Allow construction with minimal inputs (e.g., tests)."""
+        if not isinstance(values, dict):
+            return values
         if not values.get("waterfall_id"):
             values["waterfall_id"] = "WF-AUTO"
         if not values.get("project_id"):
@@ -302,8 +307,8 @@ class WaterfallStructure(BaseModel):
                 return node
         raise ValueError(f"Node {node_id} not found")
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "waterfall_id": "WATERFALL-001",
                 "project_id": "PROJ-001",
@@ -321,3 +326,4 @@ class WaterfallStructure(BaseModel):
                 ]
             }
         }
+    )

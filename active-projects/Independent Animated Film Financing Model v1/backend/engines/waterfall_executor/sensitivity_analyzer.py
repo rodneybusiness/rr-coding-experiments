@@ -10,11 +10,11 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Any
 from decimal import Decimal
 
-from backend.models.waterfall import WaterfallStructure
-from backend.models.capital_stack import CapitalStack
-from backend.engines.waterfall_executor.revenue_projector import RevenueProjector, RevenueProjection
-from backend.engines.waterfall_executor.waterfall_executor import WaterfallExecutor
-from backend.engines.waterfall_executor.stakeholder_analyzer import StakeholderAnalyzer
+from models.waterfall import WaterfallStructure
+from models.capital_stack import CapitalStack
+from .revenue_projector import RevenueProjector, RevenueProjection
+from .waterfall_executor import WaterfallExecutor
+from .stakeholder_analyzer import StakeholderAnalyzer
 
 logger = logging.getLogger(__name__)
 

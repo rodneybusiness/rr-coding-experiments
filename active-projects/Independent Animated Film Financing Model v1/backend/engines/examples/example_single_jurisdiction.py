@@ -8,13 +8,13 @@ This example uses the UK Audio-Visual Expenditure Credit (AVEC) for a £5M produ
 from pathlib import Path
 from decimal import Decimal
 
-from backend.engines.incentive_calculator import (
+from engines.incentive_calculator import (
     PolicyLoader,
     PolicyRegistry,
     IncentiveCalculator,
     JurisdictionSpend,
 )
-from backend.models.incentive_policy import MonetizationMethod
+from models.incentive_policy import MonetizationMethod
 
 
 def main():

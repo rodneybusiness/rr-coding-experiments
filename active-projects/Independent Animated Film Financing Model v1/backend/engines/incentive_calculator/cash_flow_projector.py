@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 from decimal import Decimal
 
-from backend.engines.incentive_calculator.calculator import (
+from .calculator import (
     JurisdictionSpend,
     IncentiveResult,
 )

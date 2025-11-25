@@ -9,7 +9,7 @@ from enum import Enum
 from typing import List, Optional, Dict, Any
 from decimal import Decimal
 from datetime import date
-from pydantic import BaseModel, Field, field_validator, model_validator
+from pydantic import BaseModel, Field, field_validator, model_validator, ConfigDict
 
 
 class ProgramType(str, Enum):
@@ -556,8 +556,8 @@ class CapitalProgram(BaseModel):
             }
         }
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "program_id": "PROG-001",
                 "program_name": "Animation Fund I",
@@ -574,6 +574,7 @@ class CapitalProgram(BaseModel):
                 "fund_term_years": 10,
             }
         }
+    )
 
 
 # === FACTORY FUNCTIONS ===

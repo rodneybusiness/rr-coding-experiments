@@ -12,7 +12,7 @@ from typing import Dict, List, Any, Optional
 
 from pydantic import ValidationError
 
-from backend.models.incentive_policy import IncentivePolicy
+from models.incentive_policy import IncentivePolicy
 
 
 logger = logging.getLogger(__name__)

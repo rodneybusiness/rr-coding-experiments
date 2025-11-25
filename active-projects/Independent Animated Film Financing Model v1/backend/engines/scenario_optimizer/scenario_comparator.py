@@ -11,7 +11,7 @@ from typing import Dict, List, Optional, Tuple
 from decimal import Decimal
 from enum import Enum
 
-from backend.engines.scenario_optimizer.scenario_evaluator import ScenarioEvaluation
+from .scenario_evaluator import ScenarioEvaluation
 
 logger = logging.getLogger(__name__)
 

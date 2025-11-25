@@ -3,7 +3,7 @@ API Schemas for Tax Incentive Calculator (Engine 1)
 """
 
 from typing import List, Dict, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from decimal import Decimal
 
 
@@ -21,8 +21,8 @@ class IncentiveCalculationRequest(BaseModel):
     total_budget: Decimal = Field(..., gt=0, description="Total project budget")
     jurisdiction_spends: List[JurisdictionSpendInput] = Field(..., min_length=1)
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "project_id": "proj_123",
                 "project_name": "Animated Feature - Sky Warriors",
@@ -36,6 +36,7 @@ class IncentiveCalculationRequest(BaseModel):
                 ]
             }
         }
+    )
 
 
 class PolicyCredit(BaseModel):
@@ -74,8 +75,8 @@ class IncentiveCalculationResponse(BaseModel):
     cash_flow_projection: List[CashFlowQuarter]
     monetization_options: Dict[str, Decimal]
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "project_id": "proj_123",
                 "project_name": "Animated Feature - Sky Warriors",
@@ -111,3 +112,4 @@ class IncentiveCalculationResponse(BaseModel):
                 }
             }
         }
+    )

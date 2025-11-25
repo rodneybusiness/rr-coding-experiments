@@ -159,7 +159,7 @@ async def list_jurisdictions():
     """
     try:
         # Get all policies and extract unique jurisdictions
-        all_policies = policy_loader.get_all_policies()
+        all_policies = policy_loader.load_all()
         jurisdictions = sorted(set(policy.jurisdiction for policy in all_policies))
         return jurisdictions
     except Exception as e:

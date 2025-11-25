@@ -10,9 +10,9 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 from decimal import Decimal
 
-from backend.models.incentive_policy import IncentivePolicy, MonetizationMethod
-from backend.models.project_profile import ProjectProfile
-from backend.engines.incentive_calculator.policy_registry import PolicyRegistry
+from models.incentive_policy import IncentivePolicy, MonetizationMethod
+from models.project_profile import ProjectProfile
+from .policy_registry import PolicyRegistry
 
 
 logger = logging.getLogger(__name__)
