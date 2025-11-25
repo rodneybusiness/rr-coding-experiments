@@ -30,7 +30,14 @@ async def lifespan(app: FastAPI):
     print(f"📊 Environment: {settings.ENVIRONMENT}")
     print(f"🔧 API Prefix: {settings.API_V1_PREFIX}")
 
-    # TODO: Initialize database connection pool
+    # Initialize database
+    try:
+        from app.db.session import init_db
+        init_db()
+        print("✅ Database initialized")
+    except Exception as e:
+        print(f"⚠️ Database initialization skipped: {e}")
+
     # TODO: Initialize Redis connection
     # TODO: Warm up policy cache (load all policies into Redis)
 
@@ -38,8 +45,7 @@ async def lifespan(app: FastAPI):
 
     # Shutdown
     print("👋 Shutting down application")
-    # TODO: Close database connections
-    # TODO: Close Redis connections
+    # Database connections are automatically closed by SQLAlchemy
 
 
 # Create FastAPI application
