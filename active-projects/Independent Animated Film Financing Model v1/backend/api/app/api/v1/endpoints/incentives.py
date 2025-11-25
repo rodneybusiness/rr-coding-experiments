@@ -12,6 +12,11 @@ from app.schemas.incentives import (
     JurisdictionBreakdown,
     PolicyCredit,
     CashFlowQuarter,
+    LaborCapCalculationRequest,
+    LaborCapCalculationResponse,
+    LaborAdjustmentDetail,
+    InvestmentDrawdownRequest,
+    InvestmentDrawdownResponse,
 )
 from app.core.path_setup import BACKEND_ROOT
 
@@ -19,15 +24,20 @@ from app.core.path_setup import BACKEND_ROOT
 from engines.incentive_calculator.calculator import IncentiveCalculator, JurisdictionSpend
 from engines.incentive_calculator.policy_loader import PolicyLoader
 from engines.incentive_calculator.policy_registry import PolicyRegistry
+from engines.incentive_calculator.labor_cap_enforcer import LaborCapEnforcer
 from models.incentive_policy import MonetizationMethod
+
+# Import Engine 2 components
+from engines.waterfall_executor.revenue_projector import InvestmentDrawdown
 
 router = APIRouter()
 
-# Initialize policy loader, registry, and calculator
+# Initialize policy loader, registry, calculator, and enforcer
 policies_dir = BACKEND_ROOT / "data" / "policies"
 policy_loader = PolicyLoader(policies_dir)
 policy_registry = PolicyRegistry(policy_loader)
 calculator = IncentiveCalculator(policy_registry)
+labor_cap_enforcer = LaborCapEnforcer()
 
 
 @router.post(
@@ -305,4 +315,148 @@ async def get_jurisdiction_policies(jurisdiction: str):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to load policies: {str(e)}",
+        )
+
+
+@router.post(
+    "/labor-cap-calculation",
+    response_model=LaborCapCalculationResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Calculate Labor Cap Enforcement",
+    description="Apply labor caps and rate differentials for a tax incentive policy",
+)
+async def calculate_labor_caps(request: LaborCapCalculationRequest):
+    """
+    Calculate labor cap enforcement for a tax incentive policy.
+
+    This endpoint:
+    1. Loads the specified tax policy
+    2. Applies labor percentage caps (e.g., CPTC's 60% labor cap)
+    3. Calculates labor-specific credit rates
+    4. Handles VFX/animation special rates if provided
+    5. Returns detailed breakdown of adjustments
+
+    Args:
+        request: Policy ID and spending details
+
+    Returns:
+        Labor enforcement result with credit breakdown and adjustments
+
+    Raises:
+        HTTPException: If policy not found or calculation fails
+    """
+    try:
+        # Load the policy
+        policy = policy_registry.get_by_id(request.policy_id)
+
+        if not policy:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Policy not found: {request.policy_id}",
+            )
+
+        # Enforce labor caps
+        result = labor_cap_enforcer.enforce_labor_caps(
+            policy=policy,
+            qualified_spend=request.qualified_spend,
+            labor_spend=request.labor_spend,
+            vfx_labor_spend=request.vfx_labor_spend,
+        )
+
+        # Convert adjustments to response format
+        adjustments = [
+            LaborAdjustmentDetail(
+                type=adj.adjustment_type,
+                original=adj.original_amount,
+                adjusted=adj.adjusted_amount,
+                reduction=adj.reduction,
+                description=adj.description,
+            )
+            for adj in result.adjustments
+        ]
+
+        return LaborCapCalculationResponse(
+            adjusted_qualified_spend=result.adjusted_qualified_spend,
+            adjusted_labor_spend=result.adjusted_labor_spend,
+            labor_credit_component=result.labor_credit_component,
+            non_labor_credit_component=result.non_labor_credit_component,
+            total_credit=result.total_credit,
+            effective_rate=result.effective_rate,
+            adjustments=adjustments,
+            warnings=result.warnings,
+            labor_cap_applied=result.labor_cap_applied,
+        )
+
+    except HTTPException:
+        raise
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Validation error: {str(e)}",
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Labor cap calculation failed: {str(e)}",
+        )
+
+
+@router.post(
+    "/investment-drawdown",
+    response_model=InvestmentDrawdownResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Calculate Investment Drawdown Schedule",
+    description="Generate S-curve investment drawdown schedule for production financing",
+)
+async def calculate_investment_drawdown(request: InvestmentDrawdownRequest):
+    """
+    Calculate investment drawdown schedule using S-curve modeling.
+
+    Film investments typically follow an S-curve pattern:
+    - Pre-production: Slow initial draws (development, script, packaging)
+    - Production: Rapid draws (crew, talent, facilities, equipment)
+    - Post-production: Tapering draws (editing, VFX, sound, marketing)
+
+    This endpoint:
+    1. Applies S-curve distribution to total investment
+    2. Distributes draws across specified periods
+    3. Calculates cumulative drawdown progression
+    4. Returns detailed quarterly/monthly schedule
+
+    Args:
+        request: Investment amount and S-curve parameters
+
+    Returns:
+        Investment drawdown schedule with quarterly draws and cumulative totals
+
+    Raises:
+        HTTPException: If calculation fails or validation errors occur
+    """
+    try:
+        # Create investment drawdown using S-curve
+        drawdown = InvestmentDrawdown.create(
+            total_investment=request.total_investment,
+            draw_periods=request.draw_periods,
+            steepness=request.steepness or 8.0,
+            midpoint=request.midpoint or 0.4,
+        )
+
+        return InvestmentDrawdownResponse(
+            total_investment=drawdown.total_investment,
+            draw_periods=drawdown.draw_periods,
+            quarterly_draws=drawdown.quarterly_draws,
+            cumulative_draws=drawdown.cumulative_draws,
+            steepness=drawdown.steepness,
+            midpoint=drawdown.midpoint,
+        )
+
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Validation error: {str(e)}",
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Investment drawdown calculation failed: {str(e)}",
         )

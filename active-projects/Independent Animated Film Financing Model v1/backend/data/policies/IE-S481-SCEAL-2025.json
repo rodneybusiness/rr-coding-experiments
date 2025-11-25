@@ -20,6 +20,8 @@
     "excludes_completion_bond": false,
     "excludes_insurance": false,
     "labor_cap_per_person": null,
+    "labor_max_percent_of_spend": null,
+    "labor_only_credit": false,
     "minimum_local_labor_percentage": null,
     "minimum_local_spend_percentage": null,
     "special_rules": "This is an 8% uplift on the standard 32% rate, bringing total to 40%. Only available for animated feature films with qualifying expenditure under €20 million."

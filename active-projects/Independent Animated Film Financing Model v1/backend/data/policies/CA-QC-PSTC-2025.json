@@ -2,7 +2,7 @@
   "policy_id": "CA-QC-PSTC-2025",
   "jurisdiction": "Canada",
   "program_name": "Quebec Production Services Tax Credit (PSTC) - Animation Enhanced",
-  "headline_rate": "36.0",
+  "headline_rate": "20.0",
   "enhanced_rate": null,
   "incentive_type": "refundable_tax_credit",
   "qpe_definition": {
@@ -16,6 +16,9 @@
     "excludes_completion_bond": true,
     "excludes_insurance": true,
     "labor_cap_per_person": null,
+    "labor_max_percent_of_spend": null,
+    "labor_only_credit": false,
+    "labor_uplift_rate": "16.0",
     "minimum_local_labor_percentage": null,
     "minimum_local_spend_percentage": null,
     "special_rules": "Base rate of 20% applies to all qualified expenditures (labor + goods/services). Animation productions receive an additional 16% on qualified labor costs specifically. Combined effective rate is 36% on animation labor (20% base + 16% animation uplift). The 20% rate applies to the cost of property and services provided in Quebec; the additional 16% applies only to labor costs related to computer-aided special effects and animation."

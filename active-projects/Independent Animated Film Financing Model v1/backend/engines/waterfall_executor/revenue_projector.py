@@ -49,18 +49,31 @@ def s_curve_distribution(
     - Late periods: gradual tapering
 
     Args:
-        total: Total amount to distribute
+        total: Total amount to distribute (must be non-negative)
         periods: Number of periods
-        steepness: S-curve steepness (higher = sharper transition)
+        steepness: S-curve steepness (higher = sharper transition, must be > 0)
         midpoint: Where the steepest part occurs (0.0-1.0)
 
     Returns:
         List of amounts per period
 
+    Raises:
+        ValueError: If total is negative or steepness is <= 0
+
     Example:
         >>> s_curve_distribution(Decimal("1000000"), 12, steepness=8)
         [Decimal("12345"), Decimal("23456"), ...]  # S-curve shaped
     """
+    # QC FIX: Validate inputs
+    if not isinstance(total, Decimal):
+        total = Decimal(str(total))
+
+    if total < 0:
+        raise ValueError(f"total must be non-negative, got {total}")
+
+    if steepness <= 0:
+        raise ValueError(f"steepness must be positive, got {steepness}")
+
     if periods <= 0:
         return []
 

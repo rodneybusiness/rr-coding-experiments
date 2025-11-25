@@ -18,6 +18,9 @@
     "excludes_completion_bond": false,
     "excludes_insurance": false,
     "labor_cap_per_person": null,
+    "labor_max_percent_of_spend": null,
+    "labor_only_credit": false,
+    "vfx_animation_rate": "40.0",
     "minimum_local_labor_percentage": null,
     "minimum_local_spend_percentage": "50.0",
     "special_rules": "Qualifying expenditures are those incurred in France for production services. Enhanced 40% rate available for VFX-intensive projects with over €2M in French VFX expenses. Animation projects must spend minimum €250,000 or at least 50% of total budget in France. Must pass animation-specific cultural test administered by CNC."

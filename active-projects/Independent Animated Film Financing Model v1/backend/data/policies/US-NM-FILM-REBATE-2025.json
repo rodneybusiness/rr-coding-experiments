@@ -18,6 +18,8 @@
     "excludes_completion_bond": false,
     "excludes_insurance": false,
     "labor_cap_per_person": null,
+    "labor_max_percent_of_spend": null,
+    "labor_only_credit": false,
     "minimum_local_labor_percentage": "60.0",
     "minimum_local_spend_percentage": "60.0",
     "special_rules": "Base 25% refundable credit on qualified New Mexico spend with location and uplifts up to 30% for rural or series work."

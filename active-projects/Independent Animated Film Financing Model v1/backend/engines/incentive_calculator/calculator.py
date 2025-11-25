@@ -13,6 +13,7 @@ from decimal import Decimal
 from models.incentive_policy import IncentivePolicy, MonetizationMethod
 from models.project_profile import ProjectProfile
 from .policy_registry import PolicyRegistry
+from .labor_cap_enforcer import LaborCapEnforcer, LaborEnforcementResult
 
 
 logger = logging.getLogger(__name__)
@@ -196,7 +197,8 @@ class IncentiveCalculator:
             registry: PolicyRegistry instance with loaded policies
         """
         self.registry = registry
-        logger.info("IncentiveCalculator initialized")
+        self.labor_enforcer = LaborCapEnforcer()
+        logger.info("IncentiveCalculator initialized with LaborCapEnforcer")
 
     def calculate_single_jurisdiction(
         self,
@@ -228,9 +230,7 @@ class IncentiveCalculator:
         warnings = []
         labor_cap_applied = False
         labor_cap_basis = None
-
-        # Normalize monetization method to allow aliases/derived strategies
-        normalized_method = self._normalize_monetization_method(monetization_method, policy)
+        labor_enforcement_result: Optional[LaborEnforcementResult] = None
 
         # Normalize monetization method to allow aliases/derived strategies
         normalized_method = self._normalize_monetization_method(monetization_method, policy)
@@ -269,32 +269,63 @@ class IncentiveCalculator:
             )
 
         # Determine qualified spend for calculation
-        # For labor-only credits, use labor_spend; otherwise use qualified_spend
-        calc_spend = jurisdiction_spend.qualified_spend
-
-        # Special handling for Canada Federal (labor-only, capped at 15% of budget)
-        if policy_id == "CA-FEDERAL-CPTC-2025":
-            labor_base = jurisdiction_spend.labor_spend
-            # QCLE cannot exceed 60% of total costs, implying max credit of 15% of budget
-            labor_cap = jurisdiction_spend.total_spend * Decimal("0.60")
-            labor_cap_basis = labor_cap
-            calc_spend = min(labor_base, labor_cap)
-            labor_cap_applied = calc_spend < labor_base
-
-        # Quebec PSTC animation uplift applies to labor-only base
-        if policy_id == "CA-QC-PSTC-2025":
-            calc_spend = jurisdiction_spend.labor_spend
-
-        # Calculate gross credit using policy method
-        calc_result = policy.calculate_net_benefit(
-            qualified_spend=calc_spend,
-            monetization_method=normalized_method,
-            transfer_discount=transfer_discount
+        # Check if we should use labor enforcer
+        use_labor_enforcer = (
+            self._has_labor_cap_rules(policy)
+            and jurisdiction_spend.labor_spend > 0
         )
 
-        gross_credit = calc_result["gross_credit"]
-        net_benefit = calc_result["net_cash_benefit"]
-        effective_rate = calc_result["effective_rate"]
+        if use_labor_enforcer:
+            # Use LaborCapEnforcer for policies with labor cap rules
+            labor_enforcement_result = self.labor_enforcer.enforce_labor_caps(
+                policy=policy,
+                qualified_spend=jurisdiction_spend.qualified_spend,
+                labor_spend=jurisdiction_spend.labor_spend,
+                vfx_labor_spend=jurisdiction_spend.vfx_animation_spend if jurisdiction_spend.vfx_animation_spend > 0 else None
+            )
+
+            # Use enforcer's adjusted amounts
+            calc_spend = labor_enforcement_result.adjusted_qualified_spend
+            labor_cap_applied = labor_enforcement_result.labor_cap_applied
+            labor_cap_basis = labor_enforcement_result.adjusted_labor_spend
+
+            # Add enforcer warnings to our warnings list
+            warnings.extend(labor_enforcement_result.warnings)
+
+            # For labor-enforced policies, we use the enforcer's credit calculation
+            # to ensure consistency with labor cap logic
+            gross_credit = labor_enforcement_result.total_credit
+
+            # Calculate net benefit using policy's discount/tax logic
+            calc_result = policy.calculate_net_benefit(
+                qualified_spend=calc_spend,
+                monetization_method=normalized_method,
+                transfer_discount=transfer_discount
+            )
+
+            # Use policy's net benefit calculation but with enforcer's gross credit
+            # Recalculate with enforcer's gross credit
+            discount_factor = Decimal("1")
+            if transfer_discount and transfer_discount > 0:
+                discount_factor = Decimal("1") - (transfer_discount / Decimal("100"))
+
+            net_benefit = gross_credit * discount_factor
+            effective_rate = (net_benefit / calc_spend * Decimal("100")) if calc_spend > 0 else Decimal("0")
+
+        else:
+            # Use traditional calculation for policies without labor cap rules
+            calc_spend = jurisdiction_spend.qualified_spend
+
+            # Calculate gross credit using policy method
+            calc_result = policy.calculate_net_benefit(
+                qualified_spend=calc_spend,
+                monetization_method=normalized_method,
+                transfer_discount=transfer_discount
+            )
+
+            gross_credit = calc_result["gross_credit"]
+            net_benefit = calc_result["net_cash_benefit"]
+            effective_rate = calc_result["effective_rate"]
 
         # Extract components for detailed reporting
         discount_amount = Decimal("0")
@@ -329,6 +360,18 @@ class IncentiveCalculator:
             f"Gross ${gross_credit:,.0f} → Net ${net_benefit:,.0f} ({effective_rate}%)"
         )
 
+        # Build metadata
+        metadata = {
+            "per_project_cap": str(policy.per_project_cap) if policy.per_project_cap else None,
+            "cap_applied": gross_credit == policy.per_project_cap if policy.per_project_cap else False,
+            "labor_cap_basis": str(labor_cap_basis) if labor_cap_basis else None,
+            "labor_cap_applied": labor_cap_applied
+        }
+
+        # Add labor enforcement details if enforcer was used
+        if labor_enforcement_result:
+            metadata["labor_enforcement"] = labor_enforcement_result.to_dict()
+
         return IncentiveResult(
             policy_id=policy_id,
             jurisdiction=policy.jurisdiction,
@@ -345,12 +388,7 @@ class IncentiveCalculator:
             monetization_method=monetization_method,
             timing_months=timing_months,
             warnings=warnings,
-            metadata={
-                "per_project_cap": str(policy.per_project_cap) if policy.per_project_cap else None,
-                "cap_applied": gross_credit == policy.per_project_cap if policy.per_project_cap else False,
-                "labor_cap_basis": str(labor_cap_basis) if labor_cap_basis else None,
-                "labor_cap_applied": labor_cap_applied
-            }
+            metadata=metadata
         )
 
     @staticmethod
@@ -375,6 +413,23 @@ class IncentiveCalculator:
                 return MonetizationMethod.TRANSFER_SALE
 
         return monetization_method
+
+    @staticmethod
+    def _has_labor_cap_rules(policy: IncentivePolicy) -> bool:
+        """
+        Check if policy has any labor-specific cap or rate rules.
+
+        Returns:
+            True if policy has labor caps, labor-only credit, or labor-specific rates
+        """
+        qpe = policy.qpe_definition
+        return (
+            qpe.labor_max_percent_of_spend is not None
+            or qpe.labor_only_credit
+            or qpe.labor_specific_rate is not None
+            or qpe.labor_uplift_rate is not None
+            or qpe.vfx_animation_rate is not None
+        )
 
     def calculate_multi_jurisdiction(
         self,

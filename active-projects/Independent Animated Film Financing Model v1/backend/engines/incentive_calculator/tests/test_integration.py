@@ -119,9 +119,13 @@ class TestCompleteWorkflows:
         federal_result = next(r for r in result.jurisdiction_results if "FEDERAL" in r.policy_id)
         assert federal_result.gross_credit == Decimal("1500000")  # Capped
 
-        # Quebec: 36% × $8M = $2.88M
+        # Quebec: Labor (36% × $8M = $2.88M) + Non-labor (20% × $2M = $0.40M) = $3.28M
+        # Quebec PSTC: 20% base on all spend + 16% uplift on labor = 36% on labor, 20% on non-labor
         quebec_result = next(r for r in result.jurisdiction_results if "QC" in r.policy_id)
-        assert quebec_result.gross_credit == Decimal("8000000") * Decimal("0.36")
+        expected_labor_credit = Decimal("8000000") * Decimal("0.36")  # $2.88M
+        expected_nonlabor_credit = Decimal("2000000") * Decimal("0.20")  # $0.40M
+        expected_quebec_credit = expected_labor_credit + expected_nonlabor_credit  # $3.28M
+        assert quebec_result.gross_credit == expected_quebec_credit
 
         # Total net benefit should be sum of both
         expected_total = federal_result.net_cash_benefit + quebec_result.net_cash_benefit
