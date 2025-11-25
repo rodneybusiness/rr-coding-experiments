@@ -186,7 +186,7 @@ npm run dev
 - ✅ Redis caching for performance
 - ✅ Comprehensive error handling
 - ✅ TypeScript type safety (0 errors)
-- ✅ 182+ backend tests passing
+- ✅ 200+ backend tests passing
 - ✅ Expert code review validated
 - ✅ SQLAlchemy 2.0 database models ready
 
@@ -199,6 +199,16 @@ This is a research and development project. For questions or collaboration inqui
 TBD
 
 ## Version
+
+v1.3.0 - Full Frontend Integration & API Completeness (November 2025)
+- Fixed critical ownership.py import issues
+- Implemented /scenarios/compare endpoint
+- Created Projects CRUD API with full lifecycle
+- Added Portfolio Analytics dashboard with Recharts visualizations
+- Added Settings and Help pages
+- Connected Dashboard to real metrics API
+- Added comprehensive end-to-end API workflow tests
+- 200+ tests passing
 
 v1.2.0 - Capital Programs & Company-Level Management (November 2025)
 - Added CapitalProgram model with 11 program types

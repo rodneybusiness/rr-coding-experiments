@@ -29,6 +29,13 @@ import {
   Clapperboard,
 } from 'lucide-react';
 import { formatCurrency, formatPercentage } from '@/lib/utils';
+import {
+  createProject,
+  listProjects,
+  deleteProject,
+  updateProject,
+} from '@/lib/api/services';
+import type { ProjectProfileResponse, ProjectProfileInput } from '@/lib/api/types';
 
 interface ProjectProfile {
   project_id: string;
@@ -79,8 +86,26 @@ const STATUS_COLORS: Record<string, string> = {
   completed: 'bg-green-100 text-green-700',
 };
 
-// In-memory storage for demo (would use API in production)
-let projectStorage: ProjectProfile[] = [];
+// Helper function to convert API response to local type
+function toProjectProfile(p: ProjectProfileResponse): ProjectProfile {
+  return {
+    project_id: p.project_id,
+    project_name: p.project_name,
+    project_budget: p.project_budget,
+    genre: p.genre,
+    jurisdiction: p.jurisdiction,
+    rating: p.rating,
+    is_development: p.is_development,
+    is_first_time_director: p.is_first_time_director,
+    expected_revenue: p.expected_revenue,
+    production_start_date: p.production_start_date,
+    expected_release_date: p.expected_release_date,
+    description: p.description,
+    total_funding: p.total_funding,
+    funding_gap: p.funding_gap,
+    status: p.is_development ? 'development' : 'pre_production',
+  };
+}
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<ProjectProfile[]>([]);
@@ -88,6 +113,7 @@ export default function ProjectsPage() {
   const [error, setError] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [selectedProject, setSelectedProject] = useState<ProjectProfile | null>(null);
+  const [apiAvailable, setApiAvailable] = useState(true);
 
   // Form state
   const [projectName, setProjectName] = useState('');
@@ -107,7 +133,19 @@ export default function ProjectsPage() {
   }, []);
 
   const loadProjects = async () => {
-    setProjects(projectStorage);
+    setLoading(true);
+    try {
+      const response = await listProjects();
+      setProjects(response.projects.map(toProjectProfile));
+      setApiAvailable(true);
+      setError(null);
+    } catch (err) {
+      console.error('Failed to load projects from API:', err);
+      setApiAvailable(false);
+      setError('API unavailable - using demo mode');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCreateProject = async () => {
@@ -115,8 +153,7 @@ export default function ProjectsPage() {
     setError(null);
 
     try {
-      const newProject: ProjectProfile = {
-        project_id: `proj_${Date.now()}`,
+      const projectInput: ProjectProfileInput = {
         project_name: projectName,
         project_budget: projectBudget,
         genre,
@@ -128,13 +165,10 @@ export default function ProjectsPage() {
         production_start_date: productionStartDate || undefined,
         expected_release_date: expectedReleaseDate || undefined,
         description: description || undefined,
-        total_funding: 0,
-        funding_gap: projectBudget,
-        status: isDevelopment ? 'development' : 'pre_production',
       };
 
-      projectStorage = [...projectStorage, newProject];
-      await loadProjects();
+      const created = await createProject(projectInput);
+      setProjects((prev) => [...prev, toProjectProfile(created)]);
       setShowForm(false);
       resetForm();
     } catch (err: any) {
@@ -146,8 +180,8 @@ export default function ProjectsPage() {
 
   const handleDeleteProject = async (projectId: string) => {
     try {
-      projectStorage = projectStorage.filter((p) => p.project_id !== projectId);
-      await loadProjects();
+      await deleteProject(projectId);
+      setProjects((prev) => prev.filter((p) => p.project_id !== projectId));
       if (selectedProject?.project_id === projectId) {
         setSelectedProject(null);
       }

@@ -249,3 +249,80 @@ export const getPortfolioMetrics = async (
   );
   return response.data;
 };
+
+// Projects API
+
+import type {
+  ProjectProfileInput,
+  ProjectProfileResponse,
+  ProjectListResponse,
+  DashboardResponse,
+} from './types';
+
+export const createProject = async (
+  request: ProjectProfileInput
+): Promise<ProjectProfileResponse> => {
+  const response = await apiClient.post<ProjectProfileResponse>(
+    '/api/v1/projects',
+    request
+  );
+  return response.data;
+};
+
+export const getProject = async (projectId: string): Promise<ProjectProfileResponse> => {
+  const response = await apiClient.get<ProjectProfileResponse>(
+    `/api/v1/projects/${encodeURIComponent(projectId)}`
+  );
+  return response.data;
+};
+
+export const listProjects = async (filters?: {
+  genre?: string;
+  jurisdiction?: string;
+  is_development?: boolean;
+  min_budget?: number;
+  max_budget?: number;
+  has_funding_gap?: boolean;
+  limit?: number;
+  offset?: number;
+}): Promise<ProjectListResponse> => {
+  const params = new URLSearchParams();
+  if (filters) {
+    if (filters.genre) params.append('genre', filters.genre);
+    if (filters.jurisdiction) params.append('jurisdiction', filters.jurisdiction);
+    if (filters.is_development !== undefined)
+      params.append('is_development', String(filters.is_development));
+    if (filters.min_budget) params.append('min_budget', String(filters.min_budget));
+    if (filters.max_budget) params.append('max_budget', String(filters.max_budget));
+    if (filters.has_funding_gap !== undefined)
+      params.append('has_funding_gap', String(filters.has_funding_gap));
+    if (filters.limit) params.append('limit', String(filters.limit));
+    if (filters.offset) params.append('offset', String(filters.offset));
+  }
+  const queryString = params.toString();
+  const url = queryString ? `/api/v1/projects?${queryString}` : '/api/v1/projects';
+  const response = await apiClient.get<ProjectListResponse>(url);
+  return response.data;
+};
+
+export const updateProject = async (
+  projectId: string,
+  update: Partial<ProjectProfileInput>
+): Promise<ProjectProfileResponse> => {
+  const response = await apiClient.patch<ProjectProfileResponse>(
+    `/api/v1/projects/${encodeURIComponent(projectId)}`,
+    update
+  );
+  return response.data;
+};
+
+export const deleteProject = async (projectId: string): Promise<void> => {
+  await apiClient.delete(`/api/v1/projects/${encodeURIComponent(projectId)}`);
+};
+
+export const getDashboardMetrics = async (): Promise<DashboardResponse> => {
+  const response = await apiClient.get<DashboardResponse>(
+    '/api/v1/projects/dashboard/metrics'
+  );
+  return response.data;
+};

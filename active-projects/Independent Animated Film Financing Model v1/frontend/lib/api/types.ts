@@ -565,3 +565,35 @@ export interface ProjectProfileResponse {
   total_funding: number;
   funding_gap: number;
 }
+
+export interface ProjectListResponse {
+  projects: ProjectProfileResponse[];
+  total_count: number;
+}
+
+// Dashboard Types
+
+export interface DashboardMetrics {
+  total_projects: number;
+  total_budget: number;
+  total_tax_incentives: number;
+  average_capture_rate: number;
+  scenarios_generated: number;
+  active_capital_programs: number;
+  total_committed_capital: number;
+  total_deployed_capital: number;
+  projects_in_development: number;
+  projects_in_production: number;
+}
+
+export interface RecentActivity {
+  project: string;
+  action: string;
+  time: string;
+  activity_type: 'scenario' | 'incentive' | 'waterfall' | 'deal' | 'capital' | 'project';
+}
+
+export interface DashboardResponse {
+  metrics: DashboardMetrics;
+  recent_activity: RecentActivity[];
+}
