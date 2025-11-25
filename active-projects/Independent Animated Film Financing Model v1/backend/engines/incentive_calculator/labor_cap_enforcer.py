@@ -175,12 +175,31 @@ class LaborCapEnforcer:
                 description=f"Labor uplift: +{qpe.labor_uplift_rate}% on labor spend"
             ))
 
+        # QC FIX: Validate combined rate doesn't exceed 100%
+        if labor_rate > Decimal("100"):
+            warnings.append(
+                f"Combined labor rate ({labor_rate}%) exceeds 100%. "
+                f"Capping at 100% to prevent credit exceeding spend."
+            )
+            labor_rate = Decimal("100")
+
         # Handle VFX/animation special rate
         vfx_credit = Decimal("0")
         regular_labor_credit = Decimal("0")
 
         if vfx_labor_spend and qpe.vfx_animation_rate:
+            if not isinstance(vfx_labor_spend, Decimal):
+                vfx_labor_spend = Decimal(str(vfx_labor_spend))
+
             vfx_labor = min(vfx_labor_spend, adjusted_labor)
+
+            # QC FIX: Warn if VFX labor exceeds total labor
+            if vfx_labor_spend > adjusted_labor:
+                warnings.append(
+                    f"VFX labor spend ({vfx_labor_spend}) exceeds total labor spend ({adjusted_labor}). "
+                    f"Capping VFX labor at total labor."
+                )
+
             regular_labor = adjusted_labor - vfx_labor
 
             vfx_credit = vfx_labor * (qpe.vfx_animation_rate / Decimal("100"))
@@ -193,6 +212,33 @@ class LaborCapEnforcer:
                 reduction=Decimal("0"),
                 description=f"VFX labor at {qpe.vfx_animation_rate}% rate"
             ))
+        # QC FIX: Implement resident/non-resident labor rate differentiation
+        elif resident_labor_spend is not None or nonresident_labor_spend is not None:
+            if not isinstance(resident_labor_spend or Decimal("0"), Decimal):
+                resident_labor_spend = Decimal(str(resident_labor_spend or "0"))
+            if not isinstance(nonresident_labor_spend or Decimal("0"), Decimal):
+                nonresident_labor_spend = Decimal(str(nonresident_labor_spend or "0"))
+
+            resident_labor_spend = resident_labor_spend or Decimal("0")
+            nonresident_labor_spend = nonresident_labor_spend or Decimal("0")
+
+            # Use policy rates if available, otherwise use the general labor rate
+            resident_rate = qpe.labor_resident_rate if qpe.labor_resident_rate is not None else labor_rate
+            nonresident_rate = qpe.labor_nonresident_rate if qpe.labor_nonresident_rate is not None else labor_rate
+
+            resident_credit = resident_labor_spend * (resident_rate / Decimal("100"))
+            nonresident_credit = nonresident_labor_spend * (nonresident_rate / Decimal("100"))
+
+            regular_labor_credit = resident_credit + nonresident_credit
+
+            if qpe.labor_resident_rate is not None or qpe.labor_nonresident_rate is not None:
+                adjustments.append(LaborAdjustment(
+                    adjustment_type="residency_rate",
+                    original_amount=adjusted_labor,
+                    adjusted_amount=regular_labor_credit,
+                    reduction=Decimal("0"),
+                    description=f"Resident labor at {resident_rate}%, non-resident at {nonresident_rate}%"
+                ))
         else:
             regular_labor_credit = adjusted_labor * (labor_rate / Decimal("100"))
 

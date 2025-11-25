@@ -17,6 +17,8 @@
     "excludes_completion_bond": false,
     "excludes_insurance": false,
     "labor_cap_per_person": null,
+    "labor_max_percent_of_spend": null,
+    "labor_only_credit": false,
     "minimum_local_labor_percentage": null,
     "minimum_local_spend_percentage": null,
     "special_rules": "Qualifying New Zealand Production Expenditure (QNZPE) includes expenditure incurred in New Zealand on goods, services, and labor. Eligible formats include feature films, television, short-form animation, and other non-feature formats. Must be primarily New Zealand content."

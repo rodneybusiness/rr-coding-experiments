@@ -494,7 +494,7 @@ class CapitalStackOptimizer:
 
         Creates a minimal evaluation for optimization when waterfall not provided.
         """
-        from backend.engines.scenario_optimizer.scenario_evaluator import ScenarioEvaluation
+        from engines.scenario_optimizer.scenario_evaluator import ScenarioEvaluation
 
         evaluation = ScenarioEvaluation(
             scenario_name=stack.stack_name,

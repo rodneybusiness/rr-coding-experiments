@@ -161,8 +161,10 @@ class TestPolicyLoader:
         """Test Quebec PSTC policy data integrity"""
         policy = loader.load_policy("CA-QC-PSTC-2025")
 
-        # Check animation-specific rate
-        assert policy.headline_rate == Decimal("36.0")
+        # Check animation-specific rate structure
+        # Base rate: 20% on all spend, plus 16% uplift on labor = 36% effective on labor
+        assert policy.headline_rate == Decimal("20.0")
+        assert policy.qpe_definition.labor_uplift_rate == Decimal("16.0")
         assert "animation" in policy.notes.lower()
         assert policy.jurisdiction == "Canada"
 

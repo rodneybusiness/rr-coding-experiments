@@ -19,6 +19,8 @@
     "excludes_completion_bond": false,
     "excludes_insurance": false,
     "labor_cap_per_person": null,
+    "labor_max_percent_of_spend": null,
+    "labor_only_credit": false,
     "minimum_local_labor_percentage": null,
     "minimum_local_spend_percentage": null,
     "special_rules": "QAPE (Qualifying Australian Production Expenditure) includes all expenditure directly related to production incurred in Australia. For theatrically-released feature films (including animation): 40% offset. For non-theatrical features, TV series, short-form animation: 30% offset."

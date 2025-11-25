@@ -18,6 +18,8 @@
     "excludes_completion_bond": true,
     "excludes_insurance": true,
     "labor_cap_per_person": null,
+    "labor_max_percent_of_spend": null,
+    "labor_only_credit": false,
     "minimum_local_labor_percentage": null,
     "minimum_local_spend_percentage": null,
     "special_rules": "Qualified expenditure includes costs incurred in South Korea for production. Must have at least 80% foreign financing to qualify as international production. Two tiers: 20% for minimum 5-day shoot with KRW 100M spend; 25% for minimum 10-day shoot with KRW 800M spend. Animation productions can qualify if significant work performed in Korea."

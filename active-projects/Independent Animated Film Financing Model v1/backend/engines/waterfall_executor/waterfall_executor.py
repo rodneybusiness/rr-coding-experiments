@@ -12,7 +12,7 @@ from decimal import Decimal
 from copy import deepcopy
 
 from models.waterfall import WaterfallStructure, RecoupmentPriority
-from .revenue_projector import RevenueProjection
+from .revenue_projector import RevenueProjection, InvestmentDrawdown, s_curve_distribution
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +33,8 @@ class QuarterlyWaterfallExecution:
         cumulative_recouped: Node ID → cumulative recouped to date
         cumulative_paid: Payee → cumulative paid to date
         unrecouped_balances: Node ID → remaining to recoup
+        investment_drawn: Investment drawn this quarter (optional, for S-curve modeling)
+        cumulative_investment_drawn: Cumulative investment drawn to date (optional)
     """
     quarter: int
     gross_receipts: Decimal
@@ -48,9 +50,13 @@ class QuarterlyWaterfallExecution:
 
     unrecouped_balances: Dict[str, Decimal] = field(default_factory=dict)
 
+    # Optional investment drawdown tracking (S-curve modeling)
+    investment_drawn: Optional[Decimal] = None
+    cumulative_investment_drawn: Optional[Decimal] = None
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for serialization"""
-        return {
+        result = {
             "quarter": self.quarter,
             "gross_receipts": str(self.gross_receipts),
             "distribution_fees": str(self.distribution_fees),
@@ -62,6 +68,12 @@ class QuarterlyWaterfallExecution:
             "cumulative_paid": {k: str(v) for k, v in self.cumulative_paid.items()},
             "unrecouped_balances": {k: str(v) for k, v in self.unrecouped_balances.items()}
         }
+        # Add optional investment drawdown fields if present
+        if self.investment_drawn is not None:
+            result["investment_drawn"] = str(self.investment_drawn)
+        if self.cumulative_investment_drawn is not None:
+            result["cumulative_investment_drawn"] = str(self.cumulative_investment_drawn)
+        return result
 
 
 @dataclass
@@ -79,6 +91,8 @@ class TimeSeriesWaterfallResult:
         total_recouped_by_node: Node ID → total recouped
         total_paid_by_payee: Payee → total paid
         final_unrecouped: What didn't recoup
+        investment_drawdown: Optional investment drawdown profile used (S-curve modeling)
+        total_investment_drawn: Total investment drawn (if drawdown profile provided)
         metadata: Execution notes
     """
     project_name: str
@@ -94,11 +108,15 @@ class TimeSeriesWaterfallResult:
 
     final_unrecouped: Dict[str, Decimal]
 
+    # Optional investment drawdown tracking (S-curve modeling)
+    investment_drawdown: Optional[InvestmentDrawdown] = None
+    total_investment_drawn: Optional[Decimal] = None
+
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for serialization"""
-        return {
+        result = {
             "project_name": self.project_name,
             "revenue_projection": self.revenue_projection.to_dict(),
             "quarterly_executions": [qe.to_dict() for qe in self.quarterly_executions],
@@ -109,6 +127,12 @@ class TimeSeriesWaterfallResult:
             "final_unrecouped": {k: str(v) for k, v in self.final_unrecouped.items()},
             "metadata": self.metadata
         }
+        # Add optional investment drawdown fields if present
+        if self.investment_drawdown is not None:
+            result["investment_drawdown"] = self.investment_drawdown.to_dict()
+        if self.total_investment_drawn is not None:
+            result["total_investment_drawn"] = str(self.total_investment_drawn)
+        return result
 
 
 class WaterfallExecutor:
@@ -133,24 +157,34 @@ class WaterfallExecutor:
         self,
         revenue_projection: RevenueProjection,
         distribution_fee_rate: Optional[Decimal] = None,
-        pa_expenses_per_quarter: Optional[Dict[int, Decimal]] = None
+        pa_expenses_per_quarter: Optional[Dict[int, Decimal]] = None,
+        investment_drawdown_profile: Optional[InvestmentDrawdown] = None
     ) -> TimeSeriesWaterfallResult:
         """
-        Execute waterfall quarter-by-quarter.
+        Execute waterfall quarter-by-quarter with optional investment drawdown tracking.
 
         Args:
             revenue_projection: Revenue projection from RevenueProjector
             distribution_fee_rate: Override default distribution fee (%)
             pa_expenses_per_quarter: Optional P&A expenses by quarter
+            investment_drawdown_profile: Optional S-curve investment drawdown schedule
 
         Returns:
-            TimeSeriesWaterfallResult with quarterly detail
+            TimeSeriesWaterfallResult with quarterly detail and optional investment tracking
         """
         # Initialize cumulative state
         cumulative_recouped: Dict[str, Decimal] = {}
         for node in self.waterfall.nodes:
             node_id = f"{node.priority.value}_{node.payee_name}"
             cumulative_recouped[node_id] = Decimal("0")
+
+        # Initialize investment tracking if profile provided
+        cumulative_investment = Decimal("0")
+        investment_draws_by_quarter: Dict[int, Decimal] = {}
+        if investment_drawdown_profile:
+            # Map investment draws to quarters
+            for i, draw in enumerate(investment_drawdown_profile.quarterly_draws):
+                investment_draws_by_quarter[i] = draw
 
         # Process each quarter
         quarterly_executions = []
@@ -168,13 +202,21 @@ class WaterfallExecutor:
             if pa_expenses_per_quarter and quarter in pa_expenses_per_quarter:
                 pa_expenses = pa_expenses_per_quarter[quarter]
 
+            # Investment draw this quarter (if tracking)
+            investment_draw = None
+            if investment_drawdown_profile and quarter in investment_draws_by_quarter:
+                investment_draw = investment_draws_by_quarter[quarter]
+                cumulative_investment += investment_draw
+
             # Process this quarter
             quarterly_execution = self.process_quarter(
                 quarter=quarter,
                 gross_receipts=gross_receipts,
                 cumulative_state=cumulative_recouped,
                 distribution_fee_rate=distribution_fee_rate,
-                pa_expenses=pa_expenses
+                pa_expenses=pa_expenses,
+                investment_draw=investment_draw,
+                cumulative_investment=cumulative_investment if investment_drawdown_profile else None
             )
 
             quarterly_executions.append(quarterly_execution)
@@ -203,6 +245,14 @@ class WaterfallExecutor:
                 if remaining > 0:
                     final_unrecouped[node_id] = remaining
 
+        # Prepare metadata
+        metadata_dict = {
+            "num_quarters": len(quarterly_executions),
+            "distribution_fee_rate": str(distribution_fee_rate) if distribution_fee_rate else "default"
+        }
+        if investment_drawdown_profile:
+            metadata_dict["investment_tracking_enabled"] = True
+
         result = TimeSeriesWaterfallResult(
             project_name=revenue_projection.project_name,
             waterfall_structure=self.waterfall,
@@ -213,16 +263,18 @@ class WaterfallExecutor:
             total_recouped_by_node=total_recouped_by_node,
             total_paid_by_payee=total_paid_by_payee,
             final_unrecouped=final_unrecouped,
-            metadata={
-                "num_quarters": len(quarterly_executions),
-                "distribution_fee_rate": str(distribution_fee_rate) if distribution_fee_rate else "default"
-            }
+            investment_drawdown=investment_drawdown_profile,
+            total_investment_drawn=cumulative_investment if investment_drawdown_profile else None,
+            metadata=metadata_dict
         )
 
-        logger.info(
+        log_msg = (
             f"Executed waterfall over {len(quarterly_executions)} quarters: "
             f"${total_receipts:,.0f} total receipts, ${total_fees_sum:,.0f} fees"
         )
+        if investment_drawdown_profile:
+            log_msg += f", ${cumulative_investment:,.0f} total investment drawn"
+        logger.info(log_msg)
 
         return result
 
@@ -232,10 +284,12 @@ class WaterfallExecutor:
         gross_receipts: Decimal,
         cumulative_state: Dict[str, Decimal],
         distribution_fee_rate: Optional[Decimal] = None,
-        pa_expenses: Decimal = Decimal("0")
+        pa_expenses: Decimal = Decimal("0"),
+        investment_draw: Optional[Decimal] = None,
+        cumulative_investment: Optional[Decimal] = None
     ) -> QuarterlyWaterfallExecution:
         """
-        Process waterfall for a single quarter.
+        Process waterfall for a single quarter with optional investment tracking.
 
         Args:
             quarter: Quarter number
@@ -243,6 +297,8 @@ class WaterfallExecutor:
             cumulative_state: Cumulative recoupment state (node_id → amount)
             distribution_fee_rate: Distribution fee percentage
             pa_expenses: P&A expenses this quarter
+            investment_draw: Investment drawn this quarter (optional, for S-curve modeling)
+            cumulative_investment: Cumulative investment drawn to date (optional)
 
         Returns:
             QuarterlyWaterfallExecution with this quarter's results
@@ -334,7 +390,9 @@ class WaterfallExecutor:
             payee_payouts=payee_payouts,
             cumulative_recouped=cumulative_state.copy(),
             cumulative_paid=cumulative_paid,
-            unrecouped_balances=unrecouped_balances
+            unrecouped_balances=unrecouped_balances,
+            investment_drawn=investment_draw,
+            cumulative_investment_drawn=cumulative_investment
         )
 
         return execution

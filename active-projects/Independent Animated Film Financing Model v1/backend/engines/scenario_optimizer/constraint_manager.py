@@ -403,7 +403,7 @@ class ConstraintManager:
 
         # Soft Constraint 3: Maximize Tax Incentives
         def maximize_incentives_validator(stack: CapitalStack) -> bool:
-            from backend.models.financial_instruments import TaxIncentive
+            from models.financial_instruments import TaxIncentive
 
             incentive_total = sum(
                 c.instrument.amount for c in stack.components

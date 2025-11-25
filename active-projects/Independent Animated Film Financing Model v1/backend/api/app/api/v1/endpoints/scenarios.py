@@ -7,6 +7,7 @@ from typing import List, Dict, Optional
 from decimal import Decimal
 import uuid
 
+from app.schemas import scenarios as schemas
 from app.schemas.scenarios import (
     ScenarioGenerationRequest,
     ScenarioGenerationResponse,
@@ -521,6 +522,478 @@ def _generate_comparison_recommendation(scenarios: List[Scenario], metrics: Dict
         return f"Recommended: {best_overall[1]['name']} offers the best risk-adjusted returns. Consider {best_irr[1]['name']} if maximizing IRR is the priority."
     else:
         return f"Balanced recommendation: {best_overall[1]['name']} offers the best overall score. For maximum IRR, consider {best_irr[1]['name']}. For maximum tax capture, consider {best_tax[1]['name']}."
+
+
+# ========================================
+# New Optimizer Endpoints
+# ========================================
+
+
+@router.post(
+    "/validate-constraints",
+    response_model=schemas.ValidateConstraintsResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Validate Constraints",
+    description="Validate a capital stack configuration against hard and soft constraints",
+)
+async def validate_constraints(request: schemas.ValidateConstraintsRequest):
+    """
+    Validate capital stack against constraints.
+
+    This endpoint:
+    1. Converts capital structure to CapitalStack
+    2. Applies default or custom constraints
+    3. Validates hard constraints (must satisfy)
+    4. Validates soft constraints (preferences)
+    5. Returns violations and penalties
+
+    Args:
+        request: Capital structure and constraints to validate
+
+    Returns:
+        Validation result with violations and penalties
+
+    Raises:
+        HTTPException: If validation fails
+    """
+    try:
+        from engines.scenario_optimizer.constraint_manager import ConstraintManager
+        from models.financial_instruments import (
+            SeniorDebt, GapFinancing, MezzanineDebt, Equity, TaxIncentive, PreSale, Grant
+        )
+        from models.capital_stack import CapitalStack, CapitalComponent
+
+        # Build CapitalStack from capital structure
+        components = []
+        position = 1
+
+        if request.capital_structure.senior_debt > 0:
+            inst = SeniorDebt(
+                amount=request.capital_structure.senior_debt,
+                interest_rate=Decimal("7.0"),
+                term_months=60
+            )
+            components.append(CapitalComponent(instrument=inst, position=position))
+            position += 1
+
+        if request.capital_structure.gap_financing > 0:
+            inst = GapFinancing(
+                amount=request.capital_structure.gap_financing,
+                interest_rate=Decimal("9.0"),
+                term_months=48,
+                minimum_presales_percentage=Decimal("30.0")
+            )
+            components.append(CapitalComponent(instrument=inst, position=position))
+            position += 1
+
+        if request.capital_structure.mezzanine_debt > 0:
+            inst = MezzanineDebt(
+                amount=request.capital_structure.mezzanine_debt,
+                interest_rate=Decimal("11.0"),
+                term_months=60,
+                equity_kicker_percentage=Decimal("5.0")
+            )
+            components.append(CapitalComponent(instrument=inst, position=position))
+            position += 1
+
+        if request.capital_structure.equity > 0:
+            inst = Equity(
+                amount=request.capital_structure.equity,
+                ownership_percentage=Decimal("40.0"),
+                premium_percentage=Decimal("120.0")
+            )
+            components.append(CapitalComponent(instrument=inst, position=position))
+            position += 1
+
+        if request.capital_structure.tax_incentives > 0:
+            inst = TaxIncentive(
+                amount=request.capital_structure.tax_incentives,
+                jurisdiction="California",
+                qualified_spend=request.capital_structure.tax_incentives * Decimal("4"),
+                credit_rate=Decimal("25.0"),
+                timing_months=18
+            )
+            components.append(CapitalComponent(instrument=inst, position=position))
+            position += 1
+
+        if request.capital_structure.presales > 0:
+            inst = PreSale(
+                amount=request.capital_structure.presales,
+                territory="North America",
+                rights_description="All media",
+                mg_amount=request.capital_structure.presales,
+                payment_on_delivery=Decimal("80.0")
+            )
+            components.append(CapitalComponent(instrument=inst, position=position))
+            position += 1
+
+        if request.capital_structure.grants > 0:
+            inst = Grant(
+                amount=request.capital_structure.grants,
+                grantor_name="Film Fund",
+                grant_type="Cultural"
+            )
+            components.append(CapitalComponent(instrument=inst, position=position))
+            position += 1
+
+        capital_stack = CapitalStack(
+            stack_name="validation_stack",
+            project_budget=request.project_budget,
+            components=components
+        )
+
+        # Initialize constraint manager (uses defaults if no custom constraints)
+        manager = ConstraintManager()
+
+        # TODO: Add custom constraints from request if provided
+        # For now, using default constraints only
+
+        # Validate
+        validation = manager.validate(capital_stack)
+
+        # Convert violations to output format
+        hard_violations = [
+            schemas.ConstraintViolationOutput(
+                constraint_id=v.constraint.constraint_id,
+                constraint_type=v.constraint.constraint_type.value,
+                description=v.constraint.description,
+                severity=v.severity,
+                details=v.details
+            )
+            for v in validation.hard_violations
+        ]
+
+        soft_violations = [
+            schemas.ConstraintViolationOutput(
+                constraint_id=v.constraint.constraint_id,
+                constraint_type=v.constraint.constraint_type.value,
+                description=v.constraint.description,
+                severity=v.severity,
+                details=v.details
+            )
+            for v in validation.soft_violations
+        ]
+
+        return schemas.ValidateConstraintsResponse(
+            is_valid=validation.is_valid,
+            hard_violations=hard_violations,
+            soft_violations=soft_violations,
+            total_penalty=validation.total_penalty,
+            summary=validation.summary
+        )
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Constraint validation failed: {str(e)}",
+        )
+
+
+@router.post(
+    "/optimize-capital-stack",
+    response_model=schemas.OptimizeCapitalStackResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Optimize Capital Stack",
+    description="Find optimal capital stack allocation using scipy optimization",
+)
+async def optimize_capital_stack(request: schemas.OptimizeCapitalStackRequest):
+    """
+    Optimize capital stack allocation.
+
+    This endpoint:
+    1. Takes template capital structure as starting point
+    2. Uses scipy.optimize to find optimal allocations
+    3. Respects hard constraints
+    4. Minimizes soft constraint penalties
+    5. Maximizes weighted objective function
+
+    Args:
+        request: Template structure, objectives, and constraints
+
+    Returns:
+        Optimized capital stack with solver metadata
+
+    Raises:
+        HTTPException: If optimization fails
+    """
+    try:
+        from engines.scenario_optimizer.capital_stack_optimizer import CapitalStackOptimizer
+        from engines.scenario_optimizer.constraint_manager import ConstraintManager
+        from models.financial_instruments import (
+            SeniorDebt, GapFinancing, MezzanineDebt, Equity, TaxIncentive, PreSale, Grant
+        )
+        from models.capital_stack import CapitalStack, CapitalComponent
+
+        # Build template CapitalStack
+        components = []
+        position = 1
+
+        if request.template_structure.senior_debt > 0:
+            inst = SeniorDebt(
+                amount=request.template_structure.senior_debt,
+                interest_rate=Decimal("7.0"),
+                term_months=60
+            )
+            components.append(CapitalComponent(instrument=inst, position=position))
+            position += 1
+
+        if request.template_structure.gap_financing > 0:
+            inst = GapFinancing(
+                amount=request.template_structure.gap_financing,
+                interest_rate=Decimal("9.0"),
+                term_months=48,
+                minimum_presales_percentage=Decimal("30.0")
+            )
+            components.append(CapitalComponent(instrument=inst, position=position))
+            position += 1
+
+        if request.template_structure.mezzanine_debt > 0:
+            inst = MezzanineDebt(
+                amount=request.template_structure.mezzanine_debt,
+                interest_rate=Decimal("11.0"),
+                term_months=60,
+                equity_kicker_percentage=Decimal("5.0")
+            )
+            components.append(CapitalComponent(instrument=inst, position=position))
+            position += 1
+
+        if request.template_structure.equity > 0:
+            inst = Equity(
+                amount=request.template_structure.equity,
+                ownership_percentage=Decimal("40.0"),
+                premium_percentage=Decimal("120.0")
+            )
+            components.append(CapitalComponent(instrument=inst, position=position))
+            position += 1
+
+        if request.template_structure.tax_incentives > 0:
+            inst = TaxIncentive(
+                amount=request.template_structure.tax_incentives,
+                jurisdiction="California",
+                qualified_spend=request.template_structure.tax_incentives * Decimal("4"),
+                credit_rate=Decimal("25.0"),
+                timing_months=18
+            )
+            components.append(CapitalComponent(instrument=inst, position=position))
+            position += 1
+
+        if request.template_structure.presales > 0:
+            inst = PreSale(
+                amount=request.template_structure.presales,
+                territory="North America",
+                rights_description="All media",
+                mg_amount=request.template_structure.presales,
+                payment_on_delivery=Decimal("80.0")
+            )
+            components.append(CapitalComponent(instrument=inst, position=position))
+            position += 1
+
+        if request.template_structure.grants > 0:
+            inst = Grant(
+                amount=request.template_structure.grants,
+                grantor_name="Film Fund",
+                grant_type="Cultural"
+            )
+            components.append(CapitalComponent(instrument=inst, position=position))
+            position += 1
+
+        template_stack = CapitalStack(
+            stack_name="template_stack",
+            project_budget=request.project_budget,
+            components=components
+        )
+
+        # Initialize optimizer with constraint manager
+        constraint_manager = ConstraintManager()
+        optimizer = CapitalStackOptimizer(constraint_manager=constraint_manager)
+
+        # Convert objective weights to dict
+        objective_weights = {
+            "equity_irr": request.objective_weights.equity_irr / Decimal("100"),
+            "cost_of_capital": request.objective_weights.cost_of_capital / Decimal("100"),
+            "tax_incentives": request.objective_weights.tax_incentive_capture / Decimal("100"),
+            "risk": request.objective_weights.risk_minimization / Decimal("100"),
+        }
+
+        # Convert bounds if provided
+        bounds_dict = None
+        if request.bounds:
+            bounds_dict = {
+                "equity": (request.bounds.equity_min_pct, request.bounds.equity_max_pct),
+                "senior_debt": (request.bounds.senior_debt_min_pct, request.bounds.senior_debt_max_pct),
+                "mezzanine_debt": (request.bounds.mezzanine_debt_min_pct, request.bounds.mezzanine_debt_max_pct),
+                "gap_financing": (request.bounds.gap_financing_min_pct, request.bounds.gap_financing_max_pct),
+                "pre_sale": (request.bounds.pre_sale_min_pct, request.bounds.pre_sale_max_pct),
+                "tax_incentive": (request.bounds.tax_incentive_min_pct, request.bounds.tax_incentive_max_pct),
+            }
+
+        # Run optimization
+        if request.use_convergence:
+            result = optimizer.optimize_with_convergence(
+                template_stack=template_stack,
+                project_budget=request.project_budget,
+                objective_weights=objective_weights,
+                bounds=bounds_dict,
+                scenario_name="optimized_scenario",
+                waterfall_structure=None,  # Simple mode without waterfall
+                num_starts=3
+            )
+        else:
+            result = optimizer.optimize(
+                template_stack=template_stack,
+                project_budget=request.project_budget,
+                objective_weights=objective_weights,
+                bounds=bounds_dict,
+                scenario_name="optimized_scenario",
+                waterfall_structure=None  # Simple mode without waterfall
+            )
+
+        # Extract optimized structure
+        optimized_structure = _extract_capital_structure(result.capital_stack)
+
+        # Build convergence info if available
+        convergence_info = None
+        if "convergence_scores" in result.metadata:
+            convergence_info = {
+                "num_starts": result.metadata.get("num_starts", 1),
+                "convergence_std": result.metadata.get("convergence_std", 0.0),
+                "convergence_range": result.metadata.get("convergence_range", 0.0),
+            }
+
+        return schemas.OptimizeCapitalStackResponse(
+            objective_value=result.objective_value,
+            optimized_structure=optimized_structure,
+            solver_status=result.solver_status,
+            solve_time_seconds=result.solve_time_seconds,
+            allocations=result.allocations,
+            num_iterations=result.metadata.get("num_iterations", 0),
+            num_evaluations=result.metadata.get("num_evaluations", 0),
+            convergence_info=convergence_info
+        )
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Capital stack optimization failed: {str(e)}",
+        )
+
+
+@router.post(
+    "/analyze-tradeoffs",
+    response_model=schemas.AnalyzeTradeoffsResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Analyze Tradeoffs",
+    description="Identify Pareto frontier and analyze tradeoffs between competing objectives",
+)
+async def analyze_tradeoffs(request: schemas.AnalyzeTradeoffsRequest):
+    """
+    Analyze tradeoffs between scenarios.
+
+    This endpoint:
+    1. Takes multiple evaluated scenarios
+    2. Identifies Pareto-optimal scenarios
+    3. Calculates trade-off slopes
+    4. Generates insights and recommendations
+    5. Highlights dominated scenarios
+
+    Args:
+        request: List of scenarios with metrics
+
+    Returns:
+        Pareto frontiers, recommendations, and trade-off summary
+
+    Raises:
+        HTTPException: If analysis fails
+    """
+    try:
+        from engines.scenario_optimizer.tradeoff_analyzer import TradeOffAnalyzer
+        from engines.scenario_optimizer.scenario_evaluator import ScenarioEvaluation
+        from models.capital_stack import CapitalStack
+
+        # Convert scenarios to ScenarioEvaluation objects
+        evaluations = []
+        for scenario in request.scenarios:
+            # Create minimal evaluation with metrics
+            evaluation = ScenarioEvaluation(
+                scenario_name=scenario.scenario_name,
+                capital_stack=None  # We don't need full stack for tradeoff analysis
+            )
+
+            # Set metrics from input
+            evaluation.equity_irr = scenario.metrics.equity_irr
+            evaluation.weighted_cost_of_capital = scenario.metrics.cost_of_capital
+            evaluation.tax_incentive_effective_rate = scenario.metrics.tax_incentive_rate
+            evaluation.risk_score = scenario.metrics.risk_score
+            evaluation.debt_coverage_ratio = scenario.metrics.debt_coverage_ratio
+            evaluation.probability_of_equity_recoupment = scenario.metrics.probability_of_recoupment
+            evaluation.senior_debt_recovery_rate = Decimal("95.0")  # Default
+            evaluation.overall_score = Decimal("75.0")  # Default
+
+            evaluations.append(evaluation)
+
+        # Initialize analyzer
+        analyzer = TradeOffAnalyzer()
+
+        # Convert objective pairs if provided
+        objective_pairs = None
+        if request.objective_pairs:
+            objective_pairs = [tuple(pair) for pair in request.objective_pairs]
+
+        # Run analysis
+        analysis = analyzer.analyze(
+            evaluations=evaluations,
+            objective_pairs=objective_pairs
+        )
+
+        # Convert Pareto frontiers to output format
+        pareto_frontiers = []
+        for frontier in analysis.pareto_frontiers:
+            frontier_points = [
+                schemas.ParetoPoint(
+                    scenario_id=p.scenario_name,
+                    scenario_name=p.scenario_name,
+                    objective_1_value=p.objective_1_value,
+                    objective_2_value=p.objective_2_value,
+                    is_pareto_optimal=p.is_pareto_optimal,
+                    dominated_by=p.dominated_by
+                )
+                for p in frontier.frontier_points
+            ]
+
+            dominated_points = [
+                schemas.ParetoPoint(
+                    scenario_id=p.scenario_name,
+                    scenario_name=p.scenario_name,
+                    objective_1_value=p.objective_1_value,
+                    objective_2_value=p.objective_2_value,
+                    is_pareto_optimal=p.is_pareto_optimal,
+                    dominated_by=p.dominated_by
+                )
+                for p in frontier.dominated_points
+            ]
+
+            pareto_frontiers.append(
+                schemas.ParetoFrontierOutput(
+                    objective_1_name=frontier.objective_1_name,
+                    objective_2_name=frontier.objective_2_name,
+                    frontier_points=frontier_points,
+                    dominated_points=dominated_points,
+                    trade_off_slope=frontier.trade_off_slope,
+                    insights=frontier.insights
+                )
+            )
+
+        return schemas.AnalyzeTradeoffsResponse(
+            pareto_frontiers=pareto_frontiers,
+            recommended_scenarios=analysis.recommended_scenarios,
+            trade_off_summary=analysis.trade_off_summary
+        )
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Tradeoff analysis failed: {str(e)}",
+        )
 
 
 def _create_sample_waterfall(project_id: str, waterfall_id: str) -> WaterfallStructure:

@@ -130,3 +130,138 @@ class WaterfallExecutionResponse(BaseModel):
             }
         }
     )
+
+
+# ===== Sensitivity Analysis Schemas =====
+
+
+class SensitivityVariableInput(BaseModel):
+    """Input for a variable to analyze in sensitivity analysis."""
+    variable_name: str = Field(..., description="Variable identifier (e.g., 'revenue_multiplier', 'interest_rate')")
+    base_value: Decimal = Field(..., description="Base case value for this variable")
+    low_value: Decimal = Field(..., description="Pessimistic/low case value")
+    high_value: Decimal = Field(..., description="Optimistic/high case value")
+    variable_type: str = Field(default="revenue", description="Type of variable (revenue, cost, rate)")
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "variable_name": "revenue_multiplier",
+                "base_value": 75000000,
+                "low_value": 60000000,
+                "high_value": 90000000,
+                "variable_type": "revenue"
+            }
+        }
+    )
+
+
+class SensitivityAnalysisRequest(BaseModel):
+    """Request for sensitivity analysis."""
+    project_id: str = Field(..., description="Unique project identifier")
+    waterfall_id: str = Field(..., description="Waterfall structure ID")
+    base_total_revenue: Decimal = Field(..., gt=0, description="Base case total ultimate revenue")
+    release_strategy: str = Field(default="wide_theatrical", description="Release strategy type")
+    variation_percentage: Optional[Decimal] = Field(
+        default=Decimal("20"),
+        ge=0,
+        le=100,
+        description="Percentage variation for auto-generated ranges (e.g., 20 = +/-20%)"
+    )
+    custom_variables: Optional[List[SensitivityVariableInput]] = Field(
+        default=None,
+        description="Custom variables with explicit ranges (overrides auto-generated)"
+    )
+    target_metrics: List[str] = Field(
+        default=["equity_irr", "overall_recovery_rate"],
+        description="Metrics to analyze (e.g., equity_irr, overall_recovery_rate)"
+    )
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "project_id": "proj_123",
+                "waterfall_id": "waterfall_789",
+                "base_total_revenue": 75000000,
+                "release_strategy": "wide_theatrical",
+                "variation_percentage": 20,
+                "custom_variables": None,
+                "target_metrics": ["equity_irr", "overall_recovery_rate"]
+            }
+        }
+    )
+
+
+class SensitivityResultData(BaseModel):
+    """Sensitivity result for a single variable."""
+    variable_name: str
+    variable_type: str
+    base_value: Decimal
+    low_value: Decimal
+    high_value: Decimal
+    base_case_metric: Decimal
+    low_case_metric: Decimal
+    high_case_metric: Decimal
+    delta_low: Decimal
+    delta_high: Decimal
+    impact_score: Decimal
+
+
+class TornadoChartDataSchema(BaseModel):
+    """Tornado chart data for visualization."""
+    target_metric: str = Field(..., description="The metric being analyzed (e.g., equity_irr)")
+    variables: List[str] = Field(..., description="Variable names sorted by impact (descending)")
+    base_value: Decimal = Field(..., description="Base case value of the metric")
+    low_deltas: List[Decimal] = Field(..., description="Negative deltas from base (for low scenarios)")
+    high_deltas: List[Decimal] = Field(..., description="Positive deltas from base (for high scenarios)")
+
+
+class SensitivityAnalysisResponse(BaseModel):
+    """Response from sensitivity analysis."""
+    project_id: str
+    base_total_revenue: Decimal
+    target_metrics: List[str]
+    results_by_metric: Dict[str, List[SensitivityResultData]] = Field(
+        ...,
+        description="Sensitivity results grouped by target metric, sorted by impact"
+    )
+    tornado_charts: Dict[str, TornadoChartDataSchema] = Field(
+        ...,
+        description="Tornado chart data for each target metric"
+    )
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "project_id": "proj_123",
+                "base_total_revenue": 75000000,
+                "target_metrics": ["equity_irr"],
+                "results_by_metric": {
+                    "equity_irr": [
+                        {
+                            "variable_name": "revenue_multiplier",
+                            "variable_type": "revenue",
+                            "base_value": 75000000,
+                            "low_value": 60000000,
+                            "high_value": 90000000,
+                            "base_case_metric": 28.5,
+                            "low_case_metric": 15.2,
+                            "high_case_metric": 42.8,
+                            "delta_low": 13.3,
+                            "delta_high": 14.3,
+                            "impact_score": 14.3
+                        }
+                    ]
+                },
+                "tornado_charts": {
+                    "equity_irr": {
+                        "target_metric": "equity_irr",
+                        "variables": ["revenue_multiplier", "interest_rate"],
+                        "base_value": 28.5,
+                        "low_deltas": [-13.3, -5.2],
+                        "high_deltas": [14.3, 6.1]
+                    }
+                }
+            }
+        }
+    )
