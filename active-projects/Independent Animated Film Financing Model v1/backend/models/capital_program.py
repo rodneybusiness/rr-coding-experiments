@@ -177,6 +177,16 @@ class CapitalDeployment(BaseModel):
         description="Backend profit participation %"
     )
 
+    # Project characteristics (for portfolio metrics)
+    is_development: bool = Field(
+        default=False,
+        description="Whether this project is in development stage"
+    )
+    is_first_time_director: bool = Field(
+        default=False,
+        description="Whether the project has a first-time director"
+    )
+
     # Dates
     allocation_date: date = Field(default_factory=date.today)
     funding_date: Optional[date] = Field(default=None)
@@ -221,6 +231,8 @@ class CapitalDeployment(BaseModel):
             "equity_percentage": str(self.equity_percentage) if self.equity_percentage else None,
             "recoupment_priority": self.recoupment_priority,
             "backend_participation_pct": str(self.backend_participation_pct) if self.backend_participation_pct else None,
+            "is_development": self.is_development,
+            "is_first_time_director": self.is_first_time_director,
             "allocation_date": self.allocation_date.isoformat(),
             "funding_date": self.funding_date.isoformat() if self.funding_date else None,
             "expected_recoupment_date": self.expected_recoupment_date.isoformat() if self.expected_recoupment_date else None,
