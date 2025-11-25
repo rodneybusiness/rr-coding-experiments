@@ -19,6 +19,7 @@ from app.schemas.incentives import (
     InvestmentDrawdownResponse,
 )
 from app.core.path_setup import BACKEND_ROOT
+from app.core import business_rules
 
 # Import Engine 1 (path setup done in api.py)
 from engines.incentive_calculator.calculator import IncentiveCalculator, JurisdictionSpend
@@ -178,9 +179,11 @@ async def calculate_incentives(request: IncentiveCalculationRequest):
             if q < avg_timing_quarters:
                 amount = Decimal("0")
             elif q == avg_timing_quarters:
-                amount = total_net * Decimal("0.6")  # 60% at expected timing
+                # Primary distribution at expected timing
+                amount = total_net * business_rules.CASH_FLOW_PRIMARY_DISTRIBUTION_PCT
             elif q == avg_timing_quarters + 1:
-                amount = total_net * Decimal("0.4")  # 40% in next quarter
+                # Secondary distribution in next quarter
+                amount = total_net * business_rules.CASH_FLOW_SECONDARY_DISTRIBUTION_PCT
             else:
                 amount = Decimal("0")
 
@@ -189,13 +192,9 @@ async def calculate_incentives(request: IncentiveCalculationRequest):
                     CashFlowQuarter(quarter=q, amount=amount)
                 )
 
-        # Calculate monetization options
+        # Calculate monetization options using centralized business rules
         total_gross = result.total_gross_credits
-        monetization_options = {
-            "direct_receipt": total_gross,  # 100% value, wait 18-24 months
-            "bank_loan": total_gross * Decimal("0.85"),  # 15% cost (interest)
-            "broker_sale": total_gross * Decimal("0.80"),  # 20% discount
-        }
+        monetization_options = business_rules.get_monetization_options(total_gross)
 
         return IncentiveCalculationResponse(
             project_id=request.project_id,
@@ -433,12 +432,12 @@ async def calculate_investment_drawdown(request: InvestmentDrawdownRequest):
         HTTPException: If calculation fails or validation errors occur
     """
     try:
-        # Create investment drawdown using S-curve
+        # Create investment drawdown using S-curve with business rule defaults
         drawdown = InvestmentDrawdown.create(
             total_investment=request.total_investment,
             draw_periods=request.draw_periods,
-            steepness=request.steepness or 8.0,
-            midpoint=request.midpoint or 0.4,
+            steepness=request.steepness or business_rules.SCURVE_DEFAULT_STEEPNESS,
+            midpoint=request.midpoint or business_rules.SCURVE_DEFAULT_MIDPOINT,
         )
 
         return InvestmentDrawdownResponse(

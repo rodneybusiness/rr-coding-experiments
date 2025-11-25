@@ -232,3 +232,270 @@ class ScenarioComparisonResponse(BaseModel):
     scenarios: List[Scenario]
     trade_off_analyses: List[TradeOffAnalysis]
     recommendation: str
+
+
+# ========================================
+# New Schemas for Optimizer Endpoints
+# ========================================
+
+
+class ConstraintInput(BaseModel):
+    """Input for a constraint."""
+    constraint_id: str = Field(..., description="Unique constraint identifier")
+    constraint_type: str = Field(..., description="Type: 'hard' or 'soft'")
+    category: str = Field(..., description="Category: financial, ownership, risk, timing, strategic")
+    description: str = Field(..., description="Human-readable constraint description")
+    min_value: Optional[Decimal] = Field(default=None, description="Minimum value for range constraints")
+    max_value: Optional[Decimal] = Field(default=None, description="Maximum value for range constraints")
+    target_value: Optional[Decimal] = Field(default=None, description="Target value for soft constraints")
+    penalty_weight: Decimal = Field(default=Decimal("1.0"), ge=0, le=1, description="Penalty weight for soft constraints")
+
+
+class ValidateConstraintsRequest(BaseModel):
+    """Request to validate constraints against a capital stack."""
+    project_budget: Decimal = Field(..., gt=0, description="Total project budget")
+    capital_structure: CapitalStructure = Field(..., description="Capital structure to validate")
+    constraints: List[ConstraintInput] = Field(
+        default_factory=list,
+        description="List of constraints to validate (uses defaults if empty)"
+    )
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "project_budget": 30000000,
+                "capital_structure": {
+                    "senior_debt": 9000000,
+                    "gap_financing": 3000000,
+                    "mezzanine_debt": 2000000,
+                    "equity": 10000000,
+                    "tax_incentives": 6000000,
+                    "presales": 0,
+                    "grants": 0
+                },
+                "constraints": [
+                    {
+                        "constraint_id": "min_equity_15pct",
+                        "constraint_type": "hard",
+                        "category": "financial",
+                        "description": "Minimum 15% equity financing",
+                        "min_value": 15.0
+                    }
+                ]
+            }
+        }
+    )
+
+
+class ConstraintViolationOutput(BaseModel):
+    """Output for a constraint violation."""
+    constraint_id: str
+    constraint_type: str
+    description: str
+    severity: Decimal = Field(description="Severity of violation (0-1)")
+    details: str
+
+
+class ValidateConstraintsResponse(BaseModel):
+    """Response from constraint validation."""
+    is_valid: bool = Field(description="True if all hard constraints satisfied")
+    hard_violations: List[ConstraintViolationOutput] = Field(default_factory=list)
+    soft_violations: List[ConstraintViolationOutput] = Field(default_factory=list)
+    total_penalty: Decimal = Field(description="Sum of soft constraint penalties")
+    summary: str
+
+
+class OptimizationBounds(BaseModel):
+    """Bounds for optimization variables."""
+    equity_min_pct: Decimal = Field(default=Decimal("15.0"), ge=0, le=100)
+    equity_max_pct: Decimal = Field(default=Decimal("80.0"), ge=0, le=100)
+    senior_debt_min_pct: Decimal = Field(default=Decimal("0"), ge=0, le=100)
+    senior_debt_max_pct: Decimal = Field(default=Decimal("60.0"), ge=0, le=100)
+    mezzanine_debt_min_pct: Decimal = Field(default=Decimal("0"), ge=0, le=100)
+    mezzanine_debt_max_pct: Decimal = Field(default=Decimal("30.0"), ge=0, le=100)
+    gap_financing_min_pct: Decimal = Field(default=Decimal("0"), ge=0, le=100)
+    gap_financing_max_pct: Decimal = Field(default=Decimal("25.0"), ge=0, le=100)
+    pre_sale_min_pct: Decimal = Field(default=Decimal("0"), ge=0, le=100)
+    pre_sale_max_pct: Decimal = Field(default=Decimal("40.0"), ge=0, le=100)
+    tax_incentive_min_pct: Decimal = Field(default=Decimal("0"), ge=0, le=100)
+    tax_incentive_max_pct: Decimal = Field(default=Decimal("35.0"), ge=0, le=100)
+
+
+class OptimizeCapitalStackRequest(BaseModel):
+    """Request to optimize capital stack."""
+    project_budget: Decimal = Field(..., gt=0, description="Total project budget")
+    template_structure: CapitalStructure = Field(
+        ...,
+        description="Template capital structure (provides starting point and instrument types)"
+    )
+    objective_weights: ObjectiveWeights = Field(
+        default_factory=ObjectiveWeights,
+        description="Weights for multi-objective optimization"
+    )
+    bounds: Optional[OptimizationBounds] = Field(
+        default=None,
+        description="Bounds for each financing instrument (optional)"
+    )
+    constraints: List[ConstraintInput] = Field(
+        default_factory=list,
+        description="Custom constraints (uses defaults if empty)"
+    )
+    use_convergence: bool = Field(
+        default=False,
+        description="Use multi-start optimization for better convergence"
+    )
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "project_budget": 30000000,
+                "template_structure": {
+                    "senior_debt": 9000000,
+                    "gap_financing": 3000000,
+                    "mezzanine_debt": 2000000,
+                    "equity": 10000000,
+                    "tax_incentives": 6000000,
+                    "presales": 0,
+                    "grants": 0
+                },
+                "objective_weights": {
+                    "equity_irr": 30.0,
+                    "cost_of_capital": 25.0,
+                    "tax_incentive_capture": 20.0,
+                    "risk_minimization": 25.0
+                },
+                "use_convergence": True
+            }
+        }
+    )
+
+
+class OptimizeCapitalStackResponse(BaseModel):
+    """Response from capital stack optimization."""
+    objective_value: Decimal = Field(description="Achieved objective value")
+    optimized_structure: CapitalStructure = Field(description="Optimized capital structure")
+    solver_status: str = Field(description="Solver status (SUCCESS, etc.)")
+    solve_time_seconds: float = Field(description="Time taken to solve")
+    allocations: Dict[str, Decimal] = Field(description="Percentage allocations by instrument type")
+    num_iterations: int = Field(description="Number of solver iterations")
+    num_evaluations: int = Field(description="Number of objective function evaluations")
+    convergence_info: Optional[Dict[str, float]] = Field(
+        default=None,
+        description="Convergence information (if multi-start used)"
+    )
+
+
+class ScenarioForTradeoff(BaseModel):
+    """Scenario input for tradeoff analysis."""
+    scenario_id: str
+    scenario_name: str
+    capital_structure: CapitalStructure
+    metrics: ScenarioMetrics
+
+
+class ParetoPoint(BaseModel):
+    """Point on Pareto frontier."""
+    scenario_id: str
+    scenario_name: str
+    objective_1_value: Decimal
+    objective_2_value: Decimal
+    is_pareto_optimal: bool
+    dominated_by: List[str] = Field(default_factory=list)
+
+
+class ParetoFrontierOutput(BaseModel):
+    """Pareto frontier for two objectives."""
+    objective_1_name: str
+    objective_2_name: str
+    frontier_points: List[ParetoPoint] = Field(description="Pareto-optimal points")
+    dominated_points: List[ParetoPoint] = Field(description="Dominated points")
+    trade_off_slope: Optional[Decimal] = Field(
+        default=None,
+        description="Average trade-off rate (ΔObj1 / ΔObj2)"
+    )
+    insights: List[str] = Field(default_factory=list)
+
+
+class AnalyzeTradeoffsRequest(BaseModel):
+    """Request to analyze tradeoffs between scenarios."""
+    scenarios: List[ScenarioForTradeoff] = Field(
+        ...,
+        min_length=2,
+        description="List of scenarios to analyze (minimum 2)"
+    )
+    objective_pairs: Optional[List[List[str]]] = Field(
+        default=None,
+        description="List of objective pairs to analyze, e.g., [['equity_irr', 'risk_score']]. Uses common pairs if not provided."
+    )
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "scenarios": [
+                    {
+                        "scenario_id": "scenario_1",
+                        "scenario_name": "High Equity",
+                        "capital_structure": {
+                            "senior_debt": 5000000,
+                            "gap_financing": 2000000,
+                            "mezzanine_debt": 1000000,
+                            "equity": 15000000,
+                            "tax_incentives": 7000000,
+                            "presales": 0,
+                            "grants": 0
+                        },
+                        "metrics": {
+                            "equity_irr": 35.0,
+                            "cost_of_capital": 11.5,
+                            "tax_incentive_rate": 23.3,
+                            "risk_score": 45.0,
+                            "debt_coverage_ratio": 2.5,
+                            "probability_of_recoupment": 88.0,
+                            "total_debt": 8000000,
+                            "total_equity": 15000000,
+                            "debt_to_equity_ratio": 0.53
+                        }
+                    },
+                    {
+                        "scenario_id": "scenario_2",
+                        "scenario_name": "Balanced",
+                        "capital_structure": {
+                            "senior_debt": 9000000,
+                            "gap_financing": 3000000,
+                            "mezzanine_debt": 2000000,
+                            "equity": 10000000,
+                            "tax_incentives": 6000000,
+                            "presales": 0,
+                            "grants": 0
+                        },
+                        "metrics": {
+                            "equity_irr": 28.0,
+                            "cost_of_capital": 10.0,
+                            "tax_incentive_rate": 20.0,
+                            "risk_score": 55.0,
+                            "debt_coverage_ratio": 2.0,
+                            "probability_of_recoupment": 82.0,
+                            "total_debt": 14000000,
+                            "total_equity": 10000000,
+                            "debt_to_equity_ratio": 1.4
+                        }
+                    }
+                ],
+                "objective_pairs": [
+                    ["equity_irr", "probability_of_recoupment"],
+                    ["tax_incentive_rate", "equity_irr"]
+                ]
+            }
+        }
+    )
+
+
+class AnalyzeTradeoffsResponse(BaseModel):
+    """Response from tradeoff analysis."""
+    pareto_frontiers: List[ParetoFrontierOutput] = Field(
+        description="Pareto frontiers for each objective pair"
+    )
+    recommended_scenarios: Dict[str, str] = Field(
+        description="Recommended scenarios for different preferences"
+    )
+    trade_off_summary: str = Field(description="Human-readable summary")

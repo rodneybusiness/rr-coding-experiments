@@ -14,6 +14,11 @@ from app.schemas.waterfall import (
     RevenueWindow,
     MonteCarloResults,
     MonteCarloPercentiles,
+    SensitivityAnalysisRequest,
+    SensitivityAnalysisResponse,
+    SensitivityResultData,
+    TornadoChartDataSchema,
+    SensitivityVariableInput,
 )
 
 # Import Engine 2 (path setup done in api.py)
@@ -21,6 +26,10 @@ from engines.waterfall_executor.waterfall_executor import WaterfallExecutor
 from engines.waterfall_executor.stakeholder_analyzer import StakeholderAnalyzer
 from engines.waterfall_executor.monte_carlo_simulator import MonteCarloSimulator
 from engines.waterfall_executor.revenue_projector import RevenueProjector
+from engines.waterfall_executor.sensitivity_analyzer import (
+    SensitivityAnalyzer,
+    SensitivityVariable,
+)
 from models.capital_stack import CapitalStack
 from models.waterfall import WaterfallStructure
 from models.financial_instruments import *
@@ -333,3 +342,140 @@ def _run_monte_carlo_simulation(
         equity_irr=equity_irr_percentiles,
         probability_of_recoupment=probability_of_recoupment,
     )
+
+
+@router.post(
+    "/sensitivity-analysis",
+    response_model=SensitivityAnalysisResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Run Sensitivity Analysis",
+    description="Perform sensitivity analysis to identify which variables have the biggest impact on returns (tornado charts)",
+)
+async def sensitivity_analysis(request: SensitivityAnalysisRequest):
+    """
+    Run sensitivity analysis on waterfall returns.
+
+    This endpoint:
+    1. Creates base case revenue projection
+    2. Defines variables to test (revenue, interest rates, timing, etc.)
+    3. Runs waterfall for base/low/high scenarios for each variable
+    4. Calculates impact on target metrics (e.g., equity IRR)
+    5. Returns tornado chart data showing variable impacts
+
+    Args:
+        request: Sensitivity analysis parameters
+
+    Returns:
+        Sensitivity results with tornado chart data for visualization
+
+    Raises:
+        HTTPException: If analysis fails or validation errors occur
+    """
+    try:
+        # Create sample capital stack and waterfall structure
+        capital_stack = _create_sample_capital_stack(request.project_id)
+        waterfall_structure = _create_sample_waterfall(
+            request.project_id, request.waterfall_id
+        )
+
+        # Initialize revenue projector
+        revenue_projector = RevenueProjector()
+
+        # Project base case revenue
+        base_projection = revenue_projector.project_revenue(
+            total_ultimate_revenue=request.base_total_revenue,
+            release_strategy=request.release_strategy,
+        )
+
+        # Prepare sensitivity variables
+        if request.custom_variables:
+            # Use custom variables provided by user
+            sensitivity_variables = [
+                SensitivityVariable(
+                    variable_name=var.variable_name,
+                    base_value=var.base_value,
+                    low_value=var.low_value,
+                    high_value=var.high_value,
+                    variable_type=var.variable_type,
+                )
+                for var in request.custom_variables
+            ]
+        else:
+            # Auto-generate standard variables with variation percentage
+            variation_pct = request.variation_percentage / Decimal("100")
+
+            # Revenue multiplier
+            revenue_low = request.base_total_revenue * (Decimal("1") - variation_pct)
+            revenue_high = request.base_total_revenue * (Decimal("1") + variation_pct)
+
+            sensitivity_variables = [
+                SensitivityVariable(
+                    variable_name="revenue_multiplier",
+                    base_value=request.base_total_revenue,
+                    low_value=revenue_low,
+                    high_value=revenue_high,
+                    variable_type="revenue",
+                )
+            ]
+
+        # Initialize sensitivity analyzer
+        analyzer = SensitivityAnalyzer(
+            waterfall_structure=waterfall_structure,
+            capital_stack=capital_stack,
+            base_revenue_projection=base_projection,
+        )
+
+        # Run sensitivity analysis
+        sensitivity_results = analyzer.analyze(
+            variables=sensitivity_variables,
+            target_metrics=request.target_metrics,
+        )
+
+        # Build response data
+        results_by_metric = {}
+        tornado_charts = {}
+
+        for metric, results in sensitivity_results.items():
+            # Convert SensitivityResult objects to SensitivityResultData schemas
+            result_data_list = []
+            for result in results:
+                result_data_list.append(
+                    SensitivityResultData(
+                        variable_name=result.variable.variable_name,
+                        variable_type=result.variable.variable_type,
+                        base_value=result.variable.base_value,
+                        low_value=result.variable.low_value,
+                        high_value=result.variable.high_value,
+                        base_case_metric=result.base_case[metric],
+                        low_case_metric=result.low_case[metric],
+                        high_case_metric=result.high_case[metric],
+                        delta_low=result.delta_low[metric],
+                        delta_high=result.delta_high[metric],
+                        impact_score=result.impact_score,
+                    )
+                )
+            results_by_metric[metric] = result_data_list
+
+            # Generate tornado chart data
+            tornado_data = analyzer.generate_tornado_chart_data(results, metric)
+            tornado_charts[metric] = TornadoChartDataSchema(
+                target_metric=tornado_data.target_metric,
+                variables=tornado_data.variables,
+                base_value=tornado_data.base_value,
+                low_deltas=tornado_data.low_deltas,
+                high_deltas=tornado_data.high_deltas,
+            )
+
+        return SensitivityAnalysisResponse(
+            project_id=request.project_id,
+            base_total_revenue=request.base_total_revenue,
+            target_metrics=request.target_metrics,
+            results_by_metric=results_by_metric,
+            tornado_charts=tornado_charts,
+        )
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Sensitivity analysis failed: {str(e)}",
+        )
