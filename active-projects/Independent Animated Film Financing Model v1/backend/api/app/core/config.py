@@ -7,7 +7,7 @@ Uses Pydantic Settings for type-safe configuration with validation.
 
 from typing import List, Optional, Any
 from pydantic_settings import BaseSettings
-from pydantic import AnyHttpUrl, field_validator, PostgresDsn, model_validator
+from pydantic import AnyHttpUrl, field_validator, model_validator
 import secrets
 
 
@@ -26,12 +26,14 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
-    # Database
-    DATABASE_URL: PostgresDsn
+    # Database (supports both PostgreSQL and SQLite)
+    DATABASE_URL: str = "sqlite:///./film_financing.db"
+    ASYNC_DATABASE_URL: Optional[str] = None  # Auto-derived from DATABASE_URL
     DB_POOL_SIZE: int = 5
     DB_MAX_OVERFLOW: int = 10
     DB_POOL_TIMEOUT: int = 30
     DB_POOL_RECYCLE: int = 3600
+    SQL_ECHO: bool = False  # Set to True to see SQL queries
 
     # Redis
     REDIS_URL: str = "redis://localhost:6379/0"
