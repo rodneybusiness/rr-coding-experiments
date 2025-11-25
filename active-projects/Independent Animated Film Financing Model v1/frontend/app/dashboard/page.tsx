@@ -365,6 +365,33 @@ export default function DashboardPage() {
               </Link>
             </CardContent>
           </Card>
+
+          {/* Program Evaluator */}
+          <Card className="group hover:shadow-lg transition-all duration-200 border-indigo-200">
+            <CardHeader>
+              <div className="flex items-center space-x-3">
+                <div className="h-10 w-10 rounded-lg bg-indigo-100 flex items-center justify-center group-hover:bg-indigo-200 transition-colors">
+                  <Calculator className="h-5 w-5 text-indigo-600" />
+                </div>
+                <div>
+                  <CardTitle className="text-lg">Program Evaluator</CardTitle>
+                  <CardDescription>Constraint Analysis</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-600 mb-4">
+                Evaluate scenarios against capital program constraints
+                and get allocation recommendations.
+              </p>
+              <Link href="/dashboard/program-evaluator">
+                <Button className="w-full bg-indigo-600 hover:bg-indigo-700">
+                  Open Evaluator
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Recent Activity */}
