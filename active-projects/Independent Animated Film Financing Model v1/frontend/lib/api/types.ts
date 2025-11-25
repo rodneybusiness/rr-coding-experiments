@@ -286,3 +286,314 @@ export interface DealTemplate {
   description: string;
   default_values: Record<string, any>;
 }
+
+// Engine 5: Capital Programs
+
+export type ProgramType =
+  | 'internal_pool'
+  | 'external_fund'
+  | 'private_equity'
+  | 'family_office'
+  | 'output_deal'
+  | 'first_look'
+  | 'overhead_deal'
+  | 'spv'
+  | 'tax_credit_fund'
+  | 'international_copro'
+  | 'government_fund';
+
+export type ProgramStatus =
+  | 'prospective'
+  | 'in_negotiation'
+  | 'active'
+  | 'fully_deployed'
+  | 'winding_down'
+  | 'closed';
+
+export type AllocationStatus =
+  | 'pending'
+  | 'approved'
+  | 'committed'
+  | 'funded'
+  | 'recouped'
+  | 'written_off';
+
+export interface CapitalSourceInput {
+  source_name: string;
+  source_type?: string;
+  committed_amount: number;
+  drawn_amount?: number;
+  currency?: string;
+  interest_rate?: number;
+  management_fee_pct?: number;
+  carry_percentage?: number;
+  hurdle_rate?: number;
+  geographic_restrictions?: string[];
+  genre_restrictions?: string[];
+  budget_range_min?: number;
+  budget_range_max?: number;
+  commitment_date?: string;
+  expiry_date?: string;
+  notes?: string;
+}
+
+export interface CapitalSourceResponse {
+  source_id: string;
+  source_name: string;
+  source_type: string;
+  committed_amount: number;
+  drawn_amount: number;
+  available_amount: number;
+  utilization_rate: number;
+  currency: string;
+  interest_rate?: number;
+  management_fee_pct?: number;
+  carry_percentage?: number;
+  hurdle_rate?: number;
+  geographic_restrictions: string[];
+  genre_restrictions: string[];
+  budget_range_min?: number;
+  budget_range_max?: number;
+  commitment_date?: string;
+  expiry_date?: string;
+  notes?: string;
+}
+
+export interface CapitalProgramConstraintsInput {
+  max_single_project_pct?: number;
+  max_single_counterparty_pct?: number;
+  min_project_budget?: number;
+  max_project_budget?: number;
+  required_jurisdictions?: string[];
+  prohibited_jurisdictions?: string[];
+  required_genres?: string[];
+  prohibited_genres?: string[];
+  prohibited_ratings?: string[];
+  target_num_projects?: number;
+  target_avg_budget?: number;
+  target_portfolio_irr?: number;
+  target_multiple?: number;
+  max_development_pct?: number;
+  max_first_time_director_pct?: number;
+  target_deployment_years?: number;
+  min_reserve_pct?: number;
+}
+
+export interface CapitalProgramInput {
+  program_name: string;
+  program_type: ProgramType;
+  description?: string;
+  target_size: number;
+  currency?: string;
+  sources?: CapitalSourceInput[];
+  constraints?: CapitalProgramConstraintsInput;
+  manager_name?: string;
+  management_fee_pct?: number;
+  carry_percentage?: number;
+  hurdle_rate?: number;
+  vintage_year?: number;
+  investment_period_years?: number;
+  fund_term_years?: number;
+  extension_years?: number;
+  formation_date?: string;
+  first_close_date?: string;
+  final_close_date?: string;
+  notes?: string;
+}
+
+export interface CapitalDeploymentResponse {
+  deployment_id: string;
+  program_id: string;
+  source_id?: string;
+  project_id: string;
+  project_name: string;
+  allocated_amount: number;
+  funded_amount: number;
+  recouped_amount: number;
+  profit_distributed: number;
+  outstanding_amount: number;
+  total_return: number;
+  multiple?: number;
+  currency: string;
+  status: AllocationStatus;
+  equity_percentage?: number;
+  recoupment_priority: number;
+  backend_participation_pct?: number;
+  allocation_date: string;
+  funding_date?: string;
+  expected_recoupment_date?: string;
+  notes?: string;
+}
+
+export interface CapitalProgramMetrics {
+  total_committed: number;
+  total_drawn: number;
+  total_available: number;
+  total_allocated: number;
+  total_funded: number;
+  total_recouped: number;
+  total_profit: number;
+  commitment_progress: number;
+  deployment_rate: number;
+  num_active_projects: number;
+  portfolio_multiple?: number;
+  reserve_amount: number;
+  deployable_capital: number;
+}
+
+export interface CapitalProgramResponse {
+  program_id: string;
+  program_name: string;
+  program_type: ProgramType;
+  status: ProgramStatus;
+  description?: string;
+  target_size: number;
+  currency: string;
+  sources: CapitalSourceResponse[];
+  deployments: CapitalDeploymentResponse[];
+  constraints: Record<string, any>;
+  manager_name?: string;
+  management_fee_pct?: number;
+  carry_percentage?: number;
+  hurdle_rate?: number;
+  vintage_year?: number;
+  investment_period_years: number;
+  fund_term_years: number;
+  extension_years: number;
+  formation_date?: string;
+  first_close_date?: string;
+  final_close_date?: string;
+  notes?: string;
+  metrics: CapitalProgramMetrics;
+}
+
+export interface CapitalProgramListResponse {
+  programs: CapitalProgramResponse[];
+  total_count: number;
+}
+
+export interface AllocationRequestInput {
+  project_id: string;
+  project_name: string;
+  requested_amount: number;
+  project_budget: number;
+  jurisdiction?: string;
+  genre?: string;
+  rating?: string;
+  is_development?: boolean;
+  is_first_time_director?: boolean;
+  counterparty_name?: string;
+  equity_percentage?: number;
+  recoupment_priority?: number;
+  backend_participation_pct?: number;
+  source_id?: string;
+}
+
+export interface ConstraintViolation {
+  constraint_name: string;
+  constraint_type: string;
+  current_value: string;
+  limit_value: string;
+  description: string;
+  is_blocking: boolean;
+}
+
+export interface AllocationResultResponse {
+  success: boolean;
+  allocation_id?: string;
+  deployment?: CapitalDeploymentResponse;
+  violations: ConstraintViolation[];
+  warnings: string[];
+  selected_source_id?: string;
+  source_selection_reason?: string;
+  recommendations: string[];
+}
+
+export interface PortfolioMetricsResponse {
+  size_metrics: Record<string, any>;
+  project_metrics: Record<string, any>;
+  concentration_metrics: Record<string, any>;
+  performance_metrics: Record<string, any>;
+  risk_metrics: Record<string, any>;
+  constraint_compliance: Record<string, any>;
+}
+
+export interface ProgramTypeInfo {
+  type: string;
+  label: string;
+  description: string;
+}
+
+export interface ProgramTypesResponse {
+  types: ProgramTypeInfo[];
+}
+
+// Project Profile Types
+
+export interface ProjectProfileInput {
+  project_name: string;
+  project_budget: number;
+  genre?: string;
+  jurisdiction?: string;
+  rating?: string;
+  is_development?: boolean;
+  is_first_time_director?: boolean;
+  expected_revenue?: number;
+  production_start_date?: string;
+  expected_release_date?: string;
+  description?: string;
+  notes?: string;
+}
+
+export interface ProjectProfileResponse {
+  project_id: string;
+  project_name: string;
+  project_budget: number;
+  genre?: string;
+  jurisdiction?: string;
+  rating?: string;
+  is_development: boolean;
+  is_first_time_director: boolean;
+  expected_revenue?: number;
+  production_start_date?: string;
+  expected_release_date?: string;
+  description?: string;
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+  capital_deployments: CapitalDeploymentResponse[];
+  total_funding: number;
+  funding_gap: number;
+}
+
+export interface ProjectListResponse {
+  projects: ProjectProfileResponse[];
+  total_count: number;
+}
+
+// Dashboard Types
+
+export interface DashboardMetrics {
+  total_projects: number;
+  total_budget: number;
+  total_tax_incentives: number;
+  average_capture_rate: number;
+  scenarios_generated: number;
+  active_capital_programs: number;
+  total_committed_capital: number;
+  total_deployed_capital: number;
+  projects_in_development: number;
+  projects_in_production: number;
+}
+
+export interface RecentActivity {
+  project: string;
+  action: string;
+  time: string;
+  activity_type: 'scenario' | 'incentive' | 'waterfall' | 'deal' | 'capital' | 'project';
+}
+
+export interface DashboardResponse {
+  metrics: DashboardMetrics;
+  recent_activity: RecentActivity[];
+}

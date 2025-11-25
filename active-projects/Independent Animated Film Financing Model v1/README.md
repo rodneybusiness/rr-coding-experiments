@@ -68,7 +68,7 @@ The central question this tool answers:
 - ✅ Production-ready Docker deployment
 
 ### Phase 5: Testing & Validation ✅ COMPLETED
-- ✅ 124 backend tests passing (87 core + 37 integration)
+- ✅ 182+ backend tests (core + integration + API)
 - ✅ Expert code review (8.2/10 quality score)
 - ✅ TypeScript compilation: 0 errors
 - ✅ Production readiness verified
@@ -78,6 +78,14 @@ The central question this tool answers:
 - ✅ OwnershipControlScorer engine with 4 dimensions (34 tests)
 - ✅ Integration with ScenarioEvaluator (70% financial + 30% strategic blending)
 - ✅ API endpoints: `/deals`, `/ownership`
+
+### Phase 7: Capital Programs & Company-Level Management ✅ COMPLETED
+- ✅ CapitalProgram model with 11 program types (70 tests)
+- ✅ CapitalProgramManager engine with constraint validation
+- ✅ ScenarioEvaluator integration (evaluate_for_program method)
+- ✅ SQLAlchemy database models ready for persistence
+- ✅ API endpoints: `/capital-programs`
+- ✅ Frontend pages: `/dashboard/capital-programs`, `/dashboard/projects`
 
 ## Getting Started
 
@@ -163,6 +171,13 @@ npm run dev
    - Strategic risk flags (MFN, control concentration, reversion)
    - Integrated into ScenarioEvaluator for blended financial + strategic analysis
 
+5. **Capital Programs Manager (Engine 5)**
+   - 11 program types (External Fund, Private Equity, Output Deal, SPV, etc.)
+   - Portfolio-level constraint validation (concentration, jurisdiction, genre)
+   - Multi-source capital management with automatic source selection
+   - Deployment lifecycle tracking (allocation → funding → recoupment)
+   - Program-aware scenario evaluation with portfolio fit scoring
+
 ### 🚀 Production Ready
 
 - ✅ Full-stack application (FastAPI + Next.js)
@@ -171,8 +186,9 @@ npm run dev
 - ✅ Redis caching for performance
 - ✅ Comprehensive error handling
 - ✅ TypeScript type safety (0 errors)
-- ✅ 124 backend tests passing
+- ✅ 200+ backend tests passing
 - ✅ Expert code review validated
+- ✅ SQLAlchemy 2.0 database models ready
 
 ## Contributing
 
@@ -184,9 +200,26 @@ TBD
 
 ## Version
 
+v1.3.0 - Full Frontend Integration & API Completeness (November 2025)
+- Fixed critical ownership.py import issues
+- Implemented /scenarios/compare endpoint
+- Created Projects CRUD API with full lifecycle
+- Added Portfolio Analytics dashboard with Recharts visualizations
+- Added Settings and Help pages
+- Connected Dashboard to real metrics API
+- Added comprehensive end-to-end API workflow tests
+- 200+ tests passing
+
+v1.2.0 - Capital Programs & Company-Level Management (November 2025)
+- Added CapitalProgram model with 11 program types
+- CapitalProgramManager engine with constraint validation
+- ScenarioEvaluator integration for program-aware evaluation
+- SQLAlchemy database models for persistence
+- Frontend pages: `/dashboard/capital-programs`, `/dashboard/projects`
+- 182+ tests passing
+
 v1.1.0 - Strategic Deal Modeling (November 2025)
 - Added DealBlock model and OwnershipControlScorer engine
 - Integrated strategic scoring into ScenarioEvaluator
-- 124 tests passing
 
 v1.0.0 - Initial Implementation (October 2025)

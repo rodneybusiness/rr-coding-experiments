@@ -9,7 +9,7 @@ from decimal import Decimal
 from typing import List, Dict
 from fastapi import APIRouter, HTTPException
 
-from backend.api.app.schemas.ownership import (
+from app.schemas.ownership import (
     OwnershipScoreRequest,
     OwnershipScoreResponse,
     ScoreDealBlockInput,
@@ -20,14 +20,20 @@ from backend.api.app.schemas.ownership import (
     ScenarioComparisonResponse,
 )
 
-from backend.models.deal_block import (
+# Add backend root to path for engine/model imports
+import sys
+from pathlib import Path
+backend_root = Path(__file__).parent.parent.parent.parent.parent
+sys.path.insert(0, str(backend_root))
+
+from models.deal_block import (
     DealBlock,
     DealType,
     ApprovalRight,
     RightsWindow,
 )
 
-from backend.engines.scenario_optimizer.ownership_control_scorer import (
+from engines.scenario_optimizer.ownership_control_scorer import (
     OwnershipControlScorer,
     OwnershipControlResult,
 )
