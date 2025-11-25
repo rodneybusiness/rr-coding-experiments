@@ -6,6 +6,8 @@ from typing import List, Dict, Optional
 from pydantic import BaseModel, Field
 from decimal import Decimal
 
+from app.schemas.deals import DealBlockInput
+
 
 class ObjectiveWeights(BaseModel):
     """Optimization objective weights."""
@@ -23,6 +25,10 @@ class ScenarioGenerationRequest(BaseModel):
     waterfall_id: str = Field(..., description="Waterfall structure ID")
     objective_weights: Optional[ObjectiveWeights] = Field(default=None)
     num_scenarios: int = Field(default=4, ge=1, le=10, description="Number of scenarios to generate")
+    deal_blocks: Optional[List[DealBlockInput]] = Field(
+        default=None,
+        description="Optional deal blocks to include in strategic ownership/control scoring"
+    )
 
     class Config:
         json_schema_extra = {
@@ -37,7 +43,19 @@ class ScenarioGenerationRequest(BaseModel):
                     "tax_incentive_capture": 20.0,
                     "risk_minimization": 25.0
                 },
-                "num_scenarios": 4
+                "num_scenarios": 4,
+                "deal_blocks": [
+                    {
+                        "deal_name": "North America Theatrical",
+                        "deal_type": "theatrical_distribution",
+                        "counterparty_name": "Major Studios Inc.",
+                        "amount": 8500000,
+                        "territories": ["United States", "Canada"],
+                        "distribution_fee_pct": 30,
+                        "approval_rights_granted": ["marketing"],
+                        "term_years": 15
+                    }
+                ]
             }
         }
 
@@ -66,6 +84,50 @@ class ScenarioMetrics(BaseModel):
     debt_to_equity_ratio: Optional[Decimal]
 
 
+class StrategicMetrics(BaseModel):
+    """Strategic ownership & control metrics from Engine 4 (OwnershipControlScorer)."""
+    ownership_score: Optional[Decimal] = Field(
+        default=None,
+        description="Ownership dimension score (0-100)"
+    )
+    control_score: Optional[Decimal] = Field(
+        default=None,
+        description="Control dimension score (0-100)"
+    )
+    optionality_score: Optional[Decimal] = Field(
+        default=None,
+        description="Optionality dimension score (0-100)"
+    )
+    friction_score: Optional[Decimal] = Field(
+        default=None,
+        description="Friction dimension score (0-100, lower is better)"
+    )
+    strategic_composite_score: Optional[Decimal] = Field(
+        default=None,
+        description="Weighted composite of all dimensions (0-100)"
+    )
+    ownership_control_impacts: List[Dict] = Field(
+        default_factory=list,
+        description="Detailed impacts from each deal on each dimension"
+    )
+    strategic_recommendations: List[str] = Field(
+        default_factory=list,
+        description="Actionable recommendations for improving strategic position"
+    )
+    has_mfn_risk: bool = Field(
+        default=False,
+        description="True if any deal has MFN clause creating risk"
+    )
+    has_control_concentration: bool = Field(
+        default=False,
+        description="True if control is concentrated with single counterparty"
+    )
+    has_reversion_opportunity: bool = Field(
+        default=False,
+        description="True if rights reversion opportunity exists"
+    )
+
+
 class Scenario(BaseModel):
     """Complete scenario with structure and metrics."""
     scenario_id: str
@@ -73,6 +135,10 @@ class Scenario(BaseModel):
     optimization_score: Decimal
     capital_structure: CapitalStructure
     metrics: ScenarioMetrics
+    strategic_metrics: Optional[StrategicMetrics] = Field(
+        default=None,
+        description="Strategic ownership/control metrics (populated when deal_blocks provided)"
+    )
     strengths: List[str]
     weaknesses: List[str]
     validation_passed: bool

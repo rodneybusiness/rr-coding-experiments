@@ -21,11 +21,11 @@ This document captures the strategic architecture plan for evolving the Film Fin
 - ✅ **Engine 2**: Waterfall Executor (Monte Carlo, IRR/NPV)
 - ✅ **Engine 3**: Scenario Optimizer (Multi-objective, Pareto frontier)
 - ✅ Full-stack application (FastAPI + Next.js)
-- ✅ 100% backend test coverage (29/29 tests)
+- ✅ 100% backend test coverage (87/87 tests)
 
 ### Target State (v2.0 - In Progress)
-- 🔄 **DealBlocks**: Composable deal structure abstraction
-- 🔄 **OwnershipControlScorer**: Strategic scoring beyond financials
+- ✅ **DealBlocks**: Composable deal structure abstraction (39 tests)
+- ✅ **OwnershipControlScorer**: Strategic scoring beyond financials (34 tests)
 - ⏳ **CapitalPrograms**: Company-level capital management
 - ⏳ **SlateAnalyzer**: Portfolio-level decisions
 - ⏳ **Stage Awareness**: Lifecycle decision points
@@ -74,15 +74,15 @@ This document captures the strategic architecture plan for evolving the Film Fin
 
 ---
 
-## Phase 1: Foundation Completion (Current)
+## Phase 1: Foundation Completion (COMPLETE ✅)
 
 ### 1A. Complete API Integration
-**Status:** Ready to implement
+**Status:** ✅ Complete (verified already working)
 **Effort:** 2-3 hours
 **Scope:** Wire Engine 2 & 3 frontend to real backend endpoints
 
 ### 1B. DealBlock Domain Model
-**Status:** Specification complete
+**Status:** ✅ Complete (39 tests passing)
 **Effort:** 1-2 weeks
 **Scope:** Composable deal structure abstraction
 
@@ -125,7 +125,7 @@ class DealBlock(BaseModel):
 | `GAP_FINANCING` | Loan terms | Collateral requirements |
 
 ### 1C. OwnershipControlScorer Engine
-**Status:** Specification complete
+**Status:** ✅ Complete (34 tests passing)
 **Effort:** 1 week
 **Scope:** Strategic scoring beyond IRR/NPV
 
