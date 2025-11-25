@@ -14,6 +14,10 @@ from .revenue_projector import (
     DistributionWindow,
     MarketRevenue,
     RevenueProjection,
+    # S-curve investment modeling
+    s_curve,
+    s_curve_distribution,
+    InvestmentDrawdown,
 )
 from .waterfall_executor import (
     WaterfallExecutor,
@@ -44,6 +48,10 @@ __all__ = [
     "DistributionWindow",
     "MarketRevenue",
     "RevenueProjection",
+    # S-curve investment modeling
+    "s_curve",
+    "s_curve_distribution",
+    "InvestmentDrawdown",
     # Waterfall execution
     "WaterfallExecutor",
     "QuarterlyWaterfallExecution",
