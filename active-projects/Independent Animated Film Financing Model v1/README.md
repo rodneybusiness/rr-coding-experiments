@@ -68,10 +68,16 @@ The central question this tool answers:
 - ✅ Production-ready Docker deployment
 
 ### Phase 5: Testing & Validation ✅ COMPLETED
-- ✅ 60+ Integration tests passing
+- ✅ 124 backend tests passing (87 core + 37 integration)
 - ✅ Expert code review (8.2/10 quality score)
 - ✅ TypeScript compilation: 0 errors
 - ✅ Production readiness verified
+
+### Phase 6: Strategic Deal Modeling ✅ COMPLETED
+- ✅ DealBlock model with 6 deal types (39 tests)
+- ✅ OwnershipControlScorer engine with 4 dimensions (34 tests)
+- ✅ Integration with ScenarioEvaluator (70% financial + 30% strategic blending)
+- ✅ API endpoints: `/deals`, `/ownership`
 
 ## Getting Started
 
@@ -151,6 +157,12 @@ npm run dev
    - Pareto frontier analysis
    - Interactive scenario comparison
 
+4. **Ownership & Control Scorer (Engine 4)**
+   - DealBlock model for composable deal structures
+   - 4-dimension scoring: Ownership, Control, Optionality, Friction
+   - Strategic risk flags (MFN, control concentration, reversion)
+   - Integrated into ScenarioEvaluator for blended financial + strategic analysis
+
 ### 🚀 Production Ready
 
 - ✅ Full-stack application (FastAPI + Next.js)
@@ -159,7 +171,7 @@ npm run dev
 - ✅ Redis caching for performance
 - ✅ Comprehensive error handling
 - ✅ TypeScript type safety (0 errors)
-- ✅ 60+ integration tests
+- ✅ 124 backend tests passing
 - ✅ Expert code review validated
 
 ## Contributing
@@ -171,5 +183,10 @@ This is a research and development project. For questions or collaboration inqui
 TBD
 
 ## Version
+
+v1.1.0 - Strategic Deal Modeling (November 2025)
+- Added DealBlock model and OwnershipControlScorer engine
+- Integrated strategic scoring into ScenarioEvaluator
+- 124 tests passing
 
 v1.0.0 - Initial Implementation (October 2025)
