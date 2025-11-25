@@ -28,6 +28,11 @@ from .monetization_comparator import (
     MonetizationScenario,
     MonetizationComparison,
 )
+from .labor_cap_enforcer import (
+    LaborCapEnforcer,
+    LaborAdjustment,
+    LaborEnforcementResult,
+)
 
 __all__ = [
     # Core components
@@ -46,6 +51,10 @@ __all__ = [
     "MonetizationComparator",
     "MonetizationScenario",
     "MonetizationComparison",
+    # Labor cap enforcement
+    "LaborCapEnforcer",
+    "LaborAdjustment",
+    "LaborEnforcementResult",
 ]
 
 __version__ = "1.0.0"

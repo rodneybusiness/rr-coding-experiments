@@ -100,17 +100,54 @@ async def health_check():
     Returns:
         Service health status with component checks
     """
-    # TODO: Add database ping
-    # TODO: Add Redis ping
-    # TODO: Add Celery worker check
+    from datetime import datetime
+    import time
+
+    checks = {}
+    overall_status = "healthy"
+    start_time = time.time()
+
+    # Database check
+    try:
+        from app.db.session import test_connection
+        db_ok = test_connection()
+        checks["database"] = "ok" if db_ok else "degraded"
+        if not db_ok:
+            overall_status = "degraded"
+    except Exception as e:
+        checks["database"] = f"error: {str(e)[:50]}"
+        overall_status = "unhealthy"
+
+    # Policy Registry check (Engine 1 core service)
+    try:
+        from app.core.path_setup import BACKEND_ROOT
+        from engines.incentive_calculator.policy_loader import PolicyLoader
+        policies_dir = BACKEND_ROOT / "data" / "policies"
+        loader = PolicyLoader(policies_dir)
+        policy_ids = loader.get_policy_ids()
+        checks["policy_registry"] = f"ok ({len(policy_ids)} policies)"
+    except Exception as e:
+        checks["policy_registry"] = f"error: {str(e)[:50]}"
+        overall_status = "degraded"
+
+    # Capital Program Manager check (Engine 5)
+    try:
+        from engines.capital_programs import CapitalProgramManager
+        # Just verify import works - manager is stateless
+        checks["capital_program_manager"] = "ok"
+    except Exception as e:
+        checks["capital_program_manager"] = f"error: {str(e)[:50]}"
+
+    # Calculate response time
+    response_time_ms = round((time.time() - start_time) * 1000, 2)
 
     return {
-        "status": "healthy",
-        "checks": {
-            "database": "ok",  # TODO: actual check
-            "redis": "ok",     # TODO: actual check
-            "celery": "ok"     # TODO: actual check
-        }
+        "status": overall_status,
+        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "response_time_ms": response_time_ms,
+        "version": settings.VERSION,
+        "environment": settings.ENVIRONMENT,
+        "checks": checks
     }
 
 

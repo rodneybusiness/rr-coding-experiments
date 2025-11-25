@@ -30,13 +30,7 @@ from app.schemas.capital_programs import (
     BatchAllocationResponse,
 )
 
-# Import models and engine
-import sys
-from pathlib import Path
-
-backend_root = Path(__file__).parent.parent.parent.parent.parent
-sys.path.insert(0, str(backend_root))
-
+# Import models and engine (path setup done in api.py)
 from models.capital_program import (
     CapitalProgram,
     CapitalSource,
@@ -424,6 +418,47 @@ async def list_sources(program_id: str):
         )
 
     return [_source_to_response(s) for s in program.sources]
+
+
+@router.delete(
+    "/{program_id}/sources/{source_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Remove Capital Source",
+    description="Remove a capital source from a program",
+)
+async def remove_source(program_id: str, source_id: str):
+    """Remove a capital source from a program"""
+    program = _manager.get_program(program_id)
+    if not program:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Program {program_id} not found",
+        )
+
+    # Find the source to remove
+    source_to_remove = None
+    for i, source in enumerate(program.sources):
+        if source.source_id == source_id:
+            source_to_remove = i
+            break
+
+    if source_to_remove is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Source {source_id} not found in program {program_id}",
+        )
+
+    # Check if source has any active deployments (drawn > 0)
+    if program.sources[source_to_remove].drawn_amount > 0:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Cannot remove source {source_id} - it has active deployments. "
+                   f"Drawn amount: {program.sources[source_to_remove].drawn_amount}",
+        )
+
+    # Remove the source
+    program.sources.pop(source_to_remove)
+    return None
 
 
 # === ALLOCATION ENDPOINTS ===

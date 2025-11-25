@@ -6,12 +6,186 @@ timing for theatrical, PVOD, EST, SVOD, AVOD, and TV windows.
 """
 
 import logging
+import math
 from copy import deepcopy
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Tuple
 from decimal import Decimal
 
 logger = logging.getLogger(__name__)
+
+
+def s_curve(t: float, k: float = 10, midpoint: float = 0.5) -> float:
+    """
+    Calculate S-curve (logistic function) value.
+
+    The S-curve is useful for modeling realistic cash flow patterns:
+    - Investment draw-down: slow in pre-production, rapid in production, tapering in post
+    - Revenue accumulation: slow start, rapid growth during release, long tail
+
+    Args:
+        t: Time position (0 to 1, where 0=start, 1=end)
+        k: Steepness of curve (higher = sharper transition)
+        midpoint: Where the inflection point occurs (0.5 = middle)
+
+    Returns:
+        Value between 0 and 1 representing cumulative progress
+    """
+    return 1 / (1 + math.exp(-k * (t - midpoint)))
+
+
+def s_curve_distribution(
+    total: Decimal,
+    periods: int,
+    steepness: float = 8,
+    midpoint: float = 0.5
+) -> List[Decimal]:
+    """
+    Distribute a total amount across periods using S-curve timing.
+
+    This creates a realistic distribution where:
+    - Early periods: slow ramp-up
+    - Middle periods: rapid accumulation
+    - Late periods: gradual tapering
+
+    Args:
+        total: Total amount to distribute
+        periods: Number of periods
+        steepness: S-curve steepness (higher = sharper transition)
+        midpoint: Where the steepest part occurs (0.0-1.0)
+
+    Returns:
+        List of amounts per period
+
+    Example:
+        >>> s_curve_distribution(Decimal("1000000"), 12, steepness=8)
+        [Decimal("12345"), Decimal("23456"), ...]  # S-curve shaped
+    """
+    if periods <= 0:
+        return []
+
+    if periods == 1:
+        return [total]
+
+    # Calculate cumulative S-curve values at each period boundary
+    cumulative_values = []
+    for i in range(periods + 1):
+        t = i / periods
+        cumulative_values.append(s_curve(t, k=steepness, midpoint=midpoint))
+
+    # Normalize so that final cumulative = 1.0
+    min_val = cumulative_values[0]
+    max_val = cumulative_values[-1]
+    scale = max_val - min_val
+
+    if scale == 0:
+        # Fallback to even distribution
+        per_period = total / Decimal(str(periods))
+        return [per_period] * periods
+
+    normalized = [(v - min_val) / scale for v in cumulative_values]
+
+    # Calculate per-period amounts as differences in cumulative values
+    period_amounts: List[Decimal] = []
+    for i in range(periods):
+        fraction = Decimal(str(normalized[i + 1] - normalized[i]))
+        amount = total * fraction
+        period_amounts.append(amount)
+
+    # Ensure exact total (handle rounding)
+    distributed = sum(period_amounts)
+    remainder = total - distributed
+    if remainder != 0 and period_amounts:
+        # Add remainder to the peak period (around midpoint)
+        peak_idx = int(midpoint * periods)
+        peak_idx = max(0, min(peak_idx, len(period_amounts) - 1))
+        period_amounts[peak_idx] += remainder
+
+    return period_amounts
+
+
+@dataclass
+class InvestmentDrawdown:
+    """
+    Models how investment capital is drawn down over time.
+
+    Film investments typically follow an S-curve pattern:
+    - Pre-production: Slow initial draws (development, script, packaging)
+    - Production: Rapid draws (crew, talent, facilities, equipment)
+    - Post-production: Tapering draws (editing, VFX, sound, marketing)
+
+    Attributes:
+        total_investment: Total investment amount
+        draw_periods: Number of periods (months or quarters)
+        quarterly_draws: List of draw amounts per period
+        cumulative_draws: List of cumulative amounts drawn
+        steepness: S-curve steepness parameter used
+        midpoint: S-curve midpoint parameter used
+    """
+    total_investment: Decimal
+    draw_periods: int
+    quarterly_draws: List[Decimal]
+    cumulative_draws: List[Decimal]
+    steepness: float = 8.0
+    midpoint: float = 0.5
+
+    @classmethod
+    def create(
+        cls,
+        total_investment: Decimal,
+        draw_periods: int = 12,
+        steepness: float = 8.0,
+        midpoint: float = 0.4
+    ) -> "InvestmentDrawdown":
+        """
+        Create an investment drawdown schedule using S-curve timing.
+
+        Args:
+            total_investment: Total investment to be drawn
+            draw_periods: Number of periods (default 12 for monthly)
+            steepness: How sharp the S-curve is (default 8.0)
+            midpoint: Where peak draw rate occurs (default 0.4 = front-loaded for production)
+
+        Returns:
+            InvestmentDrawdown with computed schedule
+        """
+        if not isinstance(total_investment, Decimal):
+            total_investment = Decimal(str(total_investment))
+
+        draws = s_curve_distribution(total_investment, draw_periods, steepness, midpoint)
+
+        # Compute cumulative
+        cumulative = []
+        running_total = Decimal("0")
+        for draw in draws:
+            running_total += draw
+            cumulative.append(running_total)
+
+        return cls(
+            total_investment=total_investment,
+            draw_periods=draw_periods,
+            quarterly_draws=draws,
+            cumulative_draws=cumulative,
+            steepness=steepness,
+            midpoint=midpoint
+        )
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary for serialization."""
+        return {
+            "total_investment": str(self.total_investment),
+            "draw_periods": self.draw_periods,
+            "quarterly_draws": [str(d) for d in self.quarterly_draws],
+            "cumulative_draws": [str(c) for c in self.cumulative_draws],
+            "steepness": self.steepness,
+            "midpoint": self.midpoint
+        }
+
+    def get_draw_percentage(self, period: int) -> Decimal:
+        """Get percentage of total drawn by end of period."""
+        if period < 0 or period >= len(self.cumulative_draws):
+            return Decimal("100") if period >= len(self.cumulative_draws) else Decimal("0")
+        return (self.cumulative_draws[period] / self.total_investment) * Decimal("100")
 
 
 @dataclass
@@ -389,6 +563,49 @@ class RevenueProjector:
                 weight = Decimal(str(i + 1)) / Decimal(str(total_weight))
                 quarter = window.start_quarter + i
                 quarterly_distribution[quarter] = total_revenue * weight
+
+        elif window.timing_profile == "s_curve":
+            # S-curve: slow start, rapid growth, gradual tapering
+            # Ideal for modeling realistic revenue accumulation patterns
+            steepness = window.metadata.get("s_curve_steepness", 8.0)
+            midpoint = window.metadata.get("s_curve_midpoint", 0.5)
+
+            amounts = s_curve_distribution(
+                total_revenue,
+                window.duration_quarters,
+                steepness=steepness,
+                midpoint=midpoint
+            )
+
+            for i, amount in enumerate(amounts):
+                quarter = window.start_quarter + i
+                quarterly_distribution[quarter] = amount
+
+        elif window.timing_profile == "s_curve_front":
+            # S-curve front-loaded: early peak, good for theatrical with strong opening
+            amounts = s_curve_distribution(
+                total_revenue,
+                window.duration_quarters,
+                steepness=10.0,
+                midpoint=0.3  # Peak earlier
+            )
+
+            for i, amount in enumerate(amounts):
+                quarter = window.start_quarter + i
+                quarterly_distribution[quarter] = amount
+
+        elif window.timing_profile == "s_curve_back":
+            # S-curve back-loaded: late peak, good for word-of-mouth driven releases
+            amounts = s_curve_distribution(
+                total_revenue,
+                window.duration_quarters,
+                steepness=10.0,
+                midpoint=0.7  # Peak later
+            )
+
+            for i, amount in enumerate(amounts):
+                quarter = window.start_quarter + i
+                quarterly_distribution[quarter] = amount
 
         return quarterly_distribution
 

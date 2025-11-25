@@ -319,6 +319,8 @@ class CapitalProgramManager:
             equity_percentage=request.equity_percentage,
             recoupment_priority=request.recoupment_priority,
             backend_participation_pct=request.backend_participation_pct,
+            is_development=request.is_development,
+            is_first_time_director=request.is_first_time_director,
             status=AllocationStatus.APPROVED,
         )
 
@@ -683,6 +685,53 @@ class CapitalProgramManager:
         total_profit = program.total_profit
         portfolio_multiple = program.portfolio_multiple
 
+        # Calculate development exposure and first-time director percentages
+        development_exposure = Decimal("0")
+        first_time_director_exposure = Decimal("0")
+
+        for d in deployments:
+            if d.is_development:
+                development_exposure += d.allocated_amount
+            if d.is_first_time_director:
+                first_time_director_exposure += d.allocated_amount
+
+        development_exposure_pct = (
+            (development_exposure / total_allocated * Decimal("100"))
+            if total_allocated > 0 else Decimal("0")
+        )
+        first_time_director_pct = (
+            (first_time_director_exposure / total_allocated * Decimal("100"))
+            if total_allocated > 0 else Decimal("0")
+        )
+
+        # Calculate weighted IRR (simplified approximation based on multiple and timing)
+        # Actual IRR would require cash flow timing for each deployment
+        weighted_irr = None
+        if portfolio_multiple and total_funded > 0:
+            # Calculate average years since funding for funded deployments
+            total_years = Decimal("0")
+            funded_count = 0
+            for d in deployments:
+                if d.funding_date and d.funded_amount > 0:
+                    days_since_funding = (date.today() - d.funding_date).days
+                    years = Decimal(str(days_since_funding)) / Decimal("365")
+                    total_years += years * d.funded_amount
+                    funded_count += 1
+
+            if funded_count > 0 and total_years > 0:
+                avg_years = total_years / total_funded
+                if avg_years > 0:
+                    # Simple IRR approximation: IRR ≈ (multiple^(1/years) - 1) * 100
+                    try:
+                        import math
+                        multiple_float = float(portfolio_multiple)
+                        years_float = float(avg_years)
+                        if multiple_float > 0 and years_float > 0:
+                            irr_approx = (math.pow(multiple_float, 1 / years_float) - 1) * 100
+                            weighted_irr = Decimal(str(round(irr_approx, 2)))
+                    except (ValueError, OverflowError):
+                        pass
+
         # Constraint compliance
         hard_satisfied = True
         soft_met = 0
@@ -721,9 +770,9 @@ class CapitalProgramManager:
             total_recouped=total_recouped,
             total_profit=total_profit,
             portfolio_multiple=portfolio_multiple,
-            weighted_irr=None,  # Would require more complex calculation
-            development_exposure_pct=Decimal("0"),  # Would need per-deployment tracking
-            first_time_director_pct=Decimal("0"),  # Would need per-deployment tracking
+            weighted_irr=weighted_irr,
+            development_exposure_pct=development_exposure_pct,
+            first_time_director_pct=first_time_director_pct,
             hard_constraints_satisfied=hard_satisfied,
             soft_constraints_met=soft_met,
             soft_constraints_total=soft_total,

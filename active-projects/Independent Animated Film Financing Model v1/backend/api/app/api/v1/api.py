@@ -5,6 +5,10 @@ Combines all endpoint routers for API v1.
 """
 
 from fastapi import APIRouter
+
+# Import path setup BEFORE any endpoints to ensure backend packages are accessible
+import app.core.path_setup  # noqa: F401
+
 from app.api.v1.endpoints import (
     incentives,
     waterfall,
