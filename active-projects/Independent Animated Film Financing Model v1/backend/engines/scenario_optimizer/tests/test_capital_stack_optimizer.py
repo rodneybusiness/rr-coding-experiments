@@ -25,6 +25,13 @@ from models.waterfall import (
 )
 
 
+def create_minimal_capital_stack(name: str = "test", budget: Decimal = Decimal("30000000")) -> CapitalStack:
+    """Create a minimal valid capital stack with one equity component for testing."""
+    equity = Equity(amount=budget, ownership_percentage=Decimal("100.0"))
+    component = CapitalComponent(instrument=equity, position=1)
+    return CapitalStack(stack_name=name, project_budget=budget, components=[component])
+
+
 class TestCapitalStackOptimizer:
     """Test CapitalStackOptimizer class."""
 
@@ -586,11 +593,7 @@ class TestOptimizationResult:
 
     def test_optimization_result_creation(self):
         """Test creating optimization result."""
-        stack = CapitalStack(
-            stack_name="test",
-            project_budget=Decimal("30000000"),
-            components=[]
-        )
+        stack = create_minimal_capital_stack()
 
         result = OptimizationResult(
             objective_value=Decimal("75.5"),
@@ -608,11 +611,7 @@ class TestOptimizationResult:
 
     def test_optimization_result_with_metadata(self):
         """Test optimization result with metadata."""
-        stack = CapitalStack(
-            stack_name="test",
-            project_budget=Decimal("30000000"),
-            components=[]
-        )
+        stack = create_minimal_capital_stack()
 
         result = OptimizationResult(
             objective_value=Decimal("80.0"),

@@ -179,11 +179,14 @@ class ScenarioGenerator:
             amount = (allocations["tax_incentives"] / Decimal("100")) * project_budget
             terms = template.typical_terms.get("tax_incentives", {})
 
+            # FIX: credit_rate is stored as percentage (30.0 = 30%), convert to decimal for calculation
+            credit_rate_pct = Decimal(str(terms.get("credit_rate", 30.0)))
+            credit_rate_decimal = credit_rate_pct / Decimal("100")  # 30.0 -> 0.30
             incentive = TaxIncentive(
                 amount=amount,
                 jurisdiction=terms.get("jurisdiction", "Multi-Jurisdiction"),
-                qualified_spend=amount / Decimal(str(terms.get("credit_rate", 0.30))),
-                credit_rate=Decimal(str(terms.get("credit_rate", 30.0))),
+                qualified_spend=amount / credit_rate_decimal,  # $7.5M / 0.30 = $25M
+                credit_rate=credit_rate_pct,
                 timing_months=int(terms.get("timing_months", 18))
             )
             components.append(CapitalComponent(instrument=incentive, position=position))
