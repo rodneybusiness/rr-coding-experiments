@@ -5,7 +5,7 @@ Combines all endpoint routers for API v1.
 """
 
 from fastapi import APIRouter
-from app.api.v1.endpoints import incentives, waterfall, scenarios, deals, ownership
+from app.api.v1.endpoints import incentives, waterfall, scenarios, deals, ownership, capital_programs
 
 api_router = APIRouter()
 
@@ -38,4 +38,10 @@ api_router.include_router(
     ownership.router,
     prefix="/ownership",
     tags=["Ownership & Control Scoring"]
+)
+
+api_router.include_router(
+    capital_programs.router,
+    prefix="/capital-programs",
+    tags=["Engine 5: Capital Programs"]
 )

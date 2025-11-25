@@ -48,6 +48,19 @@ from .deal_block import (
     create_streamer_original_template,
     create_gap_financing_template,
 )
+from .capital_program import (
+    CapitalProgram,
+    CapitalSource,
+    CapitalDeployment,
+    CapitalProgramConstraints,
+    ProgramType,
+    ProgramStatus,
+    AllocationStatus,
+    create_internal_pool,
+    create_external_fund,
+    create_output_deal,
+    create_spv,
+)
 
 __all__ = [
     # Financial Instruments
@@ -87,4 +100,16 @@ __all__ = [
     "create_streamer_license_template",
     "create_streamer_original_template",
     "create_gap_financing_template",
+    # Capital Programs
+    "CapitalProgram",
+    "CapitalSource",
+    "CapitalDeployment",
+    "CapitalProgramConstraints",
+    "ProgramType",
+    "ProgramStatus",
+    "AllocationStatus",
+    "create_internal_pool",
+    "create_external_fund",
+    "create_output_deal",
+    "create_spv",
 ]
