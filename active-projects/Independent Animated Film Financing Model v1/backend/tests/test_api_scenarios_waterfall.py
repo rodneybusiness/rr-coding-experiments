@@ -39,7 +39,6 @@ class TestValidateConstraintsEndpoint:
         assert isinstance(data["hard_violations"], list)
         assert isinstance(data["soft_violations"], list)
 
-    @pytest.mark.xfail(reason="Empty capital structure causes implementation error - needs fix")
     def test_validate_constraints_empty_structure(self, client):
         """Test validation with empty capital structure"""
         payload = {
@@ -690,7 +689,6 @@ class TestAnalyzeTradeoffsEndpoint:
         assert len(data["trade_off_summary"]) > 0
 
 
-@pytest.mark.xfail(reason="Sensitivity analysis endpoint returns 500 errors - implementation needs debugging")
 class TestSensitivityAnalysisEndpoint:
     """Tests for /api/v1/waterfall/sensitivity-analysis endpoint"""
 
@@ -1007,7 +1005,6 @@ class TestEndpointIntegration:
             assert tradeoff_response.status_code == 200
             assert "pareto_frontiers" in tradeoff_response.json()
 
-    @pytest.mark.xfail(reason="Sensitivity analysis endpoint returns 500 errors - implementation needs debugging")
     def test_sensitivity_analysis_multiple_projects(self, client):
         """Test sensitivity analysis for multiple projects"""
         project_configs = [

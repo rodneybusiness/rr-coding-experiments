@@ -168,34 +168,42 @@ def _create_sample_capital_stack(project_id: str) -> CapitalStack:
         GapFinancing,
         MezzanineDebt,
         Equity,
-        InstrumentType,
-        RecoupmentPriority,
+    )
+    from models.waterfall import RecoupmentPriority
+    from models.capital_stack import CapitalComponent
+
+    # Create financial instruments
+    senior_debt = SeniorDebt(
+        amount=Decimal("12000000"),
+        interest_rate=Decimal("8.0"),
+        term_months=36,
+        recoupment_priority=RecoupmentPriority.SENIOR_DEBT,
+    )
+    gap_financing = GapFinancing(
+        amount=Decimal("4500000"),
+        interest_rate=Decimal("12.0"),
+        term_months=24,
+        recoupment_priority=RecoupmentPriority.SENIOR_DEBT,
+    )
+    mezzanine_debt = MezzanineDebt(
+        amount=Decimal("3000000"),
+        interest_rate=Decimal("15.0"),
+        term_months=24,
+        recoupment_priority=RecoupmentPriority.MEZZANINE_DEBT,  # Fixed: was MEZZANINE
+    )
+    equity = Equity(
+        amount=Decimal("7500000"),
+        ownership_percentage=Decimal("100.0"),  # Required field
+        preferred_return=Decimal("12.0"),
+        recoupment_priority=RecoupmentPriority.EQUITY,
     )
 
+    # Wrap in CapitalComponents with position
     components = [
-        SeniorDebt(
-            amount=Decimal("12000000"),
-            interest_rate=Decimal("8.0"),
-            term_months=36,
-            recoupment_priority=RecoupmentPriority.SENIOR_DEBT,
-        ),
-        GapFinancing(
-            amount=Decimal("4500000"),
-            interest_rate=Decimal("12.0"),
-            term_months=24,
-            recoupment_priority=RecoupmentPriority.SENIOR_DEBT,
-        ),
-        MezzanineDebt(
-            amount=Decimal("3000000"),
-            interest_rate=Decimal("15.0"),
-            term_months=24,
-            recoupment_priority=RecoupmentPriority.MEZZANINE,
-        ),
-        Equity(
-            amount=Decimal("7500000"),
-            preferred_return=Decimal("12.0"),
-            recoupment_priority=RecoupmentPriority.EQUITY,
-        ),
+        CapitalComponent(instrument=senior_debt, position=1),
+        CapitalComponent(instrument=gap_financing, position=2),
+        CapitalComponent(instrument=mezzanine_debt, position=3),
+        CapitalComponent(instrument=equity, position=4),
     ]
 
     return CapitalStack(
@@ -205,73 +213,68 @@ def _create_sample_capital_stack(project_id: str) -> CapitalStack:
 
 def _create_sample_waterfall(project_id: str, waterfall_id: str) -> WaterfallStructure:
     """Create a sample waterfall structure for testing."""
-    from models.waterfall import WaterfallNode, WaterfallStructure, PayeeType
+    from models.waterfall import WaterfallNode, WaterfallStructure, PayeeType, RecoupmentPriority, RecoupmentBasis
 
     nodes = [
         # Senior Debt
         WaterfallNode(
             node_id="senior_debt",
             description="Senior Debt Recoupment",
-            payee_type=PayeeType.FINANCIER,
-            payee_name="Senior Debt",
-            recoupment_basis="senior_debt",
+            priority=RecoupmentPriority.SENIOR_DEBT,
+            payee_type=PayeeType.LENDER,
+            payee_name="Senior Lender",
+            recoupment_basis=RecoupmentBasis.REMAINING_POOL,
             fixed_amount=None,
             percentage_of_receipts=Decimal("100"),
             capped_at=None,
-            waterfall_id=waterfall_id,
-            project_id=project_id,
         ),
         # Gap Financing
         WaterfallNode(
             node_id="gap_financing",
             description="Gap Financing Recoupment",
-            payee_type=PayeeType.FINANCIER,
-            payee_name="Gap Financing",
-            recoupment_basis="gap_debt",
+            priority=RecoupmentPriority.MEZZANINE_DEBT,
+            payee_type=PayeeType.LENDER,
+            payee_name="Gap Lender",
+            recoupment_basis=RecoupmentBasis.REMAINING_POOL,
             fixed_amount=None,
             percentage_of_receipts=Decimal("100"),
             capped_at=None,
-            waterfall_id=waterfall_id,
-            project_id=project_id,
         ),
         # Mezzanine
         WaterfallNode(
             node_id="mezzanine_debt",
             description="Mezzanine Debt Recoupment",
-            payee_type=PayeeType.FINANCIER,
-            payee_name="Mezzanine Debt",
-            recoupment_basis="mezzanine_debt",
+            priority=RecoupmentPriority.MEZZANINE_DEBT,
+            payee_type=PayeeType.LENDER,
+            payee_name="Mezzanine Lender",
+            recoupment_basis=RecoupmentBasis.REMAINING_POOL,
             fixed_amount=None,
             percentage_of_receipts=Decimal("100"),
             capped_at=None,
-            waterfall_id=waterfall_id,
-            project_id=project_id,
         ),
         # Equity
         WaterfallNode(
             node_id="equity",
             description="Equity Recoupment",
-            payee_type=PayeeType.FINANCIER,
+            priority=RecoupmentPriority.EQUITY_RECOUPMENT,
+            payee_type=PayeeType.INVESTOR,
             payee_name="Equity Investor",
-            recoupment_basis="equity",
+            recoupment_basis=RecoupmentBasis.REMAINING_POOL,
             fixed_amount=None,
             percentage_of_receipts=Decimal("100"),
             capped_at=None,
-            waterfall_id=waterfall_id,
-            project_id=project_id,
         ),
         # Backend/Profit participation
         WaterfallNode(
             node_id="backend",
             description="Backend Participation",
+            priority=RecoupmentPriority.BACKEND_PARTICIPATION,
             payee_type=PayeeType.TALENT,
             payee_name="Producer",
-            recoupment_basis=None,
+            recoupment_basis=RecoupmentBasis.REMAINING_POOL,
             fixed_amount=None,
             percentage_of_receipts=Decimal("50"),
             capped_at=None,
-            waterfall_id=waterfall_id,
-            project_id=project_id,
         ),
     ]
 
@@ -382,7 +385,7 @@ async def sensitivity_analysis(request: SensitivityAnalysisRequest):
         revenue_projector = RevenueProjector()
 
         # Project base case revenue
-        base_projection = revenue_projector.project_revenue(
+        base_projection = revenue_projector.project(
             total_ultimate_revenue=request.base_total_revenue,
             release_strategy=request.release_strategy,
         )

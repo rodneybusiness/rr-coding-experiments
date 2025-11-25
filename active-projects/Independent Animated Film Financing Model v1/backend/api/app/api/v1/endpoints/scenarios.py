@@ -636,6 +636,25 @@ async def validate_constraints(request: schemas.ValidateConstraintsRequest):
             components.append(CapitalComponent(instrument=inst, position=position))
             position += 1
 
+        # Handle empty capital structure gracefully
+        if not components:
+            # Return validation response indicating empty structure
+            return schemas.ValidateConstraintsResponse(
+                is_valid=False,
+                hard_violations=[
+                    schemas.ConstraintViolationOutput(
+                        constraint_id="EMPTY_STRUCTURE",
+                        constraint_type="budget",
+                        description="Capital structure has no funding components",
+                        severity=Decimal("1.0"),  # Maximum severity (0-1 scale)
+                        details="Total capital is $0, which cannot fund the project budget"
+                    )
+                ],
+                soft_violations=[],
+                total_penalty=Decimal("1000000"),  # Large penalty for empty structure
+                summary="Capital structure is empty - no funding sources provided"
+            )
+
         capital_stack = CapitalStack(
             stack_name="validation_stack",
             project_budget=request.project_budget,

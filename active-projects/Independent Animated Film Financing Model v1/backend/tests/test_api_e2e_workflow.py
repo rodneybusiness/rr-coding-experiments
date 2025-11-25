@@ -66,7 +66,6 @@ class TestProjectsWorkflow:
         # Budget may be serialized as string (Decimal) or number
         assert float(data["project_budget"]) == 30000000
         assert "project_id" in data
-        return data["project_id"]
 
     def test_list_projects(self):
         """Test listing all projects."""
@@ -305,7 +304,6 @@ class TestCapitalProgramsWorkflow:
         data = response.json()
         assert data["program_name"] == "Test Animation Fund"
         assert "program_id" in data
-        return data["program_id"]
 
     def test_list_capital_programs(self):
         """Test listing capital programs."""
