@@ -188,9 +188,10 @@ def drop_all_tables() -> None:
 
 def test_connection() -> bool:
     """Test database connection."""
+    from sqlalchemy import text
     try:
         with sync_engine.connect() as conn:
-            conn.execute("SELECT 1")
+            conn.execute(text("SELECT 1"))
         return True
     except Exception:
         return False
@@ -198,11 +199,12 @@ def test_connection() -> bool:
 
 async def test_async_connection() -> bool:
     """Test async database connection."""
+    from sqlalchemy import text
     if async_engine is None:
         return test_connection()
     try:
         async with async_engine.connect() as conn:
-            await conn.execute("SELECT 1")
+            await conn.execute(text("SELECT 1"))
         return True
     except Exception:
         return False

@@ -7,7 +7,7 @@ control, optionality, and execution friction dimensions.
 
 from decimal import Decimal
 from typing import List, Dict, Any
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, status
 
 from app.schemas.ownership import (
     OwnershipScoreRequest,
@@ -149,7 +149,10 @@ async def score_deals(request: OwnershipScoreRequest) -> OwnershipScoreResponse:
         return _result_to_response(result)
 
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Scoring failed: {str(e)}"
+        )
 
 
 @router.post("/compare", response_model=ScenarioComparisonResponse)
@@ -200,7 +203,10 @@ async def compare_scenarios(request: ScenarioComparisonRequest) -> ScenarioCompa
         )
 
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Comparison failed: {str(e)}"
+        )
 
 
 @router.get("/weights")
