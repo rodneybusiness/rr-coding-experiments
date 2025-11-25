@@ -5,7 +5,7 @@ Manages company-level capital vehicles, deployment to projects,
 portfolio-level constraints, and performance tracking.
 """
 
-from backend.engines.capital_programs.capital_program_manager import (
+from .capital_program_manager import (
     AllocationRequest,
     AllocationResult,
     ConstraintViolation,

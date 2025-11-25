@@ -11,12 +11,12 @@ from typing import Dict, List, Optional
 from decimal import Decimal
 import math
 
-from backend.models.incentive_policy import MonetizationMethod
-from backend.engines.incentive_calculator.calculator import (
+from models.incentive_policy import MonetizationMethod
+from .calculator import (
     IncentiveCalculator,
     JurisdictionSpend,
 )
-from backend.engines.incentive_calculator.policy_registry import PolicyRegistry
+from .policy_registry import PolicyRegistry
 
 
 logger = logging.getLogger(__name__)

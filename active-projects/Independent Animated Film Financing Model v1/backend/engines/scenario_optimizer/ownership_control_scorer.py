@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import List, Dict, Optional, Any
 
-from backend.models.deal_block import DealBlock, DealType, ApprovalRight, RightsWindow
+from models.deal_block import DealBlock, DealType, ApprovalRight, RightsWindow
 
 logger = logging.getLogger(__name__)
 

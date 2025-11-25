@@ -12,7 +12,7 @@ from decimal import Decimal
 from typing import List, Dict, Optional, Any, Tuple
 from datetime import date
 
-from backend.models.capital_program import (
+from models.capital_program import (
     CapitalProgram,
     CapitalSource,
     CapitalDeployment,

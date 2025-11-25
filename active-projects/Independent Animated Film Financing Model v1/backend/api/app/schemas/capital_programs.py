@@ -7,7 +7,7 @@ Pydantic schemas for Capital Program API requests and responses.
 from typing import List, Optional, Dict, Any
 from decimal import Decimal
 from datetime import date
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 
 # === INPUT SCHEMAS ===
@@ -85,8 +85,8 @@ class CapitalProgramInput(BaseModel):
     final_close_date: Optional[date] = None
     notes: Optional[str] = Field(default=None, max_length=5000)
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "program_name": "Animation Fund I",
                 "program_type": "external_fund",
@@ -98,6 +98,7 @@ class CapitalProgramInput(BaseModel):
                 "vintage_year": 2024,
             }
         }
+    )
 
 
 class AllocationRequestInput(BaseModel):
@@ -120,8 +121,8 @@ class AllocationRequestInput(BaseModel):
 
     source_id: Optional[str] = None
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "project_id": "PROJ-001",
                 "project_name": "Sky Warriors",
@@ -132,6 +133,7 @@ class AllocationRequestInput(BaseModel):
                 "equity_percentage": "16.67",
             }
         }
+    )
 
 
 class FundingRequest(BaseModel):

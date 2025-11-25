@@ -6,7 +6,7 @@ import pytest
 from decimal import Decimal
 from datetime import date
 
-from backend.models.financial_instruments import (
+from models.financial_instruments import (
     Equity,
     SeniorDebt,
     GapDebt,
@@ -15,7 +15,7 @@ from backend.models.financial_instruments import (
     InstrumentType,
     RecoupmentPriority
 )
-from backend.models.project_profile import (
+from models.project_profile import (
     ProjectProfile,
     ProjectType,
     AnimationTechnique,
@@ -24,15 +24,15 @@ from backend.models.project_profile import (
     StrategicPathway,
     ProductionJurisdiction
 )
-from backend.models.incentive_policy import (
+from models.incentive_policy import (
     IncentivePolicy,
     IncentiveType,
     MonetizationMethod,
     QPEDefinition,
     QPECategory
 )
-from backend.models.capital_stack import CapitalStack, CapitalComponent
-from backend.models.waterfall import WaterfallStructure, WaterfallNode, PayeeType, RecoupmentBasis
+from models.capital_stack import CapitalStack, CapitalComponent
+from models.waterfall import WaterfallStructure, WaterfallNode, PayeeType, RecoupmentBasis
 
 
 class TestFinancialInstruments:

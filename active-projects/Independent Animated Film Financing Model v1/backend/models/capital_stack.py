@@ -7,7 +7,7 @@ to form the complete capital stack for a project.
 
 from decimal import Decimal
 from typing import List, Optional, Dict
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 
 from .financial_instruments import FinancialInstrument, InstrumentType
 
@@ -139,8 +139,8 @@ class CapitalStack(BaseModel):
             "equity_percentage": (self.total_equity() / self.total_capital_raised() * 100) if self.total_capital_raised() > 0 else Decimal("0"),
         }
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "stack_id": "STACK-001",
                 "project_id": "PROJ-001",
@@ -161,3 +161,4 @@ class CapitalStack(BaseModel):
                 "financing_gap": "2000000"
             }
         }
+    )

@@ -15,41 +15,15 @@ from sqlalchemy import (
     String, Text, Numeric, Integer, Boolean, Date, DateTime,
     Enum, ForeignKey, JSON, Index, CheckConstraint, UniqueConstraint
 )
-from sqlalchemy.orm import (
-    DeclarativeBase, Mapped, mapped_column, relationship
-)
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+# Import Base, mixins, and GUID type from base.py (single source of truth)
+from app.db.base import Base, UUIDMixin, TimestampMixin, GUID
 
-# === Base Classes ===
-
-class Base(DeclarativeBase):
-    """Base class for all models"""
-    pass
-
-
-class UUIDMixin:
-    """Mixin for UUID primary key"""
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),
-        primary_key=True,
-        default=uuid.uuid4
-    )
-
-
-class TimestampMixin:
-    """Mixin for created/updated timestamps"""
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime,
-        default=datetime.utcnow,
-        nullable=False
-    )
-    updated_at: Mapped[datetime] = mapped_column(
-        DateTime,
-        default=datetime.utcnow,
-        onupdate=datetime.utcnow,
-        nullable=False
-    )
+__all__ = [
+    'Base', 'UUIDMixin', 'TimestampMixin', 'GUID',
+    # Model classes are exported by name in the module
+]
 
 
 # === Enums ===
@@ -181,7 +155,7 @@ class CapitalSourceModel(Base, UUIDMixin, TimestampMixin):
 
     source_id: Mapped[str] = mapped_column(String(50), unique=True, index=True, nullable=False)
     program_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),
+        GUID(),
         ForeignKey("capital_programs.id", ondelete="CASCADE"),
         nullable=False
     )
@@ -231,7 +205,7 @@ class CapitalDeploymentModel(Base, UUIDMixin, TimestampMixin):
 
     deployment_id: Mapped[str] = mapped_column(String(50), unique=True, index=True, nullable=False)
     program_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True),
+        GUID(),
         ForeignKey("capital_programs.id", ondelete="CASCADE"),
         nullable=False
     )
@@ -340,7 +314,7 @@ class DealBlockModel(Base, UUIDMixin, TimestampMixin):
 
     deal_id: Mapped[str] = mapped_column(String(50), unique=True, index=True, nullable=False)
     project_id: Mapped[Optional[uuid.UUID]] = mapped_column(
-        UUID(as_uuid=True),
+        GUID(),
         ForeignKey("projects.id", ondelete="SET NULL"),
         nullable=True
     )

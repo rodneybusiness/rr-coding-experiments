@@ -11,8 +11,8 @@ from typing import Dict, List, Optional, Any
 from decimal import Decimal
 from copy import deepcopy
 
-from backend.models.capital_stack import CapitalStack, CapitalComponent
-from backend.models.financial_instruments import (
+from models.capital_stack import CapitalStack, CapitalComponent
+from models.financial_instruments import (
     Equity, SeniorDebt, MezzanineDebt, GapFinancing, PreSale, TaxIncentive
 )
 

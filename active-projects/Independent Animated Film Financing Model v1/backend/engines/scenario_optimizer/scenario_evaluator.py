@@ -10,18 +10,18 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Any
 from decimal import Decimal
 
-from backend.models.capital_stack import CapitalStack
-from backend.models.waterfall import WaterfallStructure, WaterfallNode, RecoupmentPriority
-from backend.models.financial_instruments import TaxIncentive, Debt, Equity, PreSale
+from models.capital_stack import CapitalStack
+from models.waterfall import WaterfallStructure, WaterfallNode, RecoupmentPriority
+from models.financial_instruments import TaxIncentive, Debt, Equity, PreSale
 
 # Engine 1 imports
-from backend.engines.incentive_calculator import (
+from engines.incentive_calculator import (
     IncentiveCalculator,
     JurisdictionSpend
 )
 
 # Engine 2 imports
-from backend.engines.waterfall_executor import (
+from engines.waterfall_executor import (
     RevenueProjector,
     WaterfallExecutor,
     StakeholderAnalyzer,
@@ -30,13 +30,13 @@ from backend.engines.waterfall_executor import (
 )
 
 # Engine 4 imports (Ownership & Control)
-from backend.engines.scenario_optimizer.ownership_control_scorer import (
+from .ownership_control_scorer import (
     OwnershipControlScorer,
     OwnershipControlResult
 )
 
 # DealBlock model
-from backend.models.deal_block import DealBlock
+from models.deal_block import DealBlock
 
 logger = logging.getLogger(__name__)
 

@@ -16,12 +16,12 @@ from enum import Enum
 import numpy as np
 from scipy.optimize import minimize, Bounds, LinearConstraint
 
-from backend.models.capital_stack import CapitalStack, CapitalComponent
-from backend.models.financial_instruments import (
+from models.capital_stack import CapitalStack, CapitalComponent
+from models.financial_instruments import (
     Equity, SeniorDebt, MezzanineDebt, GapFinancing, PreSale, TaxIncentive, Debt
 )
-from backend.engines.scenario_optimizer.constraint_manager import ConstraintManager
-from backend.engines.scenario_optimizer.scenario_evaluator import ScenarioEvaluator
+from .constraint_manager import ConstraintManager
+from .scenario_evaluator import ScenarioEvaluator
 
 logger = logging.getLogger(__name__)
 

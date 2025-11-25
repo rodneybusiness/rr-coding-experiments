@@ -9,7 +9,7 @@ from datetime import date
 from decimal import Decimal
 from enum import Enum
 from typing import Optional, List, Dict, Any
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 
 
 class IncentiveType(str, Enum):
@@ -228,8 +228,8 @@ class IncentivePolicy(BaseModel):
             "effective_rate": (net_cash_benefit / qualified_spend * 100) if qualified_spend > 0 else Decimal("0")
         }
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "policy_id": "UK-AVEC-2025",
                 "jurisdiction": "United Kingdom",
@@ -244,3 +244,4 @@ class IncentivePolicy(BaseModel):
                 "last_updated": "2025-10-31"
             }
         }
+    )

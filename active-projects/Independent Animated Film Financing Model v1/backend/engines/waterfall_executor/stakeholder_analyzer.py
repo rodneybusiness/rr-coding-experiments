@@ -11,8 +11,8 @@ from typing import Dict, List, Optional, Any, Tuple
 from decimal import Decimal
 import math
 
-from backend.models.capital_stack import CapitalStack
-from backend.engines.waterfall_executor.waterfall_executor import TimeSeriesWaterfallResult
+from models.capital_stack import CapitalStack
+from .waterfall_executor import TimeSeriesWaterfallResult
 
 logger = logging.getLogger(__name__)
 

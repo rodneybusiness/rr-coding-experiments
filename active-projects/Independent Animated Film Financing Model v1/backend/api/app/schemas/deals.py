@@ -7,7 +7,7 @@ Pydantic schemas for DealBlock API requests and responses.
 from typing import List, Optional, Dict, Any
 from decimal import Decimal
 from datetime import date
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class DealBlockInput(BaseModel):
@@ -74,8 +74,8 @@ class DealBlockInput(BaseModel):
     # Notes
     notes: Optional[str] = Field(default=None, max_length=2000)
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "deal_name": "North America Theatrical Distribution",
                 "deal_type": "theatrical_distribution",
@@ -89,6 +89,7 @@ class DealBlockInput(BaseModel):
                 "probability_of_closing": "90",
             }
         }
+    )
 
 
 class DealBlockResponse(BaseModel):

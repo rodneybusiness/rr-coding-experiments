@@ -9,12 +9,12 @@ import logging
 from typing import Dict, List, Optional
 from decimal import Decimal
 
-from backend.models.incentive_policy import (
+from models.incentive_policy import (
     IncentivePolicy,
     IncentiveType,
     MonetizationMethod,
 )
-from backend.engines.incentive_calculator.policy_loader import PolicyLoader
+from .policy_loader import PolicyLoader
 
 
 logger = logging.getLogger(__name__)

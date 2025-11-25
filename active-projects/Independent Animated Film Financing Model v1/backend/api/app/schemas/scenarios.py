@@ -3,7 +3,7 @@ API Schemas for Scenario Optimizer (Engine 3)
 """
 
 from typing import List, Dict, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from decimal import Decimal
 
 from app.schemas.deals import DealBlockInput
@@ -22,7 +22,7 @@ class ScenarioGenerationRequest(BaseModel):
     project_id: str = Field(..., description="Unique project identifier")
     project_name: str = Field(..., description="Project name")
     project_budget: Decimal = Field(..., gt=0, description="Total project budget")
-    waterfall_id: str = Field(..., description="Waterfall structure ID")
+    waterfall_id: Optional[str] = Field(default=None, description="Waterfall structure ID (auto-generated if not provided)")
     objective_weights: Optional[ObjectiveWeights] = Field(default=None)
     num_scenarios: int = Field(default=4, ge=1, le=10, description="Number of scenarios to generate")
     deal_blocks: Optional[List[DealBlockInput]] = Field(
@@ -30,8 +30,8 @@ class ScenarioGenerationRequest(BaseModel):
         description="Optional deal blocks to include in strategic ownership/control scoring"
     )
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "project_id": "proj_123",
                 "project_name": "Animated Feature - Sky Warriors",
@@ -58,6 +58,7 @@ class ScenarioGenerationRequest(BaseModel):
                 ]
             }
         }
+    )
 
 
 class CapitalStructure(BaseModel):
@@ -153,8 +154,8 @@ class ScenarioGenerationResponse(BaseModel):
     scenarios: List[Scenario]
     best_scenario_id: str
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "project_id": "proj_123",
                 "project_name": "Animated Feature - Sky Warriors",
@@ -199,6 +200,7 @@ class ScenarioGenerationResponse(BaseModel):
                 "best_scenario_id": "scenario_tax_optimized"
             }
         }
+    )
 
 
 class ScenarioComparisonRequest(BaseModel):

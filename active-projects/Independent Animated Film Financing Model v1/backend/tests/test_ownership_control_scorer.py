@@ -8,7 +8,7 @@ import pytest
 from decimal import Decimal
 from typing import List
 
-from backend.models.deal_block import (
+from models.deal_block import (
     DealBlock,
     DealType,
     DealStatus,
@@ -16,7 +16,7 @@ from backend.models.deal_block import (
     RightsWindow,
 )
 
-from backend.engines.scenario_optimizer.ownership_control_scorer import (
+from engines.scenario_optimizer.ownership_control_scorer import (
     OwnershipControlScorer,
     OwnershipControlResult,
     ControlImpact,

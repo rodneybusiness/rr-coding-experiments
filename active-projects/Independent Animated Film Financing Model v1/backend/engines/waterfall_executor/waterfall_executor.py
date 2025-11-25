@@ -11,8 +11,8 @@ from typing import Dict, List, Optional, Any
 from decimal import Decimal
 from copy import deepcopy
 
-from backend.models.waterfall import WaterfallStructure, RecoupmentPriority
-from backend.engines.waterfall_executor.revenue_projector import RevenueProjection
+from models.waterfall import WaterfallStructure, RecoupmentPriority
+from .revenue_projector import RevenueProjection
 
 logger = logging.getLogger(__name__)
 

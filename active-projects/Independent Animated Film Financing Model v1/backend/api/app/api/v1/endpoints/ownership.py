@@ -6,7 +6,7 @@ control, optionality, and execution friction dimensions.
 """
 
 from decimal import Decimal
-from typing import List, Dict
+from typing import List, Dict, Any
 from fastapi import APIRouter, HTTPException
 
 from app.schemas.ownership import (
@@ -209,7 +209,7 @@ async def compare_scenarios(request: ScenarioComparisonRequest) -> ScenarioCompa
 
 
 @router.get("/weights")
-async def get_default_weights() -> Dict[str, float]:
+async def get_default_weights() -> Dict[str, Any]:
     """
     Get the default scoring weights.
 

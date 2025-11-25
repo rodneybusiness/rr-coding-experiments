@@ -3,7 +3,7 @@ API Schemas for Waterfall Analysis (Engine 2)
 """
 
 from typing import List, Dict, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from decimal import Decimal
 
 
@@ -17,8 +17,8 @@ class WaterfallExecutionRequest(BaseModel):
     run_monte_carlo: bool = Field(default=True, description="Whether to run Monte Carlo simulation")
     monte_carlo_iterations: int = Field(default=1000, ge=100, le=10000)
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "project_id": "proj_123",
                 "capital_stack_id": "stack_456",
@@ -29,6 +29,7 @@ class WaterfallExecutionRequest(BaseModel):
                 "monte_carlo_iterations": 1000
             }
         }
+    )
 
 
 class StakeholderReturn(BaseModel):
@@ -80,8 +81,8 @@ class WaterfallExecutionResponse(BaseModel):
     revenue_by_window: List[RevenueWindow]
     monte_carlo_results: Optional[MonteCarloResults]
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "project_id": "proj_123",
                 "total_revenue": 75000000,
@@ -128,3 +129,4 @@ class WaterfallExecutionResponse(BaseModel):
                 }
             }
         }
+    )

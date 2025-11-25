@@ -11,8 +11,8 @@ from typing import Dict, List, Optional, Any, Callable
 from decimal import Decimal
 from enum import Enum
 
-from backend.models.capital_stack import CapitalStack
-from backend.models.financial_instruments import Equity, Debt
+from models.capital_stack import CapitalStack
+from models.financial_instruments import Equity, Debt
 
 logger = logging.getLogger(__name__)
 

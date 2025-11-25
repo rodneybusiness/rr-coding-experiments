@@ -20,10 +20,10 @@ from decimal import Decimal
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from backend.models.waterfall import WaterfallStructure, WaterfallNode, RecoupmentPriority
-from backend.models.capital_stack import CapitalStack
+from models.waterfall import WaterfallStructure, WaterfallNode, RecoupmentPriority
+from models.capital_stack import CapitalStack
 
-from backend.engines.scenario_optimizer import (
+from engines.scenario_optimizer import (
     ScenarioGenerator,
     ConstraintManager,
     CapitalStackOptimizer,

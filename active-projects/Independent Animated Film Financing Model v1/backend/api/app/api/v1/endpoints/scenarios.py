@@ -31,7 +31,7 @@ sys.path.insert(0, str(backend_root))
 
 from engines.scenario_optimizer.scenario_generator import ScenarioGenerator
 from engines.scenario_optimizer.scenario_evaluator import ScenarioEvaluator
-from models.waterfall import WaterfallStructure, WaterfallNode, PayeeType
+from models.waterfall import WaterfallStructure, WaterfallNode, PayeeType, RecoupmentPriority, RecoupmentBasis
 from models.capital_stack import CapitalStack
 from models.deal_block import DealBlock, DealType, DealStatus, RightsWindow, ApprovalRight
 
@@ -141,9 +141,12 @@ async def generate_scenarios(request: ScenarioGenerationRequest):
         HTTPException: If generation fails or validation errors occur
     """
     try:
+        # Use provided waterfall_id or generate one
+        waterfall_id = request.waterfall_id or f"WF-{request.project_id}-AUTO"
+
         # Create sample waterfall structure (in production, load from database)
         waterfall_structure = _create_sample_waterfall(
-            request.project_id, request.waterfall_id
+            request.project_id, waterfall_id
         )
 
         # Convert deal_blocks if provided
@@ -156,7 +159,7 @@ async def generate_scenarios(request: ScenarioGenerationRequest):
 
         # Initialize generator and evaluator
         generator = ScenarioGenerator()
-        evaluator = ScenarioEvaluator(waterfall_structure)
+        evaluator = ScenarioEvaluator()
 
         # Get templates to use based on num_scenarios
         all_templates = ["debt_heavy", "equity_heavy", "balanced", "presale_focused", "incentive_maximized"]
@@ -318,7 +321,7 @@ async def compare_scenarios(request: ScenarioComparisonRequest):
 
         # Initialize generator and evaluator
         generator = ScenarioGenerator()
-        evaluator = ScenarioEvaluator(waterfall_structure)
+        evaluator = ScenarioEvaluator()
 
         # Generate requested scenarios
         scenarios = []
@@ -532,39 +535,30 @@ def _create_sample_waterfall(project_id: str, waterfall_id: str) -> WaterfallStr
     nodes = [
         WaterfallNode(
             node_id="senior_debt",
+            priority=RecoupmentPriority.SENIOR_DEBT,
             description="Senior Debt Recoupment",
-            payee_type=PayeeType.FINANCIER,
-            payee_name="Senior Debt",
-            recoupment_basis="senior_debt",
-            fixed_amount=None,
+            payee_type=PayeeType.LENDER,
+            payee_name="Senior Lender",
+            recoupment_basis=RecoupmentBasis.REMAINING_POOL,
             percentage_of_receipts=Decimal("100"),
-            capped_at=None,
-            waterfall_id=waterfall_id,
-            project_id=project_id,
         ),
         WaterfallNode(
-            node_id="gap_financing",
-            description="Gap Financing Recoupment",
-            payee_type=PayeeType.FINANCIER,
-            payee_name="Gap Financing",
-            recoupment_basis="gap_debt",
-            fixed_amount=None,
+            node_id="mezzanine_debt",
+            priority=RecoupmentPriority.MEZZANINE_DEBT,
+            description="Mezzanine Debt Recoupment",
+            payee_type=PayeeType.LENDER,
+            payee_name="Mezzanine Lender",
+            recoupment_basis=RecoupmentBasis.REMAINING_POOL,
             percentage_of_receipts=Decimal("100"),
-            capped_at=None,
-            waterfall_id=waterfall_id,
-            project_id=project_id,
         ),
         WaterfallNode(
             node_id="equity",
+            priority=RecoupmentPriority.EQUITY_RECOUPMENT,
             description="Equity Recoupment",
-            payee_type=PayeeType.FINANCIER,
+            payee_type=PayeeType.INVESTOR,
             payee_name="Equity Investor",
-            recoupment_basis="equity",
-            fixed_amount=None,
+            recoupment_basis=RecoupmentBasis.REMAINING_POOL,
             percentage_of_receipts=Decimal("100"),
-            capped_at=None,
-            waterfall_id=waterfall_id,
-            project_id=project_id,
         ),
     ]
 

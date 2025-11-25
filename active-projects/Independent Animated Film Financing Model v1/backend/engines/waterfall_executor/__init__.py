@@ -9,29 +9,29 @@ This module provides comprehensive investor analytics capabilities:
 - Sensitivity analysis to identify key drivers
 """
 
-from backend.engines.waterfall_executor.revenue_projector import (
+from .revenue_projector import (
     RevenueProjector,
     DistributionWindow,
     MarketRevenue,
     RevenueProjection,
 )
-from backend.engines.waterfall_executor.waterfall_executor import (
+from .waterfall_executor import (
     WaterfallExecutor,
     QuarterlyWaterfallExecution,
     TimeSeriesWaterfallResult,
 )
-from backend.engines.waterfall_executor.stakeholder_analyzer import (
+from .stakeholder_analyzer import (
     StakeholderAnalyzer,
     StakeholderCashFlows,
     StakeholderAnalysisResult,
 )
-from backend.engines.waterfall_executor.monte_carlo_simulator import (
+from .monte_carlo_simulator import (
     MonteCarloSimulator,
     RevenueDistribution,
     MonteCarloScenario,
     MonteCarloResult,
 )
-from backend.engines.waterfall_executor.sensitivity_analyzer import (
+from .sensitivity_analyzer import (
     SensitivityAnalyzer,
     SensitivityVariable,
     SensitivityResult,

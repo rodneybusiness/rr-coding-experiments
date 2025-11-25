@@ -7,7 +7,7 @@ Uses Pydantic Settings for type-safe configuration with validation.
 
 from typing import List, Optional, Any
 from pydantic_settings import BaseSettings
-from pydantic import AnyHttpUrl, field_validator, model_validator
+from pydantic import AnyHttpUrl, field_validator, model_validator, ConfigDict
 import secrets
 
 
@@ -82,10 +82,11 @@ class Settings(BaseSettings):
     # Logging
     LOG_LEVEL: str = "INFO"
 
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
-        extra = "allow"  # Allow extra fields from env
+    model_config = ConfigDict(
+        env_file=".env",
+        case_sensitive=True,
+        extra="allow"  # Allow extra fields from env
+    )
 
 
 # Create global settings instance

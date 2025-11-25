@@ -121,6 +121,7 @@ export default function ProgramEvaluatorPage() {
         project_id: `proj_eval_${Date.now()}`,
         project_name: projectName,
         project_budget: projectBudget,
+        waterfall_id: `wf_eval_${Date.now()}`,
         num_scenarios: 4,
       });
 

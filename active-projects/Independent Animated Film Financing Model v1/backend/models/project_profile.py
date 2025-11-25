@@ -8,7 +8,7 @@ from datetime import date
 from decimal import Decimal
 from enum import Enum
 from typing import Optional, List, Dict
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 
 class ProjectType(str, Enum):
@@ -157,8 +157,8 @@ class ProjectProfile(BaseModel):
             return None
         return max(self.production_jurisdictions, key=lambda x: x.estimated_spend_percentage)
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "project_id": "PROJ-001",
                 "project_name": "The Animated Adventure",
@@ -179,3 +179,4 @@ class ProjectProfile(BaseModel):
                 ]
             }
         }
+    )
