@@ -165,3 +165,124 @@ export interface ScenarioGenerationResponse {
   scenarios: Scenario[];
   best_scenario_id: string;
 }
+
+// Engine 4: Deal Blocks & Ownership Scoring
+
+export interface DealBlockInput {
+  deal_name: string;
+  deal_type: string;
+  status?: string;
+  counterparty_name: string;
+  counterparty_type?: string;
+  amount: number;
+  currency?: string;
+  recoupment_priority?: number;
+  is_recoupable?: boolean;
+  interest_rate?: number;
+  premium_percentage?: number;
+  backend_participation_pct?: number;
+  origination_fee_pct?: number;
+  distribution_fee_pct?: number;
+  sales_commission_pct?: number;
+  territories?: string[];
+  is_worldwide?: boolean;
+  rights_windows?: string[];
+  term_years?: number;
+  exclusivity?: boolean;
+  holdback_days?: number;
+  ownership_percentage?: number;
+  approval_rights_granted?: string[];
+  has_board_seat?: boolean;
+  has_veto_rights?: boolean;
+  veto_scope?: string;
+  ip_ownership?: string;
+  mfn_clause?: boolean;
+  mfn_scope?: string;
+  reversion_trigger_years?: number;
+  reversion_trigger_condition?: string;
+  sequel_rights_holder?: string;
+  sequel_participation_pct?: number;
+  cross_collateralized?: boolean;
+  cross_collateral_scope?: string;
+  probability_of_closing?: number;
+  complexity_score?: number;
+  notes?: string;
+}
+
+export interface DealBlockResponse {
+  deal_id: string;
+  deal_name: string;
+  deal_type: string;
+  status: string;
+  counterparty_name: string;
+  counterparty_type: string;
+  amount: number;
+  currency: string;
+  net_amount: number;
+  expected_value: number;
+  control_impact_score: number;
+  ownership_impact_score: number;
+  optionality_score: number;
+  territories: string[];
+  rights_windows: string[];
+  term_years: number | null;
+  mfn_clause: boolean;
+  probability_of_closing: number;
+  complexity_score: number;
+}
+
+export interface DealBlockListResponse {
+  deals: DealBlockResponse[];
+  total_count: number;
+}
+
+export interface DealBlockCreateRequest {
+  project_id: string;
+  deal: DealBlockInput;
+}
+
+// Ownership Scoring
+
+export interface ScoreWeights {
+  ownership: number;
+  control: number;
+  optionality: number;
+  friction: number;
+}
+
+export interface ControlImpact {
+  source: string;
+  dimension: string;
+  impact: number;
+  explanation: string;
+}
+
+export interface ScoringFlags {
+  has_mfn_risk: boolean;
+  has_control_concentration: boolean;
+  has_reversion_opportunity: boolean;
+}
+
+export interface OwnershipScoreRequest {
+  deal_blocks: DealBlockInput[];
+  weights?: ScoreWeights;
+}
+
+export interface OwnershipScoreResponse {
+  ownership_score: number;
+  control_score: number;
+  optionality_score: number;
+  friction_score: number;
+  composite_score: number;
+  impacts: ControlImpact[];
+  deal_impacts: Record<string, Record<string, number>>;
+  recommendations: string[];
+  flags: ScoringFlags;
+}
+
+export interface DealTemplate {
+  template_name: string;
+  deal_type: string;
+  description: string;
+  default_values: Record<string, any>;
+}

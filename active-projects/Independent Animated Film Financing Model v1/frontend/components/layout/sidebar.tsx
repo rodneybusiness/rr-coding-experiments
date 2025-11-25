@@ -11,6 +11,8 @@ import {
   FolderOpen,
   Settings,
   HelpCircle,
+  Handshake,
+  Shield,
 } from 'lucide-react';
 
 const navigation = [
@@ -36,6 +38,18 @@ const navigation = [
     href: '/dashboard/scenarios',
     icon: Lightbulb,
     description: 'Engine 3: Optimize capital stack',
+  },
+  {
+    name: 'Deal Blocks',
+    href: '/dashboard/deals',
+    icon: Handshake,
+    description: 'Engine 4: Manage deal structures',
+  },
+  {
+    name: 'Ownership Scoring',
+    href: '/dashboard/ownership',
+    icon: Shield,
+    description: 'Engine 4: Strategic position analysis',
   },
   {
     name: 'Projects',
