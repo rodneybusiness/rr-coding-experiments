@@ -46,6 +46,12 @@ from backend.engines.scenario_optimizer.tradeoff_analyzer import (
     TradeOffAnalyzer
 )
 
+from backend.engines.scenario_optimizer.ownership_control_scorer import (
+    ControlImpact,
+    OwnershipControlResult,
+    OwnershipControlScorer
+)
+
 __all__ = [
     # Scenario Generation
     "FinancingTemplate",
@@ -81,4 +87,9 @@ __all__ = [
     "TradeOffPoint",
     "ParetoFrontier",
     "TradeOffAnalyzer",
+
+    # Ownership & Control Scoring
+    "ControlImpact",
+    "OwnershipControlResult",
+    "OwnershipControlScorer",
 ]

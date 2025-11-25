@@ -36,6 +36,18 @@ from .waterfall import (
     WaterfallNode,
     RecoupmentPriority,
 )
+from .deal_block import (
+    DealBlock,
+    DealType,
+    DealStatus,
+    ApprovalRight,
+    RightsWindow,
+    create_equity_investment_template,
+    create_presale_template,
+    create_streamer_license_template,
+    create_streamer_original_template,
+    create_gap_financing_template,
+)
 
 __all__ = [
     # Financial Instruments
@@ -64,4 +76,15 @@ __all__ = [
     "WaterfallStructure",
     "WaterfallNode",
     "RecoupmentPriority",
+    # Deal Blocks
+    "DealBlock",
+    "DealType",
+    "DealStatus",
+    "ApprovalRight",
+    "RightsWindow",
+    "create_equity_investment_template",
+    "create_presale_template",
+    "create_streamer_license_template",
+    "create_streamer_original_template",
+    "create_gap_financing_template",
 ]
