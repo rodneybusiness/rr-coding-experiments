@@ -14,6 +14,8 @@
     "excludes_completion_bond": true,
     "excludes_insurance": true,
     "labor_cap_per_person": null,
+    "labor_max_percent_of_spend": "60.0",
+    "labor_only_credit": true,
     "minimum_local_labor_percentage": "75.0",
     "minimum_local_spend_percentage": null,
     "special_rules": "Credit is 25% of qualified Canadian labor expenditure (QCLE). Maximum QCLE is capped at 60% of total production costs (net of assistance), making the effective maximum credit 15% of total costs. Only Canadian resident labor qualifies. At least 75% of production services costs and post-production costs must be for services provided in Canada by Canadians or permanent residents."

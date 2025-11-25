@@ -62,6 +62,45 @@ class QPEDefinition(BaseModel):
         default=None, description="Max qualifying amount per individual"
     )
 
+    # ============= Labor Cap Enforcement Fields =============
+    # Labor as percentage of total qualified spend
+    labor_max_percent_of_spend: Optional[Decimal] = Field(
+        default=None, ge=0, le=100,
+        description="Max labor spend as % of qualified spend (e.g., 60% for CPTC)"
+    )
+
+    # Labor-specific rates
+    labor_specific_rate: Optional[Decimal] = Field(
+        default=None, ge=0, le=100,
+        description="Specific rate applied to labor spend (if different from headline)"
+    )
+    labor_uplift_rate: Optional[Decimal] = Field(
+        default=None, ge=0, le=100,
+        description="Additional % uplift on labor costs (e.g., 16% for Quebec animation)"
+    )
+
+    # Category-specific rates
+    vfx_animation_rate: Optional[Decimal] = Field(
+        default=None, ge=0, le=100,
+        description="Special rate for VFX/animation labor"
+    )
+
+    # Labor-only policies
+    labor_only_credit: bool = Field(
+        default=False,
+        description="True if credit applies only to labor (not goods/services)"
+    )
+
+    # Residency-based differentiation
+    labor_resident_rate: Optional[Decimal] = Field(
+        default=None, ge=0, le=100,
+        description="Rate for resident labor"
+    )
+    labor_nonresident_rate: Optional[Decimal] = Field(
+        default=None, ge=0, le=100,
+        description="Rate for non-resident labor (usually lower or zero)"
+    )
+
     # Residency/local requirements
     minimum_local_labor_percentage: Optional[Decimal] = Field(
         default=None, ge=0, le=100, description="Required % of local crew/cast"
