@@ -12,11 +12,13 @@ from unittest.mock import patch, MagicMock
 import sys
 from pathlib import Path
 
-# Add the backend directory to path
+# Add the backend and api directories to path
 backend_dir = Path(__file__).parent.parent
+api_dir = backend_dir / "api"
 sys.path.insert(0, str(backend_dir))
+sys.path.insert(0, str(api_dir))
 
-from api.app.main import app
+from app.main import app
 
 client = TestClient(app)
 

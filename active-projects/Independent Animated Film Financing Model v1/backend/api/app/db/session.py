@@ -77,14 +77,16 @@ def get_db_context() -> Generator[Session, None, None]:
 # === Async Database Engine ===
 # For use with async code (recommended for FastAPI)
 
-ASYNC_DATABASE_URL = getattr(
-    settings,
-    'ASYNC_DATABASE_URL',
-    SQLALCHEMY_DATABASE_URL.replace('postgresql://', 'postgresql+asyncpg://')
-)
+ASYNC_DATABASE_URL = getattr(settings, 'ASYNC_DATABASE_URL', None)
 
-# Handle SQLite for async (use aiosqlite)
-if ASYNC_DATABASE_URL.startswith('sqlite'):
+# Derive async URL from sync URL if not provided
+if ASYNC_DATABASE_URL is None:
+    if SQLALCHEMY_DATABASE_URL.startswith('sqlite'):
+        ASYNC_DATABASE_URL = SQLALCHEMY_DATABASE_URL.replace('sqlite:///', 'sqlite+aiosqlite:///')
+    else:
+        ASYNC_DATABASE_URL = SQLALCHEMY_DATABASE_URL.replace('postgresql://', 'postgresql+asyncpg://')
+elif ASYNC_DATABASE_URL.startswith('sqlite'):
+    # Handle SQLite for async (use aiosqlite)
     ASYNC_DATABASE_URL = ASYNC_DATABASE_URL.replace('sqlite:///', 'sqlite+aiosqlite:///')
 
 # Create async engine (only if not SQLite in sync mode)
@@ -157,8 +159,8 @@ def init_db() -> None:
     Initialize database tables.
     Creates all tables defined in the models.
     """
-    from app.db import models  # Import to register models
-    Base.metadata.create_all(bind=sync_engine)
+    from app.db.models import Base as ModelsBase  # Use Base from models
+    ModelsBase.metadata.create_all(bind=sync_engine)
 
 
 async def init_async_db() -> None:
@@ -169,9 +171,9 @@ async def init_async_db() -> None:
         init_db()
         return
 
-    from app.db import models  # Import to register models
+    from app.db.models import Base as ModelsBase  # Use Base from models
     async with async_engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+        await conn.run_sync(ModelsBase.metadata.create_all)
 
 
 def drop_all_tables() -> None:

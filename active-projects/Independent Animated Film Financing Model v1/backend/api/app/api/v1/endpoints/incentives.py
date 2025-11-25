@@ -18,17 +18,18 @@ from app.schemas.incentives import (
 import sys
 from pathlib import Path
 
-# Add backend root to path
-backend_root = Path(__file__).parent.parent.parent.parent.parent
+# Add backend root to path (6 levels up from endpoints/incentives.py)
+backend_root = Path(__file__).parent.parent.parent.parent.parent.parent
 sys.path.insert(0, str(backend_root))
 
-from engines.incentive_calculator.incentive_calculator import IncentiveCalculator
-from data_curation.policy_loader import PolicyLoader
+from engines.incentive_calculator.calculator import IncentiveCalculator
+from engines.incentive_calculator.policy_loader import PolicyLoader
 
 router = APIRouter()
 
 # Initialize policy loader and calculator
-policy_loader = PolicyLoader()
+policies_dir = backend_root / "data" / "policies"
+policy_loader = PolicyLoader(policies_dir)
 calculator = IncentiveCalculator(policy_loader)
 
 

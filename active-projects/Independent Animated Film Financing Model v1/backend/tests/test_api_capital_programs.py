@@ -453,6 +453,14 @@ class TestValidationEndpoints:
 @pytest.fixture
 def client():
     """Create test client"""
+    import sys
+    from pathlib import Path
+    # Add api directory to path
+    backend_dir = Path(__file__).parent.parent
+    api_dir = backend_dir / "api"
+    sys.path.insert(0, str(backend_dir))
+    sys.path.insert(0, str(api_dir))
+
     from fastapi.testclient import TestClient
     from app.main import app
     return TestClient(app)

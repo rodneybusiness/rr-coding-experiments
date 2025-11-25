@@ -11,7 +11,7 @@ from enum import Enum
 from typing import Optional, Dict, Any
 
 from pydantic import BaseModel, Field, field_validator
-from backend.models.waterfall import RecoupmentPriority
+from models.waterfall import RecoupmentPriority
 
 
 class InstrumentType(str, Enum):
