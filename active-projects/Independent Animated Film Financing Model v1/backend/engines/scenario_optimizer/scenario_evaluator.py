@@ -29,6 +29,15 @@ from backend.engines.waterfall_executor import (
     RevenueDistribution
 )
 
+# Engine 4 imports (Ownership & Control)
+from backend.engines.scenario_optimizer.ownership_control_scorer import (
+    OwnershipControlScorer,
+    OwnershipControlResult
+)
+
+# DealBlock model
+from backend.models.deal_block import DealBlock
+
 logger = logging.getLogger(__name__)
 
 
@@ -97,6 +106,18 @@ class ScenarioEvaluation:
     total_interest_expense: Decimal = Decimal("0")
     total_fees: Decimal = Decimal("0")
 
+    # Ownership & Control Metrics (from Engine 4)
+    ownership_score: Optional[Decimal] = None
+    control_score: Optional[Decimal] = None
+    optionality_score: Optional[Decimal] = None
+    friction_score: Optional[Decimal] = None
+    strategic_composite_score: Optional[Decimal] = None
+    ownership_control_impacts: List[Dict] = field(default_factory=list)
+    strategic_recommendations: List[str] = field(default_factory=list)
+    has_mfn_risk: bool = False
+    has_control_concentration: bool = False
+    has_reversion_opportunity: bool = False
+
     # Summary
     overall_score: Decimal = Decimal("0")
     strengths: List[str] = field(default_factory=list)
@@ -136,7 +157,8 @@ class ScenarioEvaluator:
         waterfall_structure: WaterfallStructure,
         revenue_projection: Optional[Decimal] = None,
         run_monte_carlo: bool = True,
-        num_simulations: int = 1000
+        num_simulations: int = 1000,
+        deal_blocks: Optional[List[DealBlock]] = None
     ) -> ScenarioEvaluation:
         """
         Evaluate financing scenario comprehensively.
@@ -147,9 +169,10 @@ class ScenarioEvaluator:
             revenue_projection: Total ultimate revenue (uses base if None)
             run_monte_carlo: Whether to run Monte Carlo simulation
             num_simulations: Number of Monte Carlo scenarios
+            deal_blocks: Optional list of DealBlocks for ownership/control scoring
 
         Returns:
-            ScenarioEvaluation with complete metrics
+            ScenarioEvaluation with complete metrics (financial + strategic)
         """
         scenario_name = capital_stack.stack_name
         logger.info(f"Evaluating scenario: {scenario_name}")
@@ -220,10 +243,14 @@ class ScenarioEvaluator:
         # 6. Calculate cost metrics
         self._calculate_cost_metrics(capital_stack, evaluation)
 
-        # 7. Calculate overall score
+        # 7. Score ownership & control if deal blocks provided (Engine 4)
+        if deal_blocks:
+            self._evaluate_ownership_control(deal_blocks, evaluation)
+
+        # 8. Calculate overall score (now includes ownership if available)
         self._calculate_overall_score(evaluation)
 
-        # 8. Identify strengths and weaknesses
+        # 9. Identify strengths and weaknesses
         self._identify_strengths_weaknesses(evaluation)
 
         logger.info(f"Evaluation complete. Score: {evaluation.overall_score:.1f}/100")
@@ -365,48 +392,112 @@ class ScenarioEvaluator:
         evaluation.total_interest_expense = total_interest
         evaluation.total_fees = total_fees
 
+    def _evaluate_ownership_control(
+        self,
+        deal_blocks: List[DealBlock],
+        evaluation: ScenarioEvaluation
+    ):
+        """
+        Score ownership & control using Engine 4 (OwnershipControlScorer).
+
+        Adds strategic metrics beyond financial returns:
+        - Ownership score: How much IP/revenue rights retained
+        - Control score: Creative and business control retained
+        - Optionality score: Future flexibility preserved
+        - Friction score: Execution complexity/risk
+        """
+        try:
+            scorer = OwnershipControlScorer()
+            result = scorer.score_scenario(deal_blocks)
+
+            # Populate evaluation with ownership/control metrics
+            evaluation.ownership_score = result.ownership_score
+            evaluation.control_score = result.control_score
+            evaluation.optionality_score = result.optionality_score
+            evaluation.friction_score = result.friction_score
+            evaluation.strategic_composite_score = result.composite_score
+
+            # Add explainability data
+            evaluation.ownership_control_impacts = [
+                {
+                    "source": impact.source,
+                    "dimension": impact.dimension,
+                    "impact": impact.impact,
+                    "explanation": impact.explanation
+                }
+                for impact in result.impacts
+            ]
+            evaluation.strategic_recommendations = result.recommendations
+
+            # Set risk flags
+            evaluation.has_mfn_risk = result.has_mfn_risk
+            evaluation.has_control_concentration = result.has_control_concentration
+            evaluation.has_reversion_opportunity = result.has_reversion_opportunity
+
+            logger.info(
+                f"Ownership scoring complete - "
+                f"O:{result.ownership_score} C:{result.control_score} "
+                f"Op:{result.optionality_score} F:{result.friction_score} "
+                f"Composite:{result.composite_score:.1f}"
+            )
+
+        except Exception as e:
+            logger.warning(f"Ownership/control scoring failed: {e}")
+
     def _calculate_overall_score(self, evaluation: ScenarioEvaluation):
         """
         Calculate composite score (0-100).
 
-        Weighted factors:
+        Financial factors (when no deal blocks):
         - Equity IRR (30%): Higher is better
         - Tax incentives (20%): Higher is better
         - Risk (20%): Lower risk is better (P(recoupment) high)
         - Cost of capital (15%): Lower is better
         - Debt recovery (15%): Higher is better
-        """
-        score = Decimal("0")
 
-        # Factor 1: Equity IRR (30 points)
+        When deal blocks provided, blends financial (70%) with strategic (30%):
+        - Financial score: 70 points (scaled from above)
+        - Strategic composite: 30 points (from ownership/control scorer)
+        """
+        financial_score = Decimal("0")
+
+        # Factor 1: Equity IRR (30 points base)
         if evaluation.equity_irr:
             # Target 20% IRR = full points
             irr_score = min(evaluation.equity_irr / Decimal("20.0"), Decimal("1.0"))
-            score += irr_score * Decimal("30")
+            financial_score += irr_score * Decimal("30")
 
-        # Factor 2: Tax Incentives (20 points)
+        # Factor 2: Tax Incentives (20 points base)
         # Target 20% of budget = full points
         incentive_score = min(evaluation.tax_incentive_effective_rate / Decimal("20.0"), Decimal("1.0"))
-        score += incentive_score * Decimal("20")
+        financial_score += incentive_score * Decimal("20")
 
-        # Factor 3: Risk (20 points)
+        # Factor 3: Risk (20 points base)
         # P(recoupment) > 80% = full points
         risk_score = min(evaluation.probability_of_equity_recoupment / Decimal("0.80"), Decimal("1.0"))
-        score += risk_score * Decimal("20")
+        financial_score += risk_score * Decimal("20")
 
-        # Factor 4: Cost of Capital (15 points)
+        # Factor 4: Cost of Capital (15 points base)
         # Lower WACC is better. Target 12% = full points
         if evaluation.weighted_cost_of_capital > 0:
             cost_score = Decimal("12.0") / evaluation.weighted_cost_of_capital
             cost_score = min(cost_score, Decimal("1.0"))
-            score += cost_score * Decimal("15")
+            financial_score += cost_score * Decimal("15")
 
-        # Factor 5: Debt Recovery (15 points)
+        # Factor 5: Debt Recovery (15 points base)
         # 100% recovery = full points
         debt_score = min(evaluation.senior_debt_recovery_rate / Decimal("100.0"), Decimal("1.0"))
-        score += debt_score * Decimal("15")
+        financial_score += debt_score * Decimal("15")
 
-        evaluation.overall_score = score
+        # Blend with strategic score if ownership/control metrics available
+        if evaluation.strategic_composite_score is not None:
+            # Financial contributes 70%, Strategic contributes 30%
+            strategic_score = evaluation.strategic_composite_score * Decimal("0.30")
+            financial_weighted = financial_score * Decimal("0.70")
+            evaluation.overall_score = financial_weighted + strategic_score
+        else:
+            # No deal blocks: use pure financial score
+            evaluation.overall_score = financial_score
 
     def _identify_strengths_weaknesses(self, evaluation: ScenarioEvaluation):
         """Identify scenario strengths and weaknesses."""
@@ -443,6 +534,43 @@ class ScenarioEvaluator:
             strengths.append("Full senior debt recovery")
         elif evaluation.senior_debt_recovery_rate < Decimal("80.0"):
             weaknesses.append(f"Weak debt coverage ({evaluation.senior_debt_recovery_rate:.0f}%)")
+
+        # Ownership & Control (if deal blocks were evaluated)
+        if evaluation.ownership_score is not None:
+            # Ownership
+            if evaluation.ownership_score >= Decimal("80"):
+                strengths.append(f"Strong IP ownership retention ({evaluation.ownership_score:.0f}/100)")
+            elif evaluation.ownership_score < Decimal("50"):
+                weaknesses.append(f"Significant ownership dilution ({evaluation.ownership_score:.0f}/100)")
+
+            # Control
+            if evaluation.control_score is not None:
+                if evaluation.control_score >= Decimal("80"):
+                    strengths.append(f"High creative control retained ({evaluation.control_score:.0f}/100)")
+                elif evaluation.control_score < Decimal("50"):
+                    weaknesses.append(f"Limited creative control ({evaluation.control_score:.0f}/100)")
+
+            # Optionality
+            if evaluation.optionality_score is not None:
+                if evaluation.optionality_score >= Decimal("80"):
+                    strengths.append(f"Strong future optionality ({evaluation.optionality_score:.0f}/100)")
+                elif evaluation.optionality_score < Decimal("50"):
+                    weaknesses.append(f"Limited future flexibility ({evaluation.optionality_score:.0f}/100)")
+
+            # Friction (lower is better)
+            if evaluation.friction_score is not None:
+                if evaluation.friction_score <= Decimal("30"):
+                    strengths.append(f"Low execution complexity ({evaluation.friction_score:.0f}/100)")
+                elif evaluation.friction_score >= Decimal("60"):
+                    weaknesses.append(f"High execution complexity ({evaluation.friction_score:.0f}/100)")
+
+            # Risk flags
+            if evaluation.has_mfn_risk:
+                weaknesses.append("MFN clause limits deal flexibility")
+            if evaluation.has_control_concentration:
+                weaknesses.append("Control concentration risk (>40% to single party)")
+            if evaluation.has_reversion_opportunity:
+                strengths.append("Rights reversion opportunity exists")
 
         evaluation.strengths = strengths
         evaluation.weaknesses = weaknesses

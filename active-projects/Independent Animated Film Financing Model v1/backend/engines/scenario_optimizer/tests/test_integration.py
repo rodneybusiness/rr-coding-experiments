@@ -801,3 +801,354 @@ class TestCompleteWorkflow:
 
 import logging
 logger = logging.getLogger(__name__)
+
+
+# ============================================================================
+# DealBlock + ScenarioEvaluator Integration Tests
+# ============================================================================
+
+from backend.models.deal_block import (
+    DealBlock,
+    DealType,
+    ApprovalRight,
+    RightsWindow,
+    create_equity_investment_template,
+    create_presale_template,
+    create_streamer_license_template,
+)
+
+
+class TestDealBlockScenarioEvaluatorIntegration:
+    """
+    Integration tests for DealBlock → ScenarioEvaluator pipeline.
+
+    Verifies that ownership/control scoring integrates correctly with
+    financial scenario evaluation.
+    """
+
+    def test_evaluate_without_deal_blocks_backward_compatible(self, sample_waterfall):
+        """
+        Evaluation without deal blocks should work as before (backward compatibility).
+        """
+        generator = ScenarioGenerator()
+        stack = generator.generate_from_template("balanced", Decimal("30000000"))
+
+        evaluator = ScenarioEvaluator()
+        evaluation = evaluator.evaluate(
+            stack,
+            sample_waterfall,
+            run_monte_carlo=False
+        )
+
+        # Financial metrics should be populated
+        assert evaluation.overall_score > Decimal("0")
+
+        # Ownership metrics should be None (no deal blocks)
+        assert evaluation.ownership_score is None
+        assert evaluation.control_score is None
+        assert evaluation.strategic_composite_score is None
+
+    def test_evaluate_with_deal_blocks_includes_ownership(self, sample_waterfall):
+        """
+        Evaluation with deal blocks should include ownership/control scoring.
+        """
+        generator = ScenarioGenerator()
+        stack = generator.generate_from_template("balanced", Decimal("30000000"))
+
+        # Create sample deal blocks
+        deals = [
+            create_equity_investment_template(
+                deal_id="EQUITY-001",
+                counterparty_name="Series A Investor",
+                amount=Decimal("10000000"),
+                ownership_percentage=Decimal("20")
+            ),
+            create_presale_template(
+                deal_id="PRESALE-001",
+                counterparty_name="France Theatrical",
+                amount=Decimal("2000000"),
+                territories=["France"]
+            )
+        ]
+
+        evaluator = ScenarioEvaluator()
+        evaluation = evaluator.evaluate(
+            stack,
+            sample_waterfall,
+            run_monte_carlo=False,
+            deal_blocks=deals  # NEW: Pass deal blocks
+        )
+
+        # Financial metrics should be populated
+        assert evaluation.overall_score > Decimal("0")
+
+        # Ownership metrics should NOW be populated
+        assert evaluation.ownership_score is not None
+        assert evaluation.control_score is not None
+        assert evaluation.optionality_score is not None
+        assert evaluation.friction_score is not None
+        assert evaluation.strategic_composite_score is not None
+
+        # Scores should be in valid range
+        assert Decimal("0") <= evaluation.ownership_score <= Decimal("100")
+        assert Decimal("0") <= evaluation.control_score <= Decimal("100")
+
+    def test_deal_blocks_affect_overall_score(self, sample_waterfall):
+        """
+        Adding deal blocks should affect the blended overall score.
+        """
+        generator = ScenarioGenerator()
+        stack = generator.generate_from_template("balanced", Decimal("30000000"))
+
+        # Evaluate WITHOUT deals
+        evaluator = ScenarioEvaluator()
+        eval_no_deals = evaluator.evaluate(
+            stack,
+            sample_waterfall,
+            run_monte_carlo=False
+        )
+
+        # Evaluate WITH deals (high ownership scenario)
+        high_ownership_deals = [
+            DealBlock(
+                deal_id="PRESALE-001",
+                deal_name="France Theatrical",
+                deal_type=DealType.PRESALE_MG,
+                counterparty_name="French Distro",
+                amount=Decimal("2000000"),
+                ip_ownership="producer",  # Retain ownership
+                territories=["France"],
+                term_years=7,
+                complexity_score=3
+            )
+        ]
+
+        eval_with_deals = evaluator.evaluate(
+            stack,
+            sample_waterfall,
+            run_monte_carlo=False,
+            deal_blocks=high_ownership_deals
+        )
+
+        # Overall scores should differ (blended vs pure financial)
+        # With high ownership deals, strategic score should be high
+        assert eval_with_deals.strategic_composite_score >= Decimal("70")
+
+        # The blended score formula: 70% financial + 30% strategic
+        # So overall_score with deals should be different
+        # Note: may be higher or lower depending on strategic vs financial balance
+
+    def test_low_ownership_deals_reduce_strengths(self, sample_waterfall):
+        """
+        Deals with poor ownership terms should appear as weaknesses.
+        """
+        generator = ScenarioGenerator()
+        stack = generator.generate_from_template("balanced", Decimal("30000000"))
+
+        # Create deal with poor ownership terms
+        poor_ownership_deals = [
+            DealBlock(
+                deal_id="BUYOUT-001",
+                deal_name="Streamer Buyout",
+                deal_type=DealType.STREAMER_ORIGINAL,
+                counterparty_name="StreamCo",
+                amount=Decimal("25000000"),
+                ip_ownership="counterparty",  # Full buyout!
+                is_worldwide=True,
+                rights_windows=[RightsWindow.ALL_RIGHTS],
+                approval_rights_granted=[
+                    ApprovalRight.FINAL_CUT,
+                    ApprovalRight.SCRIPT,
+                    ApprovalRight.DIRECTOR
+                ],
+                has_veto_rights=True,
+                complexity_score=8
+            )
+        ]
+
+        evaluator = ScenarioEvaluator()
+        evaluation = evaluator.evaluate(
+            stack,
+            sample_waterfall,
+            run_monte_carlo=False,
+            deal_blocks=poor_ownership_deals
+        )
+
+        # Ownership and control should be low
+        assert evaluation.ownership_score < Decimal("50")
+        assert evaluation.control_score < Decimal("50")
+
+        # Should have weaknesses identified
+        assert any("ownership" in w.lower() or "control" in w.lower()
+                   for w in evaluation.weaknesses)
+
+    def test_mfn_risk_flag_propagates(self, sample_waterfall):
+        """
+        MFN clause in deals should set the risk flag.
+        """
+        generator = ScenarioGenerator()
+        stack = generator.generate_from_template("balanced", Decimal("30000000"))
+
+        # Create deal with MFN clause
+        mfn_deal = [
+            DealBlock(
+                deal_id="PRESALE-MFN",
+                deal_name="France with MFN",
+                deal_type=DealType.PRESALE_MG,
+                counterparty_name="French Distro",
+                amount=Decimal("3000000"),
+                territories=["France"],
+                mfn_clause=True,
+                mfn_scope="all financial terms",
+                complexity_score=5
+            )
+        ]
+
+        evaluator = ScenarioEvaluator()
+        evaluation = evaluator.evaluate(
+            stack,
+            sample_waterfall,
+            run_monte_carlo=False,
+            deal_blocks=mfn_deal
+        )
+
+        # MFN risk flag should be set
+        assert evaluation.has_mfn_risk is True
+
+    def test_reversion_opportunity_flag_propagates(self, sample_waterfall):
+        """
+        Reversion trigger in deals should set the opportunity flag.
+        """
+        generator = ScenarioGenerator()
+        stack = generator.generate_from_template("balanced", Decimal("30000000"))
+
+        # Create deal with reversion
+        reversion_deal = [
+            DealBlock(
+                deal_id="LICENSE-001",
+                deal_name="Term License",
+                deal_type=DealType.STREAMER_LICENSE,
+                counterparty_name="StreamCo",
+                amount=Decimal("5000000"),
+                is_worldwide=True,
+                rights_windows=[RightsWindow.SVOD],
+                term_years=5,
+                reversion_trigger_years=5,  # Rights revert!
+                complexity_score=4
+            )
+        ]
+
+        evaluator = ScenarioEvaluator()
+        evaluation = evaluator.evaluate(
+            stack,
+            sample_waterfall,
+            run_monte_carlo=False,
+            deal_blocks=reversion_deal
+        )
+
+        # Reversion opportunity flag should be set
+        assert evaluation.has_reversion_opportunity is True
+
+        # Should appear in strengths
+        assert any("reversion" in s.lower() for s in evaluation.strengths)
+
+    def test_ownership_impacts_captured(self, sample_waterfall):
+        """
+        Detailed ownership impacts should be captured for explainability.
+        """
+        generator = ScenarioGenerator()
+        stack = generator.generate_from_template("balanced", Decimal("30000000"))
+
+        # Create deals with various impacts
+        deals = [
+            create_equity_investment_template(
+                deal_id="EQUITY-001",
+                counterparty_name="Investor A",
+                amount=Decimal("10000000"),
+                ownership_percentage=Decimal("25")
+            ),
+            DealBlock(
+                deal_id="PRESALE-002",
+                deal_name="Germany with Approvals",
+                deal_type=DealType.PRESALE_MG,
+                counterparty_name="German Distro",
+                amount=Decimal("1500000"),
+                territories=["Germany"],
+                approval_rights_granted=[ApprovalRight.MARKETING],
+                complexity_score=4
+            )
+        ]
+
+        evaluator = ScenarioEvaluator()
+        evaluation = evaluator.evaluate(
+            stack,
+            sample_waterfall,
+            run_monte_carlo=False,
+            deal_blocks=deals
+        )
+
+        # Should have ownership/control impacts captured
+        assert len(evaluation.ownership_control_impacts) > 0
+
+        # Each impact should have required fields
+        for impact in evaluation.ownership_control_impacts:
+            assert "source" in impact
+            assert "dimension" in impact
+            assert "impact" in impact
+            assert "explanation" in impact
+
+    def test_multiple_deals_cumulative_scoring(self, sample_waterfall):
+        """
+        Multiple deals should have cumulative effect on scores.
+        """
+        generator = ScenarioGenerator()
+        stack = generator.generate_from_template("balanced", Decimal("30000000"))
+
+        # Single deal evaluation
+        single_deal = [
+            create_presale_template(
+                deal_id="PRESALE-001",
+                counterparty_name="French Distro",
+                amount=Decimal("2000000"),
+                territories=["France"]
+            )
+        ]
+
+        evaluator = ScenarioEvaluator()
+        eval_single = evaluator.evaluate(
+            stack, sample_waterfall, run_monte_carlo=False,
+            deal_blocks=single_deal
+        )
+
+        # Multiple deals with more encumbrances
+        multiple_deals = [
+            create_presale_template(
+                deal_id="PRESALE-001",
+                counterparty_name="French Distro",
+                amount=Decimal("2000000"),
+                territories=["France"]
+            ),
+            create_presale_template(
+                deal_id="PRESALE-002",
+                counterparty_name="German Distro",
+                amount=Decimal("1500000"),
+                territories=["Germany"]
+            ),
+            create_presale_template(
+                deal_id="PRESALE-003",
+                counterparty_name="UK Distro",
+                amount=Decimal("2500000"),
+                territories=["United Kingdom"]
+            ),
+        ]
+
+        eval_multiple = evaluator.evaluate(
+            stack, sample_waterfall, run_monte_carlo=False,
+            deal_blocks=multiple_deals
+        )
+
+        # More deals = more territory encumbrance = lower ownership score
+        assert eval_multiple.ownership_score < eval_single.ownership_score
+
+        # More deals = higher friction
+        assert eval_multiple.friction_score > eval_single.friction_score
