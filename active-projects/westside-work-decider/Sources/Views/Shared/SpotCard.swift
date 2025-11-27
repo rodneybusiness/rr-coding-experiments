@@ -228,8 +228,8 @@ struct SpotCard: View {
     private var tierBorderColor: Color {
         switch spot.tier {
         case .elite: return .purple
-        case .solid: return .blue
-        case .local: return .orange
+        case .reliable: return .blue
+        case .unknown: return .gray
         }
     }
 

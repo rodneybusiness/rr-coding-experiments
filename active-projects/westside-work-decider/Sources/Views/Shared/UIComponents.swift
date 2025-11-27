@@ -212,16 +212,16 @@ struct TierBadge: View {
     private var tierTextColor: Color {
         switch tier {
         case .elite: return .purple
-        case .solid: return .blue
-        case .local: return .orange
+        case .reliable: return .blue
+        case .unknown: return .gray
         }
     }
 
     private var tierBackgroundColor: Color {
         switch tier {
         case .elite: return .purple.opacity(0.15)
-        case .solid: return .blue.opacity(0.12)
-        case .local: return .orange.opacity(0.12)
+        case .reliable: return .blue.opacity(0.12)
+        case .unknown: return .gray.opacity(0.12)
         }
     }
 }
