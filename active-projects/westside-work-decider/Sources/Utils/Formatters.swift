@@ -33,9 +33,9 @@ enum DistanceFormatter {
     /// Returns estimated travel time based on distance
     /// - Parameters:
     ///   - meters: Distance in meters
-    ///   - mode: Travel mode (drive, walk, bike)
+    ///   - mode: Travel mode (driving, walking, transit)
     /// - Returns: Formatted time string like "5 min drive"
-    static func estimatedTime(meters: Double, mode: TravelMode = .drive) -> String {
+    static func estimatedTime(meters: Double, mode: TravelMode = .driving) -> String {
         let minutes = Int(ceil(meters / mode.metersPerMinute))
         if minutes < 1 {
             return "< 1 min \(mode.suffix)"
@@ -53,25 +53,28 @@ enum DistanceFormatter {
         }
     }
 
-    enum TravelMode {
-        case drive
-        case walk
-        case bike
+}
 
-        var metersPerMinute: Double {
-            switch self {
-            case .drive: return 670  // ~25 mph average with traffic
-            case .walk: return 80    // ~3 mph
-            case .bike: return 250   // ~9 mph
-            }
+// MARK: - Travel Mode
+
+enum TravelMode {
+    case driving
+    case walking
+    case transit
+
+    var metersPerMinute: Double {
+        switch self {
+        case .driving: return 670  // ~25 mph average with traffic
+        case .walking: return 80   // ~3 mph
+        case .transit: return 400  // ~15 mph with stops
         }
+    }
 
-        var suffix: String {
-            switch self {
-            case .drive: return "drive"
-            case .walk: return "walk"
-            case .bike: return "bike"
-            }
+    var suffix: String {
+        switch self {
+        case .driving: return "drive"
+        case .walking: return "walk"
+        case .transit: return "transit"
         }
     }
 }
@@ -81,22 +84,53 @@ enum DistanceFormatter {
 enum FrictionBadge {
     /// Determines the appropriate friction warning for a spot
     /// - Parameter spot: The location spot to evaluate
-    /// - Returns: A tuple of (badge text, severity) or nil if no friction
+    /// - Returns: A FrictionWarning or nil if no friction
     static func evaluate(for spot: LocationSpot) -> FrictionWarning? {
+        return evaluate(for: spot, hour: Calendar.current.component(.hour, from: Date()))
+    }
+
+    /// Determines the appropriate friction warning for a spot at a given hour
+    /// - Parameters:
+    ///   - spot: The location spot to evaluate
+    ///   - hour: The hour of day (0-23)
+    /// - Returns: A FrictionWarning or nil if no friction
+    static func evaluate(for spot: LocationSpot, hour: Int) -> FrictionWarning? {
         // High severity: things that could ruin a work session
         if spot.chargedLaptopBrickOnly {
             return FrictionWarning(
-                text: "Charge before you go",
+                message: "Charge before you go",
                 detail: "Limited or no power outlets available",
                 severity: .high,
                 icon: "battery.25"
             )
         }
 
+        // Time-sensitive: evening/night safety
+        if hour >= 20 && !spot.safeToLeaveComputer {
+            return FrictionWarning(
+                message: "Keep belongings close at night",
+                detail: "May be busier/less secure after dark",
+                severity: .high,
+                icon: "moon.fill"
+            )
+        }
+
+        // Time-sensitive: rush hour parking
+        if (hour >= 7 && hour <= 9) || (hour >= 17 && hour <= 19) {
+            if !spot.attributes.contains(.easyParking) && !spot.walkingFriendlyLocation {
+                return FrictionWarning(
+                    message: "Rush hour - expect parking delays",
+                    detail: "Consider arriving early or using transit",
+                    severity: .medium,
+                    icon: "car.fill"
+                )
+            }
+        }
+
         // Medium severity: inconveniences
         if !spot.attributes.contains(.easyParking) && !spot.walkingFriendlyLocation {
             return FrictionWarning(
-                text: "Parking may be tricky",
+                message: "Parking may be tricky",
                 detail: "Street parking or paid lots only",
                 severity: .medium,
                 icon: "car.fill"
@@ -106,7 +140,7 @@ enum FrictionBadge {
         // Low severity: nice-to-know info
         if !spot.safeToLeaveComputer {
             return FrictionWarning(
-                text: "Keep laptop with you",
+                message: "Keep laptop with you",
                 detail: "Not ideal for bathroom breaks",
                 severity: .low,
                 icon: "eye.fill"
@@ -118,29 +152,54 @@ enum FrictionBadge {
 
     /// All applicable friction warnings for a spot (may be multiple)
     static func allWarnings(for spot: LocationSpot) -> [FrictionWarning] {
+        return allWarnings(for: spot, hour: Calendar.current.component(.hour, from: Date()))
+    }
+
+    /// All applicable friction warnings for a spot at a given hour
+    static func allWarnings(for spot: LocationSpot, hour: Int) -> [FrictionWarning] {
         var warnings: [FrictionWarning] = []
 
         if spot.chargedLaptopBrickOnly {
             warnings.append(FrictionWarning(
-                text: "Charge before you go",
+                message: "Charge before you go",
                 detail: "Limited or no power outlets available",
                 severity: .high,
                 icon: "battery.25"
             ))
         }
 
-        if !spot.attributes.contains(.easyParking) && !spot.walkingFriendlyLocation {
+        // Time-sensitive: evening/night
+        if hour >= 20 && !spot.safeToLeaveComputer {
             warnings.append(FrictionWarning(
-                text: "Parking may be tricky",
+                message: "Keep belongings close at night",
+                detail: "May be busier/less secure after dark",
+                severity: .high,
+                icon: "moon.fill"
+            ))
+        }
+
+        // Time-sensitive: rush hour
+        if (hour >= 7 && hour <= 9) || (hour >= 17 && hour <= 19) {
+            if !spot.attributes.contains(.easyParking) && !spot.walkingFriendlyLocation {
+                warnings.append(FrictionWarning(
+                    message: "Rush hour - expect parking delays",
+                    detail: "Consider arriving early or using transit",
+                    severity: .medium,
+                    icon: "car.fill"
+                ))
+            }
+        } else if !spot.attributes.contains(.easyParking) && !spot.walkingFriendlyLocation {
+            warnings.append(FrictionWarning(
+                message: "Parking may be tricky",
                 detail: "Street parking or paid lots only",
                 severity: .medium,
                 icon: "car.fill"
             ))
         }
 
-        if !spot.safeToLeaveComputer {
+        if !spot.safeToLeaveComputer && hour < 20 {
             warnings.append(FrictionWarning(
-                text: "Keep laptop with you",
+                message: "Keep laptop with you",
                 detail: "Not ideal for bathroom breaks",
                 severity: .low,
                 icon: "eye.fill"
@@ -149,7 +208,7 @@ enum FrictionBadge {
 
         if !spot.attributes.contains(.powerHeavy) && !spot.chargedLaptopBrickOnly {
             warnings.append(FrictionWarning(
-                text: "Limited outlets",
+                message: "Limited outlets",
                 detail: "Bring a fully charged laptop",
                 severity: .low,
                 icon: "bolt.slash.fill"
@@ -162,10 +221,13 @@ enum FrictionBadge {
 
 struct FrictionWarning: Identifiable, Equatable {
     let id = UUID()
-    let text: String
+    let message: String
     let detail: String
     let severity: Severity
     let icon: String
+
+    /// Convenience alias for message
+    var text: String { message }
 
     enum Severity: Int, Comparable {
         case low = 0
@@ -178,7 +240,7 @@ struct FrictionWarning: Identifiable, Equatable {
     }
 
     static func == (lhs: FrictionWarning, rhs: FrictionWarning) -> Bool {
-        lhs.text == rhs.text && lhs.severity == rhs.severity
+        lhs.message == rhs.message && lhs.severity == rhs.severity
     }
 }
 

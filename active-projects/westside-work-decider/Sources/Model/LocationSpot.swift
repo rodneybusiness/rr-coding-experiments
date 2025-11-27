@@ -752,4 +752,7 @@ struct SessionPreset: Identifiable, Codable, Hashable {
         .quickSprint,
         .lateNight
     ]
+
+    /// Alias for allPresets (for clearer API)
+    static let defaults: [SessionPreset] = allPresets
 }

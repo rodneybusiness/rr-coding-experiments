@@ -1,926 +1,2330 @@
 [
   {
-    "Name":"Griffin Club Los Angeles",
-    "City":"Los Angeles",
-    "Neighborhood":"Cheviot Hills",
-    "PlaceType":"Club",
-    "Tier":"Elite",
-    "SentimentScore":10.0,
-    "CostBasis":"Membership only (no public day passes)",
-    "OpenLate":true,
-    "CloseToHome":false,
-    "CloseToWork":true,
-    "SafeToLeaveComputer":true,
-    "WalkingFriendlyLocation":false,
-    "ExerciseWellnessAvailable":true,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\u26a1\ufe0f Power Heavy, \ud83d\ude97 Easy Parking, \ud83e\ude91 Ergonomic, \ud83d\udde3\ufe0f Body Doubling, \ud83c\udf7d\ufe0f Real Food, \ud83d\udcde Call Friendly, \ud83d\udc8e Luxury",
-    "CriticalFieldNotes":"Private-club 'Griffin Standard': multiple lounges and terraces with strong wifi and plentiful outlets; incredible all\u2011day work base if you\u2019re a member.",
-    "Status":"Verified Open",
-    "Latitude":34.0297,
-    "Longitude":-118.4075
+    "Name": "Griffin Club Los Angeles",
+    "City": "Los Angeles",
+    "Neighborhood": "Cheviot Hills",
+    "PlaceType": "Club",
+    "Tier": "Elite",
+    "SentimentScore": 10.0,
+    "CostBasis": "Membership only (no public day passes)",
+    "OpenLate": true,
+    "CloseToHome": false,
+    "CloseToWork": true,
+    "SafeToLeaveComputer": true,
+    "WalkingFriendlyLocation": false,
+    "ExerciseWellnessAvailable": true,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\u26a1\ufe0f Power Heavy, \ud83d\ude97 Easy Parking, \ud83e\ude91 Ergonomic, \ud83d\udde3\ufe0f Body Doubling, \ud83c\udf7d\ufe0f Real Food, \ud83d\udcde Call Friendly, \ud83d\udc8e Luxury",
+    "CriticalFieldNotes": "Private-club 'Griffin Standard': multiple lounges and terraces with strong wifi and plentiful outlets; incredible all\u2011day work base if you\u2019re a member.",
+    "Status": "Verified Open",
+    "Latitude": 34.0297,
+    "Longitude": -118.4075,
+    "OperatingHours": {
+      "1": {
+        "open": "06:00",
+        "close": "22:00"
+      },
+      "2": {
+        "open": "06:00",
+        "close": "22:00"
+      },
+      "3": {
+        "open": "06:00",
+        "close": "22:00"
+      },
+      "4": {
+        "open": "06:00",
+        "close": "22:00"
+      },
+      "5": {
+        "open": "06:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "07:00",
+        "close": "21:00"
+      },
+      "7": {
+        "open": "07:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"Santa Monica Proper Hotel (Lobby & Rooftop)",
-    "City":"Los Angeles",
-    "Neighborhood":"Santa Monica",
-    "PlaceType":"Hotel Lobby",
-    "Tier":"Elite",
-    "SentimentScore":9.0,
-    "CostBasis":"Hotel lobby (buy food\/drink; optional ResortPass-style daycation; paid parking)",
-    "OpenLate":true,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":true,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\u26a1\ufe0f Power Heavy, \ud83e\ude91 Ergonomic, \ud83d\udde3\ufe0f Body Doubling, \ud83c\udf7d\ufe0f Real Food, \ud83d\udcde Call Friendly, \ud83c\udf24\ufe0f Patio Power, \ud83c\udf9f\ufe0f Day Pass, \ud83d\udc8e Luxury",
-    "CriticalFieldNotes":"Design-forward lobby intentionally used for remote work with strong wifi, lots of plush plug\u2011in seating and optional day passes; only real tax is pricey food\/parking.",
-    "Status":"Verified Open",
-    "Latitude":34.0182,
-    "Longitude":-118.4905
+    "Name": "Santa Monica Proper Hotel (Lobby & Rooftop)",
+    "City": "Los Angeles",
+    "Neighborhood": "Santa Monica",
+    "PlaceType": "Hotel Lobby",
+    "Tier": "Elite",
+    "SentimentScore": 9.0,
+    "CostBasis": "Hotel lobby (buy food/drink; optional ResortPass-style daycation; paid parking)",
+    "OpenLate": true,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": true,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\u26a1\ufe0f Power Heavy, \ud83e\ude91 Ergonomic, \ud83d\udde3\ufe0f Body Doubling, \ud83c\udf7d\ufe0f Real Food, \ud83d\udcde Call Friendly, \ud83c\udf24\ufe0f Patio Power, \ud83c\udf9f\ufe0f Day Pass, \ud83d\udc8e Luxury",
+    "CriticalFieldNotes": "Design-forward lobby intentionally used for remote work with strong wifi, lots of plush plug\u2011in seating and optional day passes; only real tax is pricey food/parking.",
+    "Status": "Verified Open",
+    "Latitude": 34.0182,
+    "Longitude": -118.4905,
+    "OperatingHours": {
+      "1": {
+        "open": "06:00",
+        "close": "23:00"
+      },
+      "2": {
+        "open": "06:00",
+        "close": "23:00"
+      },
+      "3": {
+        "open": "06:00",
+        "close": "23:00"
+      },
+      "4": {
+        "open": "06:00",
+        "close": "23:00"
+      },
+      "5": {
+        "open": "06:00",
+        "close": "24:00"
+      },
+      "6": {
+        "open": "06:00",
+        "close": "24:00"
+      },
+      "7": {
+        "open": "07:00",
+        "close": "23:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"Viceroy Santa Monica (Lobby & Pool Deck)",
-    "City":"Los Angeles",
-    "Neighborhood":"Santa Monica",
-    "PlaceType":"Hotel Lobby",
-    "Tier":"Elite",
-    "SentimentScore":8.0,
-    "CostBasis":"Hotel lobby (buy food\/drink; valet\/garage parking)",
-    "OpenLate":true,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":true,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf7d\ufe0f Real Food, \ud83d\udcde Call Friendly, \ud83c\udf24\ufe0f Patio Power, \ud83d\udc8e Luxury",
-    "CriticalFieldNotes":"Boutique lobby and pool area with good wifi and full menu; excellent for 2\u20133 hour working blocks, but evenings get social and noisy.",
-    "Status":"Verified Open",
-    "Latitude":34.0096,
-    "Longitude":-118.4917
+    "Name": "Viceroy Santa Monica (Lobby & Pool Deck)",
+    "City": "Los Angeles",
+    "Neighborhood": "Santa Monica",
+    "PlaceType": "Hotel Lobby",
+    "Tier": "Elite",
+    "SentimentScore": 8.0,
+    "CostBasis": "Hotel lobby (buy food/drink; valet/garage parking)",
+    "OpenLate": true,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": true,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf7d\ufe0f Real Food, \ud83d\udcde Call Friendly, \ud83c\udf24\ufe0f Patio Power, \ud83d\udc8e Luxury",
+    "CriticalFieldNotes": "Boutique lobby and pool area with good wifi and full menu; excellent for 2\u20133 hour working blocks, but evenings get social and noisy.",
+    "Status": "Verified Open",
+    "Latitude": 34.0096,
+    "Longitude": -118.4917,
+    "OperatingHours": {
+      "1": {
+        "open": "06:00",
+        "close": "23:00"
+      },
+      "2": {
+        "open": "06:00",
+        "close": "23:00"
+      },
+      "3": {
+        "open": "06:00",
+        "close": "23:00"
+      },
+      "4": {
+        "open": "06:00",
+        "close": "23:00"
+      },
+      "5": {
+        "open": "06:00",
+        "close": "24:00"
+      },
+      "6": {
+        "open": "06:00",
+        "close": "24:00"
+      },
+      "7": {
+        "open": "07:00",
+        "close": "23:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "lively"
   },
   {
-    "Name":"Marriott Marina del Rey (Lobby)",
-    "City":"Los Angeles",
-    "Neighborhood":"Marina del Rey",
-    "PlaceType":"Hotel Lobby",
-    "Tier":"Elite",
-    "SentimentScore":7.0,
-    "CostBasis":"Hotel lobby (buy food\/drink; paid parking; best if you\u2019re a guest)",
-    "OpenLate":true,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":true,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf7d\ufe0f Real Food, \ud83d\udcde Call Friendly, \ud83d\udc8e Luxury",
-    "CriticalFieldNotes":"Business-hotel lobby with bar seating, wifi and plenty of soft chairs; a solid neutral meet\u2011up spot but not purpose-built as a work lounge.",
-    "Status":"Verified Open",
-    "Latitude":33.9805,
-    "Longitude":-118.4577
+    "Name": "Marriott Marina del Rey (Lobby)",
+    "City": "Los Angeles",
+    "Neighborhood": "Marina del Rey",
+    "PlaceType": "Hotel Lobby",
+    "Tier": "Elite",
+    "SentimentScore": 7.0,
+    "CostBasis": "Hotel lobby (buy food/drink; paid parking; best if you\u2019re a guest)",
+    "OpenLate": true,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": true,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf7d\ufe0f Real Food, \ud83d\udcde Call Friendly, \ud83d\udc8e Luxury",
+    "CriticalFieldNotes": "Business-hotel lobby with bar seating, wifi and plenty of soft chairs; a solid neutral meet\u2011up spot but not purpose-built as a work lounge.",
+    "Status": "Verified Open",
+    "Latitude": 33.9805,
+    "Longitude": -118.4577,
+    "OperatingHours": {
+      "1": {
+        "open": "06:00",
+        "close": "23:00"
+      },
+      "2": {
+        "open": "06:00",
+        "close": "23:00"
+      },
+      "3": {
+        "open": "06:00",
+        "close": "23:00"
+      },
+      "4": {
+        "open": "06:00",
+        "close": "23:00"
+      },
+      "5": {
+        "open": "06:00",
+        "close": "24:00"
+      },
+      "6": {
+        "open": "06:00",
+        "close": "24:00"
+      },
+      "7": {
+        "open": "07:00",
+        "close": "23:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"The Shay (Lobby & Canopy Club Areas)",
-    "City":"Los Angeles",
-    "Neighborhood":"Culver City",
-    "PlaceType":"Hotel Lobby",
-    "Tier":"Elite",
-    "SentimentScore":8.0,
-    "CostBasis":"Hotel lobby\/rooftop (order food\/drink; paid Ivy Station garage)",
-    "OpenLate":true,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":true,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf7d\ufe0f Real Food, \ud83d\udcde Call Friendly, \ud83c\udf24\ufe0f Patio Power, \ud83d\udc8e Luxury",
-    "CriticalFieldNotes":"Design\u2011y Culver hotel whose lobby behaves like a cowork space; strong wifi and lots of small tables, but you\u2019re expected to keep ordering and use the garage.",
-    "Status":"Verified Open",
-    "Latitude":34.0265,
-    "Longitude":-118.3905
+    "Name": "The Shay (Lobby & Canopy Club Areas)",
+    "City": "Los Angeles",
+    "Neighborhood": "Culver City",
+    "PlaceType": "Hotel Lobby",
+    "Tier": "Elite",
+    "SentimentScore": 8.0,
+    "CostBasis": "Hotel lobby/rooftop (order food/drink; paid Ivy Station garage)",
+    "OpenLate": true,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": true,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf7d\ufe0f Real Food, \ud83d\udcde Call Friendly, \ud83c\udf24\ufe0f Patio Power, \ud83d\udc8e Luxury",
+    "CriticalFieldNotes": "Design\u2011y Culver hotel whose lobby behaves like a cowork space; strong wifi and lots of small tables, but you\u2019re expected to keep ordering and use the garage.",
+    "Status": "Verified Open",
+    "Latitude": 34.0265,
+    "Longitude": -118.3905,
+    "OperatingHours": {
+      "1": {
+        "open": "06:00",
+        "close": "23:00"
+      },
+      "2": {
+        "open": "06:00",
+        "close": "23:00"
+      },
+      "3": {
+        "open": "06:00",
+        "close": "23:00"
+      },
+      "4": {
+        "open": "06:00",
+        "close": "23:00"
+      },
+      "5": {
+        "open": "06:00",
+        "close": "24:00"
+      },
+      "6": {
+        "open": "06:00",
+        "close": "24:00"
+      },
+      "7": {
+        "open": "07:00",
+        "close": "23:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"BLANKSPACES Venice",
-    "City":"Los Angeles",
-    "Neighborhood":"Venice",
-    "PlaceType":"Coworking Space",
-    "Tier":"Elite",
-    "SentimentScore":9.0,
-    "CostBasis":"Day pass (~$35 WorkCaf\u00e9) or membership",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":true,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\u26a1\ufe0f Power Heavy, \ud83e\ude91 Ergonomic, \ud83d\udde3\ufe0f Body Doubling, \ud83d\udcde Call Friendly, \ud83c\udf9f\ufe0f Day Pass",
-    "CriticalFieldNotes":"Abbot\u2011adjacent cowork where a WorkCaf\u00e9 pass buys you fast wifi, lots of outlets and a friendly creative crowd; great when you want guaranteed seating.",
-    "Status":"Verified Open",
-    "Latitude":33.9915,
-    "Longitude":-118.4695
+    "Name": "BLANKSPACES Venice",
+    "City": "Los Angeles",
+    "Neighborhood": "Venice",
+    "PlaceType": "Coworking Space",
+    "Tier": "Elite",
+    "SentimentScore": 9.0,
+    "CostBasis": "Day pass (~$35 WorkCaf\u00e9) or membership",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": true,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\u26a1\ufe0f Power Heavy, \ud83e\ude91 Ergonomic, \ud83d\udde3\ufe0f Body Doubling, \ud83d\udcde Call Friendly, \ud83c\udf9f\ufe0f Day Pass",
+    "CriticalFieldNotes": "Abbot\u2011adjacent cowork where a WorkCaf\u00e9 pass buys you fast wifi, lots of outlets and a friendly creative crowd; great when you want guaranteed seating.",
+    "Status": "Verified Open",
+    "Latitude": 33.9915,
+    "Longitude": -118.4695,
+    "OperatingHours": {
+      "1": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "2": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "3": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "4": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "5": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "20:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "18:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"BLANKSPACES Santa Monica (Main St)",
-    "City":"Los Angeles",
-    "Neighborhood":"Santa Monica",
-    "PlaceType":"Coworking Space",
-    "Tier":"Elite",
-    "SentimentScore":8.5,
-    "CostBasis":"Day pass (~$35 WorkCaf\u00e9) or membership",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":true,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\u26a1\ufe0f Power Heavy, \ud83e\ude91 Ergonomic, \ud83d\udde3\ufe0f Body Doubling, \ud83d\udcde Call Friendly, \ud83c\udf9f\ufe0f Day Pass",
-    "CriticalFieldNotes":"Beach\u2011adjacent cowork with ergonomic desks and reliable wifi; can feel tight on days when teams camp all day, but reliability is very high.",
-    "Status":"Verified Open",
-    "Latitude":34.0099,
-    "Longitude":-118.4876
+    "Name": "BLANKSPACES Santa Monica (Main St)",
+    "City": "Los Angeles",
+    "Neighborhood": "Santa Monica",
+    "PlaceType": "Coworking Space",
+    "Tier": "Elite",
+    "SentimentScore": 8.5,
+    "CostBasis": "Day pass (~$35 WorkCaf\u00e9) or membership",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": true,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\u26a1\ufe0f Power Heavy, \ud83e\ude91 Ergonomic, \ud83d\udde3\ufe0f Body Doubling, \ud83d\udcde Call Friendly, \ud83c\udf9f\ufe0f Day Pass",
+    "CriticalFieldNotes": "Beach\u2011adjacent cowork with ergonomic desks and reliable wifi; can feel tight on days when teams camp all day, but reliability is very high.",
+    "Status": "Verified Open",
+    "Latitude": 34.0099,
+    "Longitude": -118.4876,
+    "OperatingHours": {
+      "1": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "2": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "3": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "4": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "5": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "20:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "18:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"BLANKSPACES Culver City",
-    "City":"Los Angeles",
-    "Neighborhood":"Culver City",
-    "PlaceType":"Coworking Space",
-    "Tier":"Elite",
-    "SentimentScore":9.0,
-    "CostBasis":"Day pass (~$35 WorkCaf\u00e9) or membership",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":true,
-    "SafeToLeaveComputer":true,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\u26a1\ufe0f Power Heavy, \ud83e\ude91 Ergonomic, \ud83d\udde3\ufe0f Body Doubling, \ud83d\udcde Call Friendly, \ud83c\udf9f\ufe0f Day Pass",
-    "CriticalFieldNotes":"Downtown Culver cowork hub with power at every desk, solid sound management and strong startup\u2011y body\u2011doubling energy.",
-    "Status":"Verified Open",
-    "Latitude":34.0235,
-    "Longitude":-118.394
+    "Name": "BLANKSPACES Culver City",
+    "City": "Los Angeles",
+    "Neighborhood": "Culver City",
+    "PlaceType": "Coworking Space",
+    "Tier": "Elite",
+    "SentimentScore": 9.0,
+    "CostBasis": "Day pass (~$35 WorkCaf\u00e9) or membership",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": true,
+    "SafeToLeaveComputer": true,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\u26a1\ufe0f Power Heavy, \ud83e\ude91 Ergonomic, \ud83d\udde3\ufe0f Body Doubling, \ud83d\udcde Call Friendly, \ud83c\udf9f\ufe0f Day Pass",
+    "CriticalFieldNotes": "Downtown Culver cowork hub with power at every desk, solid sound management and strong startup\u2011y body\u2011doubling energy.",
+    "Status": "Verified Open",
+    "Latitude": 34.0235,
+    "Longitude": -118.394,
+    "OperatingHours": {
+      "1": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "2": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "3": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "4": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "5": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "20:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "18:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"BizHaus Marina del Rey",
-    "City":"Los Angeles",
-    "Neighborhood":"Marina del Rey",
-    "PlaceType":"Coworking Space",
-    "Tier":"Elite",
-    "SentimentScore":9.0,
-    "CostBasis":"Day pass \/ flex membership (includes wifi, coffee, parking)",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":true,
-    "WalkingFriendlyLocation":false,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\u26a1\ufe0f Power Heavy, \ud83d\ude97 Easy Parking, \ud83e\ude91 Ergonomic, \ud83d\udde3\ufe0f Body Doubling, \ud83d\udcde Call Friendly, \ud83c\udf9f\ufe0f Day Pass",
-    "CriticalFieldNotes":"Warehouse\u2011style cowork with high\u2011speed internet, on\u2011site parking and a creative\u2011tech crowd; excellent when you want a stable desk all day.",
-    "Status":"Verified Open",
-    "Latitude":33.985,
-    "Longitude":-118.444
+    "Name": "BizHaus Marina del Rey",
+    "City": "Los Angeles",
+    "Neighborhood": "Marina del Rey",
+    "PlaceType": "Coworking Space",
+    "Tier": "Elite",
+    "SentimentScore": 9.0,
+    "CostBasis": "Day pass / flex membership (includes wifi, coffee, parking)",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": true,
+    "WalkingFriendlyLocation": false,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\u26a1\ufe0f Power Heavy, \ud83d\ude97 Easy Parking, \ud83e\ude91 Ergonomic, \ud83d\udde3\ufe0f Body Doubling, \ud83d\udcde Call Friendly, \ud83c\udf9f\ufe0f Day Pass",
+    "CriticalFieldNotes": "Warehouse\u2011style cowork with high\u2011speed internet, on\u2011site parking and a creative\u2011tech crowd; excellent when you want a stable desk all day.",
+    "Status": "Verified Open",
+    "Latitude": 33.985,
+    "Longitude": -118.444,
+    "OperatingHours": {
+      "1": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "2": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "3": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "4": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "5": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "20:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "18:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"LAX Coworking",
-    "City":"Los Angeles",
-    "Neighborhood":"Westchester",
-    "PlaceType":"Coworking Space",
-    "Tier":"Elite",
-    "SentimentScore":9.0,
-    "CostBasis":"Affordable day pass via Westchester Chamber or memberships",
-    "OpenLate":false,
-    "CloseToHome":true,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":true,
-    "WalkingFriendlyLocation":false,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\u26a1\ufe0f Power Heavy, \ud83d\ude97 Easy Parking, \ud83e\ude91 Ergonomic, \ud83d\udde3\ufe0f Body Doubling, \ud83d\udcde Call Friendly, \ud83c\udf9f\ufe0f Day Pass",
-    "CriticalFieldNotes":"Airport\u2011adjacent cowork that routinely gets called out as the best LAX\u2011area workspace: fast wifi, lots of plugs and genuinely easy parking.",
-    "Status":"Verified Open",
-    "Latitude":33.9588,
-    "Longitude":-118.3974
+    "Name": "LAX Coworking",
+    "City": "Los Angeles",
+    "Neighborhood": "Westchester",
+    "PlaceType": "Coworking Space",
+    "Tier": "Elite",
+    "SentimentScore": 9.0,
+    "CostBasis": "Affordable day pass via Westchester Chamber or memberships",
+    "OpenLate": false,
+    "CloseToHome": true,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": true,
+    "WalkingFriendlyLocation": false,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\u26a1\ufe0f Power Heavy, \ud83d\ude97 Easy Parking, \ud83e\ude91 Ergonomic, \ud83d\udde3\ufe0f Body Doubling, \ud83d\udcde Call Friendly, \ud83c\udf9f\ufe0f Day Pass",
+    "CriticalFieldNotes": "Airport\u2011adjacent cowork that routinely gets called out as the best LAX\u2011area workspace: fast wifi, lots of plugs and genuinely easy parking.",
+    "Status": "Verified Open",
+    "Latitude": 33.9588,
+    "Longitude": -118.3974,
+    "OperatingHours": {
+      "1": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "2": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "3": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "4": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "5": {
+        "open": "07:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "20:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "18:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"Santa Monica Public Library (Main)",
-    "City":"Los Angeles",
-    "Neighborhood":"Santa Monica",
-    "PlaceType":"Library",
-    "Tier":"Reliable",
-    "SentimentScore":8.0,
-    "CostBasis":"Free (no purchase; public library)",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83e\uddd8 Deep Focus, \ud83c\udf24\ufe0f Patio Power",
-    "CriticalFieldNotes":"Quiet, power\u2011rich reading rooms plus a courtyard wifi signal; perfect when you want deep\u2011focus script work and don\u2019t need calls or coffee.",
-    "Status":"Verified Open",
-    "Latitude":34.0142,
-    "Longitude":-118.4921
+    "Name": "Santa Monica Public Library (Main)",
+    "City": "Los Angeles",
+    "Neighborhood": "Santa Monica",
+    "PlaceType": "Library",
+    "Tier": "Reliable",
+    "SentimentScore": 8.0,
+    "CostBasis": "Free (no purchase; public library)",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83e\uddd8 Deep Focus, \ud83c\udf24\ufe0f Patio Power",
+    "CriticalFieldNotes": "Quiet, power\u2011rich reading rooms plus a courtyard wifi signal; perfect when you want deep\u2011focus script work and don\u2019t need calls or coffee.",
+    "Status": "Verified Open",
+    "Latitude": 34.0142,
+    "Longitude": -118.4921,
+    "OperatingHours": {
+      "1": {
+        "open": "10:00",
+        "close": "20:00"
+      },
+      "2": {
+        "open": "10:00",
+        "close": "20:00"
+      },
+      "3": {
+        "open": "10:00",
+        "close": "20:00"
+      },
+      "4": {
+        "open": "10:00",
+        "close": "20:00"
+      },
+      "5": {
+        "open": "10:00",
+        "close": "18:00"
+      },
+      "6": {
+        "open": "10:00",
+        "close": "17:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "quiet"
   },
   {
-    "Name":"Culver Hotel (Lobby)",
-    "City":"Los Angeles",
-    "Neighborhood":"Culver City",
-    "PlaceType":"Hotel Lobby",
-    "Tier":"Reliable",
-    "SentimentScore":7.5,
-    "CostBasis":"Hotel bar (order food\/drink; valet\/garage nearby)",
-    "OpenLate":true,
-    "CloseToHome":false,
-    "CloseToWork":true,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf7d\ufe0f Real Food, \ud83d\udcde Call Friendly, \ud83c\udf19 Night Owl, \ud83d\udc8e Luxury",
-    "CriticalFieldNotes":"Historic lobby bar with wifi and plush seating; welcoming to laptops in off\u2011peak hours but loud and service\u2011driven at night, so best used mid\u2011day.",
-    "Status":"Verified Open",
-    "Latitude":34.0215,
-    "Longitude":-118.3931
+    "Name": "Culver Hotel (Lobby)",
+    "City": "Los Angeles",
+    "Neighborhood": "Culver City",
+    "PlaceType": "Hotel Lobby",
+    "Tier": "Reliable",
+    "SentimentScore": 7.5,
+    "CostBasis": "Hotel bar (order food/drink; valet/garage nearby)",
+    "OpenLate": true,
+    "CloseToHome": false,
+    "CloseToWork": true,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf7d\ufe0f Real Food, \ud83d\udcde Call Friendly, \ud83c\udf19 Night Owl, \ud83d\udc8e Luxury",
+    "CriticalFieldNotes": "Historic lobby bar with wifi and plush seating; welcoming to laptops in off\u2011peak hours but loud and service\u2011driven at night, so best used mid\u2011day.",
+    "Status": "Verified Open",
+    "Latitude": 34.0215,
+    "Longitude": -118.3931,
+    "OperatingHours": {
+      "1": {
+        "open": "06:00",
+        "close": "23:00"
+      },
+      "2": {
+        "open": "06:00",
+        "close": "23:00"
+      },
+      "3": {
+        "open": "06:00",
+        "close": "23:00"
+      },
+      "4": {
+        "open": "06:00",
+        "close": "23:00"
+      },
+      "5": {
+        "open": "06:00",
+        "close": "24:00"
+      },
+      "6": {
+        "open": "06:00",
+        "close": "24:00"
+      },
+      "7": {
+        "open": "07:00",
+        "close": "23:00"
+      }
+    },
+    "WifiQuality": "adequate",
+    "NoiseLevel": "lively"
   },
   {
-    "Name":"Hotel June (Lobby & Caravan Swim Club)",
-    "City":"Los Angeles",
-    "Neighborhood":"Westchester",
-    "PlaceType":"Hotel Lobby",
-    "Tier":"Elite",
-    "SentimentScore":8.0,
-    "CostBasis":"Hotel lobby\/restaurant (buy food\/drink; valet or garage parking)",
-    "OpenLate":true,
-    "CloseToHome":true,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":false,
-    "ExerciseWellnessAvailable":true,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf7d\ufe0f Real Food, \ud83d\udcde Call Friendly, \ud83c\udf24\ufe0f Patio Power, \ud83d\udc8e Luxury",
-    "CriticalFieldNotes":"Boho LAX\u2011side hotel; lobby and pool area have strong wifi and relaxed staff attitudes toward laptops if you\u2019re ordering, with the added bonus of easy access to a pool and bar.",
-    "Status":"Verified Open",
-    "Latitude":33.967,
-    "Longitude":-118.4235
+    "Name": "Hotel June (Lobby & Caravan Swim Club)",
+    "City": "Los Angeles",
+    "Neighborhood": "Westchester",
+    "PlaceType": "Hotel Lobby",
+    "Tier": "Elite",
+    "SentimentScore": 8.0,
+    "CostBasis": "Hotel lobby/restaurant (buy food/drink; valet or garage parking)",
+    "OpenLate": true,
+    "CloseToHome": true,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": false,
+    "ExerciseWellnessAvailable": true,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf7d\ufe0f Real Food, \ud83d\udcde Call Friendly, \ud83c\udf24\ufe0f Patio Power, \ud83d\udc8e Luxury",
+    "CriticalFieldNotes": "Boho LAX\u2011side hotel; lobby and pool area have strong wifi and relaxed staff attitudes toward laptops if you\u2019re ordering, with the added bonus of easy access to a pool and bar.",
+    "Status": "Verified Open",
+    "Latitude": 33.967,
+    "Longitude": -118.4235,
+    "OperatingHours": {
+      "1": {
+        "open": "06:00",
+        "close": "23:00"
+      },
+      "2": {
+        "open": "06:00",
+        "close": "23:00"
+      },
+      "3": {
+        "open": "06:00",
+        "close": "23:00"
+      },
+      "4": {
+        "open": "06:00",
+        "close": "23:00"
+      },
+      "5": {
+        "open": "06:00",
+        "close": "24:00"
+      },
+      "6": {
+        "open": "06:00",
+        "close": "24:00"
+      },
+      "7": {
+        "open": "07:00",
+        "close": "23:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"Capital One Caf\u00e9",
-    "City":"Los Angeles",
-    "Neighborhood":"Santa Monica",
-    "PlaceType":"Bank Cafe",
-    "Tier":"Elite",
-    "SentimentScore":9.0,
-    "CostBasis":"Free seating with purchase (discounts for Capital One cardholders)",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\u26a1\ufe0f Power Heavy, \ud83e\ude91 Ergonomic, \ud83d\udde3\ufe0f Body Doubling",
-    "CriticalFieldNotes":"Bank\u2011meets\u2011caf\u00e9 work hub downtown: free wifi, outlets at most seats and big communal tables; extremely functional if a bit corporate.",
-    "Status":"Verified Open",
-    "Latitude":34.0153,
-    "Longitude":-118.4955
+    "Name": "Capital One Caf\u00e9",
+    "City": "Los Angeles",
+    "Neighborhood": "Santa Monica",
+    "PlaceType": "Bank Cafe",
+    "Tier": "Elite",
+    "SentimentScore": 9.0,
+    "CostBasis": "Free seating with purchase (discounts for Capital One cardholders)",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\u26a1\ufe0f Power Heavy, \ud83e\ude91 Ergonomic, \ud83d\udde3\ufe0f Body Doubling",
+    "CriticalFieldNotes": "Bank\u2011meets\u2011caf\u00e9 work hub downtown: free wifi, outlets at most seats and big communal tables; extremely functional if a bit corporate.",
+    "Status": "Verified Open",
+    "Latitude": 34.0153,
+    "Longitude": -118.4955,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"La La Land Kind Cafe (Montana)",
-    "City":"Los Angeles",
-    "Neighborhood":"Santa Monica",
-    "PlaceType":"Cafe",
-    "Tier":"Reliable",
-    "SentimentScore":8.0,
-    "CostBasis":"Free seating with purchase",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \u2615\ufe0f Elite Coffee",
-    "CriticalFieldNotes":"High\u2011design, very social Montana Ave spot with strong wifi and lots of laptop users; great for energizing work but can be loud and busy.",
-    "Status":"Verified Open",
-    "Latitude":34.0335,
-    "Longitude":-118.4995
+    "Name": "La La Land Kind Cafe (Montana)",
+    "City": "Los Angeles",
+    "Neighborhood": "Santa Monica",
+    "PlaceType": "Cafe",
+    "Tier": "Reliable",
+    "SentimentScore": 8.0,
+    "CostBasis": "Free seating with purchase",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \u2615\ufe0f Elite Coffee",
+    "CriticalFieldNotes": "High\u2011design, very social Montana Ave spot with strong wifi and lots of laptop users; great for energizing work but can be loud and busy.",
+    "Status": "Verified Open",
+    "Latitude": 34.0335,
+    "Longitude": -118.4995,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "lively"
   },
   {
-    "Name":"Bodega Wine Bar",
-    "City":"Los Angeles",
-    "Neighborhood":"Santa Monica",
-    "PlaceType":"Cafe\/Restaurant",
-    "Tier":"Reliable",
-    "SentimentScore":8.0,
-    "CostBasis":"Free daytime seating with purchase (shifts to wine bar at night)",
-    "OpenLate":true,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83e\ude91 Ergonomic, \ud83d\udde3\ufe0f Body Doubling, \ud83c\udf7d\ufe0f Real Food, \ud83c\udf19 Night Owl",
-    "CriticalFieldNotes":"By day, a comfy coffee lounge with wifi and outlets along walls; by night, a proper wine bar\u2014so treat it as an afternoon base, not a midnight office.",
-    "Status":"Verified Open",
-    "Latitude":34.0188,
-    "Longitude":-118.4918
+    "Name": "Bodega Wine Bar",
+    "City": "Los Angeles",
+    "Neighborhood": "Santa Monica",
+    "PlaceType": "Cafe/Restaurant",
+    "Tier": "Reliable",
+    "SentimentScore": 8.0,
+    "CostBasis": "Free daytime seating with purchase (shifts to wine bar at night)",
+    "OpenLate": true,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83e\ude91 Ergonomic, \ud83d\udde3\ufe0f Body Doubling, \ud83c\udf7d\ufe0f Real Food, \ud83c\udf19 Night Owl",
+    "CriticalFieldNotes": "By day, a comfy coffee lounge with wifi and outlets along walls; by night, a proper wine bar\u2014so treat it as an afternoon base, not a midnight office.",
+    "Status": "Verified Open",
+    "Latitude": 34.0188,
+    "Longitude": -118.4918,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "adequate",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"goodboybob Coffee Roasters",
-    "City":"Los Angeles",
-    "Neighborhood":"Santa Monica",
-    "PlaceType":"Cafe",
-    "Tier":"Elite",
-    "SentimentScore":8.5,
-    "CostBasis":"Free seating with purchase (premium pricing)",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":true,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf24\ufe0f Patio Power, \u2615\ufe0f Elite Coffee",
-    "CriticalFieldNotes":"Hidden\u2011courtyard roastery with top\u2011tier beans and a laptop\u2011heavy clientele; wifi is excellent but most outlets are along walls, so best if you arrive reasonably charged.",
-    "Status":"Verified Open",
-    "Latitude":34.0255,
-    "Longitude":-118.4758
+    "Name": "goodboybob Coffee Roasters",
+    "City": "Los Angeles",
+    "Neighborhood": "Santa Monica",
+    "PlaceType": "Cafe",
+    "Tier": "Elite",
+    "SentimentScore": 8.5,
+    "CostBasis": "Free seating with purchase (premium pricing)",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": true,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf24\ufe0f Patio Power, \u2615\ufe0f Elite Coffee",
+    "CriticalFieldNotes": "Hidden\u2011courtyard roastery with top\u2011tier beans and a laptop\u2011heavy clientele; wifi is excellent but most outlets are along walls, so best if you arrive reasonably charged.",
+    "Status": "Verified Open",
+    "Latitude": 34.0255,
+    "Longitude": -118.4758,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"Gnarwhal Coffee",
-    "City":"Los Angeles",
-    "Neighborhood":"Santa Monica",
-    "PlaceType":"Cafe",
-    "Tier":"Reliable",
-    "SentimentScore":7.5,
-    "CostBasis":"Free seating with purchase",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":true,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf05 Early Bird, \u2615\ufe0f Elite Coffee",
-    "CriticalFieldNotes":"Small but beloved Main St shop with free wifi and great drinks; limited outlets mean it\u2019s ideal for a 60\u201390 minute charged\u2011battery sprint.",
-    "Status":"Verified Open",
-    "Latitude":34.0085,
-    "Longitude":-118.4883
+    "Name": "Gnarwhal Coffee",
+    "City": "Los Angeles",
+    "Neighborhood": "Santa Monica",
+    "PlaceType": "Cafe",
+    "Tier": "Reliable",
+    "SentimentScore": 7.5,
+    "CostBasis": "Free seating with purchase",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": true,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf05 Early Bird, \u2615\ufe0f Elite Coffee",
+    "CriticalFieldNotes": "Small but beloved Main St shop with free wifi and great drinks; limited outlets mean it\u2019s ideal for a 60\u201390 minute charged\u2011battery sprint.",
+    "Status": "Verified Open",
+    "Latitude": 34.0085,
+    "Longitude": -118.4883,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "adequate",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"The Cow\u2019s End Cafe (Upstairs Loft)",
-    "City":"Los Angeles",
-    "Neighborhood":"Venice",
-    "PlaceType":"Cafe",
-    "Tier":"Elite",
-    "SentimentScore":8.5,
-    "CostBasis":"Free seating with purchase",
-    "OpenLate":true,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf24\ufe0f Patio Power, \ud83c\udf05 Early Bird, \ud83c\udf19 Night Owl",
-    "CriticalFieldNotes":"Legendary Venice surf cafe; the upstairs loft has real body\u2011doubling energy, wifi and decent outlet access, while downstairs stays tourist\u2011chaotic.",
-    "Status":"Verified Open",
-    "Latitude":33.9881,
-    "Longitude":-118.4717
+    "Name": "The Cow\u2019s End Cafe (Upstairs Loft)",
+    "City": "Los Angeles",
+    "Neighborhood": "Venice",
+    "PlaceType": "Cafe",
+    "Tier": "Elite",
+    "SentimentScore": 8.5,
+    "CostBasis": "Free seating with purchase",
+    "OpenLate": true,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf24\ufe0f Patio Power, \ud83c\udf05 Early Bird, \ud83c\udf19 Night Owl",
+    "CriticalFieldNotes": "Legendary Venice surf cafe; the upstairs loft has real body\u2011doubling energy, wifi and decent outlet access, while downstairs stays tourist\u2011chaotic.",
+    "Status": "Verified Open",
+    "Latitude": 33.9881,
+    "Longitude": -118.4717,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"Companion",
-    "City":"Los Angeles",
-    "Neighborhood":"Venice",
-    "PlaceType":"Cafe\/Restaurant",
-    "Tier":"Elite",
-    "SentimentScore":8.0,
-    "CostBasis":"Free daytime seating with purchase; dinner service is restaurant\u2011mode",
-    "OpenLate":true,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf7d\ufe0f Real Food, \u2615\ufe0f Elite Coffee",
-    "CriticalFieldNotes":"All\u2011day caf\u00e9 on Lincoln that\u2019s explicitly recommended for work\/study by day, then becomes a buzzy restaurant\/wine bar at night.",
-    "Status":"Verified Open",
-    "Latitude":33.9938,
-    "Longitude":-118.4692
+    "Name": "Companion",
+    "City": "Los Angeles",
+    "Neighborhood": "Venice",
+    "PlaceType": "Cafe/Restaurant",
+    "Tier": "Elite",
+    "SentimentScore": 8.0,
+    "CostBasis": "Free daytime seating with purchase; dinner service is restaurant\u2011mode",
+    "OpenLate": true,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf7d\ufe0f Real Food, \u2615\ufe0f Elite Coffee",
+    "CriticalFieldNotes": "All\u2011day caf\u00e9 on Lincoln that\u2019s explicitly recommended for work/study by day, then becomes a buzzy restaurant/wine bar at night.",
+    "Status": "Verified Open",
+    "Latitude": 33.9938,
+    "Longitude": -118.4692,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "lively"
   },
   {
-    "Name":"Deus Ex Machina (Venice Emporium)",
-    "City":"Los Angeles",
-    "Neighborhood":"Venice",
-    "PlaceType":"Cafe",
-    "Tier":"Reliable",
-    "SentimentScore":7.0,
-    "CostBasis":"Free seating with purchase",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":true,
-    "ChargedLaptopBrickOnly":true,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf24\ufe0f Patio Power, \u2615\ufe0f Elite Coffee",
-    "CriticalFieldNotes":"Moto\u2011surf clubhouse with communal tables and fast wifi; multiple guides note limited outlets, so it\u2019s a fantastic creative sprint spot if you arrive charged.",
-    "Status":"Verified Open",
-    "Latitude":33.9954,
-    "Longitude":-118.4635
+    "Name": "Deus Ex Machina (Venice Emporium)",
+    "City": "Los Angeles",
+    "Neighborhood": "Venice",
+    "PlaceType": "Cafe",
+    "Tier": "Reliable",
+    "SentimentScore": 7.0,
+    "CostBasis": "Free seating with purchase",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": true,
+    "ChargedLaptopBrickOnly": true,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf24\ufe0f Patio Power, \u2615\ufe0f Elite Coffee",
+    "CriticalFieldNotes": "Moto\u2011surf clubhouse with communal tables and fast wifi; multiple guides note limited outlets, so it\u2019s a fantastic creative sprint spot if you arrive charged.",
+    "Status": "Verified Open",
+    "Latitude": 33.9954,
+    "Longitude": -118.4635,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "adequate",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"Superba Food + Bread (Venice)",
-    "City":"Los Angeles",
-    "Neighborhood":"Venice",
-    "PlaceType":"Cafe\/Restaurant",
-    "Tier":"Elite",
-    "SentimentScore":8.0,
-    "CostBasis":"Free seating with purchase (full restaurant menu)",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":true,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf7d\ufe0f Real Food, \ud83c\udf24\ufe0f Patio Power, \ud83d\ude97 Easy Parking",
-    "CriticalFieldNotes":"Huge, airy restaurant\u2011bakery with strong wifi and good bar\/bench seating; power is mostly under certain seats, so treat it as battery\u2011friendly, not plug\u2011rich.",
-    "Status":"Verified Open",
-    "Latitude":33.9959,
-    "Longitude":-118.468
+    "Name": "Superba Food + Bread (Venice)",
+    "City": "Los Angeles",
+    "Neighborhood": "Venice",
+    "PlaceType": "Cafe/Restaurant",
+    "Tier": "Elite",
+    "SentimentScore": 8.0,
+    "CostBasis": "Free seating with purchase (full restaurant menu)",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": true,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf7d\ufe0f Real Food, \ud83c\udf24\ufe0f Patio Power, \ud83d\ude97 Easy Parking",
+    "CriticalFieldNotes": "Huge, airy restaurant\u2011bakery with strong wifi and good bar/bench seating; power is mostly under certain seats, so treat it as battery\u2011friendly, not plug\u2011rich.",
+    "Status": "Verified Open",
+    "Latitude": 33.9959,
+    "Longitude": -118.468,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"Lo\/Cal Coffee & Market",
-    "City":"Los Angeles",
-    "Neighborhood":"Santa Monica",
-    "PlaceType":"Cafe",
-    "Tier":"Reliable",
-    "SentimentScore":7.5,
-    "CostBasis":"Free seating with purchase",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":true,
-    "Attributes":"\ud83e\uddd8 Deep Focus, \ud83c\udf24\ufe0f Patio Power",
-    "CriticalFieldNotes":"Calmer Pico\u2011corridor cafe with good wifi and a smaller, more local crowd; a few outlets along walls mean it\u2019s better when you come partially charged.",
-    "Status":"Verified Open",
-    "Latitude":34.0189,
-    "Longitude":-118.4659
+    "Name": "Lo/Cal Coffee & Market",
+    "City": "Los Angeles",
+    "Neighborhood": "Santa Monica",
+    "PlaceType": "Cafe",
+    "Tier": "Reliable",
+    "SentimentScore": 7.5,
+    "CostBasis": "Free seating with purchase",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": true,
+    "Attributes": "\ud83e\uddd8 Deep Focus, \ud83c\udf24\ufe0f Patio Power",
+    "CriticalFieldNotes": "Calmer Pico\u2011corridor cafe with good wifi and a smaller, more local crowd; a few outlets along walls mean it\u2019s better when you come partially charged.",
+    "Status": "Verified Open",
+    "Latitude": 34.0189,
+    "Longitude": -118.4659,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "adequate",
+    "NoiseLevel": "quiet"
   },
   {
-    "Name":"Layla Bagels & Coffee",
-    "City":"Los Angeles",
-    "Neighborhood":"Santa Monica",
-    "PlaceType":"Cafe",
-    "Tier":"Reliable",
-    "SentimentScore":7.0,
-    "CostBasis":"Free seating with purchase",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":true,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf05 Early Bird, \ud83c\udf24\ufe0f Patio Power",
-    "CriticalFieldNotes":"Ocean Park bagel shop that appears on study\/wifi lists; great for early\u2011morning laptop + breakfast, but patio seats and outlets are limited.",
-    "Status":"Verified Open",
-    "Latitude":34.0069,
-    "Longitude":-118.4826
+    "Name": "Layla Bagels & Coffee",
+    "City": "Los Angeles",
+    "Neighborhood": "Santa Monica",
+    "PlaceType": "Cafe",
+    "Tier": "Reliable",
+    "SentimentScore": 7.0,
+    "CostBasis": "Free seating with purchase",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": true,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf05 Early Bird, \ud83c\udf24\ufe0f Patio Power",
+    "CriticalFieldNotes": "Ocean Park bagel shop that appears on study/wifi lists; great for early\u2011morning laptop + breakfast, but patio seats and outlets are limited.",
+    "Status": "Verified Open",
+    "Latitude": 34.0069,
+    "Longitude": -118.4826,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "adequate",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"Dogtown Coffee (Main St)",
-    "City":"Los Angeles",
-    "Neighborhood":"Santa Monica",
-    "PlaceType":"Cafe",
-    "Tier":"Elite",
-    "SentimentScore":8.5,
-    "CostBasis":"Free seating with purchase",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf24\ufe0f Patio Power, \ud83c\udf05 Early Bird, \u2615\ufe0f Elite Coffee",
-    "CriticalFieldNotes":"Surf\u2011heritage shop whose own marketing leans into remote work: strong wifi and good coffee, but small footprint and long lines make timing crucial.",
-    "Status":"Verified Open",
-    "Latitude":34.0088,
-    "Longitude":-118.4885
+    "Name": "Dogtown Coffee (Main St)",
+    "City": "Los Angeles",
+    "Neighborhood": "Santa Monica",
+    "PlaceType": "Cafe",
+    "Tier": "Elite",
+    "SentimentScore": 8.5,
+    "CostBasis": "Free seating with purchase",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf24\ufe0f Patio Power, \ud83c\udf05 Early Bird, \u2615\ufe0f Elite Coffee",
+    "CriticalFieldNotes": "Surf\u2011heritage shop whose own marketing leans into remote work: strong wifi and good coffee, but small footprint and long lines make timing crucial.",
+    "Status": "Verified Open",
+    "Latitude": 34.0088,
+    "Longitude": -118.4885,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"Groundwork Coffee (Rose Ave)",
-    "City":"Los Angeles",
-    "Neighborhood":"Venice",
-    "PlaceType":"Cafe",
-    "Tier":"Elite",
-    "SentimentScore":9.0,
-    "CostBasis":"Free seating with purchase",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\u26a1\ufe0f Power Heavy, \ud83d\udde3\ufe0f Body Doubling, \ud83c\udf24\ufe0f Patio Power, \ud83c\udf05 Early Bird, \u2615\ufe0f Elite Coffee",
-    "CriticalFieldNotes":"One of Venice\u2019s most reliable work caf\u00e9s: big patio, many plugs and very dependable wifi with a crowd that\u2019s almost all laptops and meetings.",
-    "Status":"Verified Open",
-    "Latitude":33.9975,
-    "Longitude":-118.4721
+    "Name": "Groundwork Coffee (Rose Ave)",
+    "City": "Los Angeles",
+    "Neighborhood": "Venice",
+    "PlaceType": "Cafe",
+    "Tier": "Elite",
+    "SentimentScore": 9.0,
+    "CostBasis": "Free seating with purchase",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\u26a1\ufe0f Power Heavy, \ud83d\udde3\ufe0f Body Doubling, \ud83c\udf24\ufe0f Patio Power, \ud83c\udf05 Early Bird, \u2615\ufe0f Elite Coffee",
+    "CriticalFieldNotes": "One of Venice\u2019s most reliable work caf\u00e9s: big patio, many plugs and very dependable wifi with a crowd that\u2019s almost all laptops and meetings.",
+    "Status": "Verified Open",
+    "Latitude": 33.9975,
+    "Longitude": -118.4721,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"Saba Surf Cafe",
-    "City":"Los Angeles",
-    "Neighborhood":"Mar Vista",
-    "PlaceType":"Cafe",
-    "Tier":"Elite",
-    "SentimentScore":8.5,
-    "CostBasis":"Free seating with purchase",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":true,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf24\ufe0f Patio Power, \ud83c\udf05 Early Bird, \u2615\ufe0f Elite Coffee",
-    "CriticalFieldNotes":"Surf\u2011themed flagship on Venice Blvd that doubles as a community and wellness hub; strong wifi and creative energy make it a great ADHD\u2011friendly base.",
-    "Status":"Verified Open",
-    "Latitude":33.995,
-    "Longitude":-118.44
+    "Name": "Saba Surf Cafe",
+    "City": "Los Angeles",
+    "Neighborhood": "Mar Vista",
+    "PlaceType": "Cafe",
+    "Tier": "Elite",
+    "SentimentScore": 8.5,
+    "CostBasis": "Free seating with purchase",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": true,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf24\ufe0f Patio Power, \ud83c\udf05 Early Bird, \u2615\ufe0f Elite Coffee",
+    "CriticalFieldNotes": "Surf\u2011themed flagship on Venice Blvd that doubles as a community and wellness hub; strong wifi and creative energy make it a great ADHD\u2011friendly base.",
+    "Status": "Verified Open",
+    "Latitude": 33.995,
+    "Longitude": -118.44,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"Sachi.LA",
-    "City":"Los Angeles",
-    "Neighborhood":"Mar Vista",
-    "PlaceType":"Cafe",
-    "Tier":"Elite",
-    "SentimentScore":9.0,
-    "CostBasis":"Free seating with purchase",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \ud83e\uddd8 Deep Focus, \ud83c\udf24\ufe0f Patio Power, \u2615\ufe0f Elite Coffee",
-    "CriticalFieldNotes":"Plant\u2011filled coffee + retail space that locals explicitly recommend for laptops: calm but social, with good wifi and outlet access.",
-    "Status":"Verified Open",
-    "Latitude":33.9929,
-    "Longitude":-118.4281
+    "Name": "Sachi.LA",
+    "City": "Los Angeles",
+    "Neighborhood": "Mar Vista",
+    "PlaceType": "Cafe",
+    "Tier": "Elite",
+    "SentimentScore": 9.0,
+    "CostBasis": "Free seating with purchase",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \ud83e\uddd8 Deep Focus, \ud83c\udf24\ufe0f Patio Power, \u2615\ufe0f Elite Coffee",
+    "CriticalFieldNotes": "Plant\u2011filled coffee + retail space that locals explicitly recommend for laptops: calm but social, with good wifi and outlet access.",
+    "Status": "Verified Open",
+    "Latitude": 33.9929,
+    "Longitude": -118.4281,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "quiet"
   },
   {
-    "Name":"Alana\u2019s Coffee Roasters (Mar Vista)",
-    "City":"Los Angeles",
-    "Neighborhood":"Mar Vista",
-    "PlaceType":"Cafe",
-    "Tier":"Elite",
-    "SentimentScore":9.0,
-    "CostBasis":"Free seating with purchase",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf24\ufe0f Patio Power, \ud83c\udf05 Early Bird, \u2615\ufe0f Elite Coffee",
-    "CriticalFieldNotes":"Roastery on Venice Blvd with big patio, fast wifi and plenty of people working; best early in the day before the sun and crowds peak.",
-    "Status":"Verified Open",
-    "Latitude":34.0059,
-    "Longitude":-118.4365
+    "Name": "Alana\u2019s Coffee Roasters (Mar Vista)",
+    "City": "Los Angeles",
+    "Neighborhood": "Mar Vista",
+    "PlaceType": "Cafe",
+    "Tier": "Elite",
+    "SentimentScore": 9.0,
+    "CostBasis": "Free seating with purchase",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf24\ufe0f Patio Power, \ud83c\udf05 Early Bird, \u2615\ufe0f Elite Coffee",
+    "CriticalFieldNotes": "Roastery on Venice Blvd with big patio, fast wifi and plenty of people working; best early in the day before the sun and crowds peak.",
+    "Status": "Verified Open",
+    "Latitude": 34.0059,
+    "Longitude": -118.4365,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"Coffee Connection \/ Awaken Cafe",
-    "City":"Los Angeles",
-    "Neighborhood":"Mar Vista",
-    "PlaceType":"Cafe",
-    "Tier":"Elite",
-    "SentimentScore":9.0,
-    "CostBasis":"Free seating with purchase",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":false,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\u26a1\ufe0f Power Heavy, \ud83d\ude97 Easy Parking, \ud83e\uddd8 Deep Focus, \ud83c\udf24\ufe0f Patio Power",
-    "CriticalFieldNotes":"Sprawling church\u2011courtyard caf\u00e9 with tons of seating, excellent outlet strips and famously easy parking; ideal for full\u2011day laptop camping.",
-    "Status":"Verified Open",
-    "Latitude":33.9985,
-    "Longitude":-118.4278
+    "Name": "Coffee Connection / Awaken Cafe",
+    "City": "Los Angeles",
+    "Neighborhood": "Mar Vista",
+    "PlaceType": "Cafe",
+    "Tier": "Elite",
+    "SentimentScore": 9.0,
+    "CostBasis": "Free seating with purchase",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": false,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\u26a1\ufe0f Power Heavy, \ud83d\ude97 Easy Parking, \ud83e\uddd8 Deep Focus, \ud83c\udf24\ufe0f Patio Power",
+    "CriticalFieldNotes": "Sprawling church\u2011courtyard caf\u00e9 with tons of seating, excellent outlet strips and famously easy parking; ideal for full\u2011day laptop camping.",
+    "Status": "Verified Open",
+    "Latitude": 33.9985,
+    "Longitude": -118.4278,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "quiet"
   },
   {
-    "Name":"310 Coffee Company",
-    "City":"Los Angeles",
-    "Neighborhood":"Mar Vista",
-    "PlaceType":"Cafe",
-    "Tier":"Reliable",
-    "SentimentScore":7.5,
-    "CostBasis":"Free seating with purchase",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":false,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83e\uddd8 Deep Focus",
-    "CriticalFieldNotes":"Quiet neighborhood shop with solid wifi and a mellow crowd; seating and outlets are limited, so it\u2019s best for shorter deep\u2011focus blocks.",
-    "Status":"Verified Open",
-    "Latitude":34.0024,
-    "Longitude":-118.4336
+    "Name": "310 Coffee Company",
+    "City": "Los Angeles",
+    "Neighborhood": "Mar Vista",
+    "PlaceType": "Cafe",
+    "Tier": "Reliable",
+    "SentimentScore": 7.5,
+    "CostBasis": "Free seating with purchase",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": false,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83e\uddd8 Deep Focus",
+    "CriticalFieldNotes": "Quiet neighborhood shop with solid wifi and a mellow crowd; seating and outlets are limited, so it\u2019s best for shorter deep\u2011focus blocks.",
+    "Status": "Verified Open",
+    "Latitude": 34.0024,
+    "Longitude": -118.4336,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "adequate",
+    "NoiseLevel": "quiet"
   },
   {
-    "Name":"Lodge Bread (Washington Blvd)",
-    "City":"Los Angeles",
-    "Neighborhood":"Palms",
-    "PlaceType":"Cafe\/Restaurant",
-    "Tier":"Reliable",
-    "SentimentScore":7.0,
-    "CostBasis":"Free seating with purchase (full kitchen)",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf7d\ufe0f Real Food, \ud83c\udf24\ufe0f Patio Power",
-    "CriticalFieldNotes":"Ridiculously good bread and a lively lunch rush; wifi works but outlets and table time are precious, so treat it as a lunch + short\u2011work session stop.",
-    "Status":"Verified Open",
-    "Latitude":33.9967,
-    "Longitude":-118.4255
+    "Name": "Lodge Bread (Washington Blvd)",
+    "City": "Los Angeles",
+    "Neighborhood": "Palms",
+    "PlaceType": "Cafe/Restaurant",
+    "Tier": "Reliable",
+    "SentimentScore": 7.0,
+    "CostBasis": "Free seating with purchase (full kitchen)",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf7d\ufe0f Real Food, \ud83c\udf24\ufe0f Patio Power",
+    "CriticalFieldNotes": "Ridiculously good bread and a lively lunch rush; wifi works but outlets and table time are precious, so treat it as a lunch + short\u2011work session stop.",
+    "Status": "Verified Open",
+    "Latitude": 33.9967,
+    "Longitude": -118.4255,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "adequate",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"Super Domestic Coffee",
-    "City":"Los Angeles",
-    "Neighborhood":"Culver City",
-    "PlaceType":"Cafe",
-    "Tier":"Reliable",
-    "SentimentScore":8.0,
-    "CostBasis":"Free seating with purchase",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf24\ufe0f Patio Power, \u2615\ufe0f Elite Coffee",
-    "CriticalFieldNotes":"Cyclist\u2011centric caf\u00e9 with outdoor\u2011friendly vibe and fast wifi; good for a couple hours of work, especially on non\u2011race mornings.",
-    "Status":"Verified Open",
-    "Latitude":34.0165,
-    "Longitude":-118.3968
+    "Name": "Super Domestic Coffee",
+    "City": "Los Angeles",
+    "Neighborhood": "Culver City",
+    "PlaceType": "Cafe",
+    "Tier": "Reliable",
+    "SentimentScore": 8.0,
+    "CostBasis": "Free seating with purchase",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf24\ufe0f Patio Power, \u2615\ufe0f Elite Coffee",
+    "CriticalFieldNotes": "Cyclist\u2011centric caf\u00e9 with outdoor\u2011friendly vibe and fast wifi; good for a couple hours of work, especially on non\u2011race mornings.",
+    "Status": "Verified Open",
+    "Latitude": 34.0165,
+    "Longitude": -118.3968,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "adequate",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"Equator Coffees (Ivy Station)",
-    "City":"Los Angeles",
-    "Neighborhood":"Culver City",
-    "PlaceType":"Cafe",
-    "Tier":"Elite",
-    "SentimentScore":8.5,
-    "CostBasis":"Free seating with purchase (plaza seating; paid garage)",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf24\ufe0f Patio Power, \u2615\ufe0f Elite Coffee, \ud83d\udcde Call Friendly",
-    "CriticalFieldNotes":"Equator\u2019s Ivy Station outpost with strong wifi and a mix of indoor and plaza tables; great for stacking meetings before\/after train rides.",
-    "Status":"Verified Open",
-    "Latitude":34.0269,
-    "Longitude":-118.391
+    "Name": "Equator Coffees (Ivy Station)",
+    "City": "Los Angeles",
+    "Neighborhood": "Culver City",
+    "PlaceType": "Cafe",
+    "Tier": "Elite",
+    "SentimentScore": 8.5,
+    "CostBasis": "Free seating with purchase (plaza seating; paid garage)",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf24\ufe0f Patio Power, \u2615\ufe0f Elite Coffee, \ud83d\udcde Call Friendly",
+    "CriticalFieldNotes": "Equator\u2019s Ivy Station outpost with strong wifi and a mix of indoor and plaza tables; great for stacking meetings before/after train rides.",
+    "Status": "Verified Open",
+    "Latitude": 34.0269,
+    "Longitude": -118.391,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"Village Well Books & Coffee",
-    "City":"Los Angeles",
-    "Neighborhood":"Culver City",
-    "PlaceType":"Bookstore Cafe",
-    "Tier":"Reliable",
-    "SentimentScore":7.0,
-    "CostBasis":"Free seating with purchase",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":true,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \ud83e\uddd8 Deep Focus",
-    "CriticalFieldNotes":"Community bookstore\u2011caf\u00e9 with free wifi and laptop zones, but policy now restricts computers to certain tables, so it\u2019s better for 1\u20132 hour stints than day\u2011long camps.",
-    "Status":"Verified Open",
-    "Latitude":34.0219,
-    "Longitude":-118.3945
+    "Name": "Village Well Books & Coffee",
+    "City": "Los Angeles",
+    "Neighborhood": "Culver City",
+    "PlaceType": "Bookstore Cafe",
+    "Tier": "Reliable",
+    "SentimentScore": 7.0,
+    "CostBasis": "Free seating with purchase",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": true,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \ud83e\uddd8 Deep Focus",
+    "CriticalFieldNotes": "Community bookstore\u2011caf\u00e9 with free wifi and laptop zones, but policy now restricts computers to certain tables, so it\u2019s better for 1\u20132 hour stints than day\u2011long camps.",
+    "Status": "Verified Open",
+    "Latitude": 34.0219,
+    "Longitude": -118.3945,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "adequate",
+    "NoiseLevel": "quiet"
   },
   {
-    "Name":"Coffee Commissary (Motor Ave)",
-    "City":"Los Angeles",
-    "Neighborhood":"Palms",
-    "PlaceType":"Cafe",
-    "Tier":"Elite",
-    "SentimentScore":8.0,
-    "CostBasis":"Free seating with purchase",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":true,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf24\ufe0f Patio Power, \u2615\ufe0f Elite Coffee",
-    "CriticalFieldNotes":"Pico\/Motor workhorse with strong espresso, decent outlets and a regular laptop crowd; parking is meters out front plus nearby residential side streets.",
-    "Status":"Verified Open",
-    "Latitude":34.0242,
-    "Longitude":-118.4065
+    "Name": "Coffee Commissary (Motor Ave)",
+    "City": "Los Angeles",
+    "Neighborhood": "Palms",
+    "PlaceType": "Cafe",
+    "Tier": "Elite",
+    "SentimentScore": 8.0,
+    "CostBasis": "Free seating with purchase",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": true,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf24\ufe0f Patio Power, \u2615\ufe0f Elite Coffee",
+    "CriticalFieldNotes": "Pico/Motor workhorse with strong espresso, decent outlets and a regular laptop crowd; parking is meters out front plus nearby residential side streets.",
+    "Status": "Verified Open",
+    "Latitude": 34.0242,
+    "Longitude": -118.4065,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"Cognoscenti Coffee (Culver Arts District)",
-    "City":"Los Angeles",
-    "Neighborhood":"Culver City",
-    "PlaceType":"Cafe",
-    "Tier":"Reliable",
-    "SentimentScore":7.5,
-    "CostBasis":"Free seating with purchase",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83e\uddd8 Deep Focus, \u2615\ufe0f Elite Coffee",
-    "CriticalFieldNotes":"Design\u2011driven micro\u2011caf\u00e9; early write\u2011ups noted no wifi, but current Culver location offers free wifi and enough outlets for short, focused laptop sessions.",
-    "Status":"Verified Open",
-    "Latitude":34.0212,
-    "Longitude":-118.3858
+    "Name": "Cognoscenti Coffee (Culver Arts District)",
+    "City": "Los Angeles",
+    "Neighborhood": "Culver City",
+    "PlaceType": "Cafe",
+    "Tier": "Reliable",
+    "SentimentScore": 7.5,
+    "CostBasis": "Free seating with purchase",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83e\uddd8 Deep Focus, \u2615\ufe0f Elite Coffee",
+    "CriticalFieldNotes": "Design\u2011driven micro\u2011caf\u00e9; early write\u2011ups noted no wifi, but current Culver location offers free wifi and enough outlets for short, focused laptop sessions.",
+    "Status": "Verified Open",
+    "Latitude": 34.0212,
+    "Longitude": -118.3858,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "adequate",
+    "NoiseLevel": "quiet"
   },
   {
-    "Name":"Boy & The Bear (Westchester)",
-    "City":"Los Angeles",
-    "Neighborhood":"Westchester",
-    "PlaceType":"Cafe",
-    "Tier":"Elite",
-    "SentimentScore":8.5,
-    "CostBasis":"Free seating with purchase",
-    "OpenLate":false,
-    "CloseToHome":true,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":false,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83d\ude97 Easy Parking, \ud83d\udde3\ufe0f Body Doubling, \ud83c\udf05 Early Bird, \u2615\ufe0f Elite Coffee",
-    "CriticalFieldNotes":"Colombian roastery with serious coffee, easy lot\/streetside parking and a steady laptop crowd; seating isn\u2019t huge, so morning arrival is your friend.",
-    "Status":"Verified Open",
-    "Latitude":33.9655,
-    "Longitude":-118.403
+    "Name": "Boy & The Bear (Westchester)",
+    "City": "Los Angeles",
+    "Neighborhood": "Westchester",
+    "PlaceType": "Cafe",
+    "Tier": "Elite",
+    "SentimentScore": 8.5,
+    "CostBasis": "Free seating with purchase",
+    "OpenLate": false,
+    "CloseToHome": true,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": false,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83d\ude97 Easy Parking, \ud83d\udde3\ufe0f Body Doubling, \ud83c\udf05 Early Bird, \u2615\ufe0f Elite Coffee",
+    "CriticalFieldNotes": "Colombian roastery with serious coffee, easy lot/streetside parking and a steady laptop crowd; seating isn\u2019t huge, so morning arrival is your friend.",
+    "Status": "Verified Open",
+    "Latitude": 33.9655,
+    "Longitude": -118.403,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"Boy & The Bear (Culver\/Playa Vista)",
-    "City":"Los Angeles",
-    "Neighborhood":"Culver City",
-    "PlaceType":"Cafe",
-    "Tier":"Reliable",
-    "SentimentScore":8.0,
-    "CostBasis":"Free seating with purchase",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf05 Early Bird, \u2615\ufe0f Elite Coffee",
-    "CriticalFieldNotes":"Sister shop near Culver\/Playa with similar roast\u2011forward focus and a regular remote\u2011work crowd; strong choice when you\u2019re on that side of the 90.",
-    "Status":"Verified Open",
-    "Latitude":34.0087,
-    "Longitude":-118.4123
+    "Name": "Boy & The Bear (Culver/Playa Vista)",
+    "City": "Los Angeles",
+    "Neighborhood": "Culver City",
+    "PlaceType": "Cafe",
+    "Tier": "Reliable",
+    "SentimentScore": 8.0,
+    "CostBasis": "Free seating with purchase",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf05 Early Bird, \u2615\ufe0f Elite Coffee",
+    "CriticalFieldNotes": "Sister shop near Culver/Playa with similar roast\u2011forward focus and a regular remote\u2011work crowd; strong choice when you\u2019re on that side of the 90.",
+    "Status": "Verified Open",
+    "Latitude": 34.0087,
+    "Longitude": -118.4123,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "adequate",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"Cafe Ruisseau (Playa Vista)",
-    "City":"Los Angeles",
-    "Neighborhood":"Playa Vista",
-    "PlaceType":"Cafe",
-    "Tier":"Elite",
-    "SentimentScore":8.5,
-    "CostBasis":"Free seating with purchase (garage\/lot parking nearby)",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":false,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf24\ufe0f Patio Power, \ud83c\udf05 Early Bird, \u2615\ufe0f Elite Coffee",
-    "CriticalFieldNotes":"Runway Playa Vista favorite with indoor\/outdoor seating, free wifi and lots of people studying or working; think of it as the campus caf\u00e9 for the tech park.",
-    "Status":"Verified Open",
-    "Latitude":33.9735,
-    "Longitude":-118.424
+    "Name": "Cafe Ruisseau (Playa Vista)",
+    "City": "Los Angeles",
+    "Neighborhood": "Playa Vista",
+    "PlaceType": "Cafe",
+    "Tier": "Elite",
+    "SentimentScore": 8.5,
+    "CostBasis": "Free seating with purchase (garage/lot parking nearby)",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \ud83c\udf24\ufe0f Patio Power, \ud83c\udf05 Early Bird, \u2615\ufe0f Elite Coffee",
+    "CriticalFieldNotes": "Runway Playa Vista favorite with indoor/outdoor seating, free wifi and lots of people studying or working; think of it as the campus caf\u00e9 for the tech park.",
+    "Status": "Verified Open",
+    "Latitude": 33.9735,
+    "Longitude": -118.424,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "moderate"
   },
   {
-    "Name":"Upside Down",
-    "City":"Los Angeles",
-    "Neighborhood":"Westwood",
-    "PlaceType":"Cafe",
-    "Tier":"Elite",
-    "SentimentScore":8.5,
-    "CostBasis":"Donation\u2011based \/ pay\u2011what\u2011you\u2011can coffee model",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":true,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\u26a1\ufe0f Power Heavy, \ud83e\uddd8 Deep Focus, \u2615\ufe0f Elite Coffee",
-    "CriticalFieldNotes":"Nonprofit art\u2011space caf\u00e9 with a strong student presence, plenty of outlets and solid wifi; one of the best quiet laptop bases in Westwood Village.",
-    "Status":"Verified Open",
-    "Latitude":34.0619,
-    "Longitude":-118.4442
+    "Name": "Upside Down",
+    "City": "Los Angeles",
+    "Neighborhood": "Westwood",
+    "PlaceType": "Cafe",
+    "Tier": "Elite",
+    "SentimentScore": 8.5,
+    "CostBasis": "Donation\u2011based / pay\u2011what\u2011you\u2011can coffee model",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": true,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\u26a1\ufe0f Power Heavy, \ud83e\uddd8 Deep Focus, \u2615\ufe0f Elite Coffee",
+    "CriticalFieldNotes": "Nonprofit art\u2011space caf\u00e9 with a strong student presence, plenty of outlets and solid wifi; one of the best quiet laptop bases in Westwood Village.",
+    "Status": "Verified Open",
+    "Latitude": 34.0619,
+    "Longitude": -118.4442,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "quiet"
   },
   {
-    "Name":"Ministry of Coffee (Westwood)",
-    "City":"Los Angeles",
-    "Neighborhood":"Westwood",
-    "PlaceType":"Cafe",
-    "Tier":"Elite",
-    "SentimentScore":8.0,
-    "CostBasis":"Free seating with purchase",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":true,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83e\uddd8 Deep Focus, \u2615\ufe0f Elite Coffee",
-    "CriticalFieldNotes":"Australian\u2011style spot with quieter, study\u2011oriented energy; good wifi and food options make it a strong alternative to the more chaotic chains nearby.",
-    "Status":"Verified Open",
-    "Latitude":34.0615,
-    "Longitude":-118.445
+    "Name": "Ministry of Coffee (Westwood)",
+    "City": "Los Angeles",
+    "Neighborhood": "Westwood",
+    "PlaceType": "Cafe",
+    "Tier": "Elite",
+    "SentimentScore": 8.0,
+    "CostBasis": "Free seating with purchase",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": true,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83e\uddd8 Deep Focus, \u2615\ufe0f Elite Coffee",
+    "CriticalFieldNotes": "Australian\u2011style spot with quieter, study\u2011oriented energy; good wifi and food options make it a strong alternative to the more chaotic chains nearby.",
+    "Status": "Verified Open",
+    "Latitude": 34.0615,
+    "Longitude": -118.445,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "quiet"
   },
   {
-    "Name":"Espressoteric Coffee Co.",
-    "City":"Los Angeles",
-    "Neighborhood":"Westwood",
-    "PlaceType":"Cafe",
-    "Tier":"Reliable",
-    "SentimentScore":7.5,
-    "CostBasis":"Free seating with purchase",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":true,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":false,
-    "Attributes":"\ud83e\uddd8 Deep Focus, \u2615\ufe0f Elite Coffee",
-    "CriticalFieldNotes":"Tiny specialty spot with a couple of laptop\u2011suitable seats and good wifi; ideal for short, intense writing bursts rather than half\u2011day stays.",
-    "Status":"Verified Open",
-    "Latitude":34.057,
-    "Longitude":-118.443
+    "Name": "Espressoteric Coffee Co.",
+    "City": "Los Angeles",
+    "Neighborhood": "Westwood",
+    "PlaceType": "Cafe",
+    "Tier": "Reliable",
+    "SentimentScore": 7.5,
+    "CostBasis": "Free seating with purchase",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": true,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "\ud83e\uddd8 Deep Focus, \u2615\ufe0f Elite Coffee",
+    "CriticalFieldNotes": "Tiny specialty spot with a couple of laptop\u2011suitable seats and good wifi; ideal for short, intense writing bursts rather than half\u2011day stays.",
+    "Status": "Verified Open",
+    "Latitude": 34.057,
+    "Longitude": -118.443,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "adequate",
+    "NoiseLevel": "quiet"
   },
   {
-    "Name":"Alfred Coffee (Westwood)",
-    "City":"Los Angeles",
-    "Neighborhood":"Westwood",
-    "PlaceType":"Cafe",
-    "Tier":"Reliable",
-    "SentimentScore":7.0,
-    "CostBasis":"Free seating with purchase",
-    "OpenLate":false,
-    "CloseToHome":false,
-    "CloseToWork":true,
-    "SafeToLeaveComputer":false,
-    "WalkingFriendlyLocation":true,
-    "ExerciseWellnessAvailable":false,
-    "ChargedLaptopBrickOnly":true,
-    "Attributes":"\ud83d\udde3\ufe0f Body Doubling, \u2615\ufe0f Elite Coffee",
-    "CriticalFieldNotes":"Trendy, high\u2011traffic shop with strong wifi and lots of people on laptops but very few outlets; works for sprints if you come with a charged brick.",
-    "Status":"Verified Open",
-    "Latitude":34.0606,
-    "Longitude":-118.4447
+    "Name": "Alfred Coffee (Westwood)",
+    "City": "Los Angeles",
+    "Neighborhood": "Westwood",
+    "PlaceType": "Cafe",
+    "Tier": "Reliable",
+    "SentimentScore": 7.0,
+    "CostBasis": "Free seating with purchase",
+    "OpenLate": false,
+    "CloseToHome": false,
+    "CloseToWork": true,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": true,
+    "Attributes": "\ud83d\udde3\ufe0f Body Doubling, \u2615\ufe0f Elite Coffee",
+    "CriticalFieldNotes": "Trendy, high\u2011traffic shop with strong wifi and lots of people on laptops but very few outlets; works for sprints if you come with a charged brick.",
+    "Status": "Verified Open",
+    "Latitude": 34.0606,
+    "Longitude": -118.4447,
+    "OperatingHours": {
+      "1": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "08:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "6": {
+        "open": "08:00",
+        "close": "22:00"
+      },
+      "7": {
+        "open": "09:00",
+        "close": "20:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "moderate"
   }
 ]

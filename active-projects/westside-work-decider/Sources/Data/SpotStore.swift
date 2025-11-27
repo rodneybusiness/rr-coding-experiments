@@ -21,10 +21,16 @@ final class SpotStore: ObservableObject {
     var hasLoaded: Bool { loadingState.hasLoaded }
     var spotCount: Int { spots.count }
 
+    /// Indicates if the store is operating with cached/fallback data
+    @Published private(set) var isUsingCachedData: Bool = false
+
     /// All unique neighborhoods in the dataset
     var neighborhoods: [String] {
         Array(Set(spots.map { $0.neighborhood })).sorted()
     }
+
+    /// Alias for neighborhoods (for clearer API)
+    var allNeighborhoods: [String] { neighborhoods }
 
     /// All unique place types in the dataset
     var placeTypes: [PlaceType] {
@@ -36,6 +42,7 @@ final class SpotStore: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
     private var spotIndex: [String: LocationSpot] = [:]
     private var queryCache: QueryCache = QueryCache()
+    private var currentLoader: SpotLoader = BundleSpotLoader()
 
     private let stateURL: URL = {
         let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
@@ -59,6 +66,7 @@ final class SpotStore: ObservableObject {
     // MARK: - Initialization
 
     init(loader: SpotLoader = BundleSpotLoader()) {
+        self.currentLoader = loader
         setupStateObservers()
 
         Task {
@@ -133,7 +141,13 @@ final class SpotStore: ObservableObject {
     }
 
     @MainActor
-    func reload(loader: SpotLoader = BundleSpotLoader()) async {
+    func reload() async {
+        await reload(loader: currentLoader)
+    }
+
+    @MainActor
+    func reload(loader: SpotLoader) async {
+        currentLoader = loader
         queryCache.invalidate()
         loadingState = .idle
         await load(loader: loader)
