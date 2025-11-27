@@ -14,6 +14,7 @@ final class SpotStore: ObservableObject {
     @Published var location: CLLocation? = nil
     @Published private(set) var lastError: DisplayableError? = nil
     @Published private(set) var stateLoaded = false
+    @Published private(set) var currentCity: City
 
     // MARK: - Computed Properties
 
@@ -42,19 +43,14 @@ final class SpotStore: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
     private var spotIndex: [String: LocationSpot] = [:]
     private var queryCache: QueryCache = QueryCache()
-    private var currentLoader: SpotLoader = BundleSpotLoader()
+    private var currentLoader: SpotLoader
 
-    private let stateURL: URL = {
+    /// State file URL - city-specific to isolate favorites/recents per city
+    private var stateURL: URL {
         let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
             ?? URL(fileURLWithPath: NSTemporaryDirectory())
-        return directory.appendingPathComponent("spotstore_state.json")
-    }()
-
-    // MARK: - Location Anchors
-
-    private let homeAnchor = CLLocation(latitude: 33.958, longitude: -118.396)
-    private let workAnchor = CLLocation(latitude: 34.040, longitude: -118.429)
-    private let defaultAnchor = CLLocation(latitude: 34.015, longitude: -118.45)
+        return directory.appendingPathComponent("spotstore_state_\(currentCity.id).json")
+    }
 
     // MARK: - Constants
 
@@ -65,7 +61,8 @@ final class SpotStore: ObservableObject {
 
     // MARK: - Initialization
 
-    init(loader: SpotLoader = BundleSpotLoader()) {
+    init(loader: SpotLoader, city: City = .default) {
+        self.currentCity = city
         self.currentLoader = loader
         setupStateObservers()
 
@@ -76,7 +73,9 @@ final class SpotStore: ObservableObject {
     }
 
     /// Initialize with pre-loaded spots (useful for testing and previews)
-    init(spots: [LocationSpot]) {
+    init(spots: [LocationSpot], city: City = .default) {
+        self.currentCity = city
+        self.currentLoader = BundleSpotLoader(resourceName: city.dataFileName)
         self.spots = spots
         self.loadingState = .loaded(spots)
         self.stateLoaded = true
@@ -151,6 +150,35 @@ final class SpotStore: ObservableObject {
         queryCache.invalidate()
         loadingState = .idle
         await load(loader: loader)
+    }
+
+    // MARK: - City Switching
+
+    /// Switch to a different city, preserving state for each city separately
+    @MainActor
+    func switchCity(_ city: City) async {
+        guard city.id != currentCity.id else { return }
+
+        // Persist current city's state before switching
+        persistState()
+
+        // Clear current data
+        spots = []
+        spotIndex = [:]
+        queryCache.invalidate()
+        favorites = []
+        recentVisits = [:]
+        stateLoaded = false
+        loadingState = .idle
+
+        // Update to new city
+        currentCity = city
+        let newLoader = BundleSpotLoader(resourceName: city.dataFileName)
+        currentLoader = newLoader
+
+        // Load new city's state and data
+        await loadState()
+        await load(loader: newLoader)
     }
 
     private func buildIndex() {
@@ -271,9 +299,9 @@ final class SpotStore: ObservableObject {
 
     func anchorLocation(for query: SpotQuery) -> CLLocation? {
         if let location { return location }
-        if query.closeToHome == true { return homeAnchor }
-        if query.closeToWork == true { return workAnchor }
-        return defaultAnchor
+        if query.closeToHome == true, let home = currentCity.homeAnchor { return home }
+        if query.closeToWork == true, let work = currentCity.workAnchor { return work }
+        return currentCity.defaultAnchor
     }
 
     // MARK: - User Actions
@@ -460,7 +488,11 @@ protocol SpotLoader {
 }
 
 struct BundleSpotLoader: SpotLoader {
-    var resourceName: String = "westside_remote_work_master_verified"
+    let resourceName: String
+
+    init(resourceName: String) {
+        self.resourceName = resourceName
+    }
 
     func loadSpots() async throws -> [LocationSpot] {
         guard let url = Bundle.main.url(forResource: resourceName, withExtension: "json") else {

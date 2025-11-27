@@ -2,18 +2,27 @@ import SwiftUI
 import CoreLocation
 
 struct AppExperienceView: View {
-    @StateObject private var appModel = AppModel(loader: CompositeSpotLoader())
+    @StateObject private var appModel: AppModel
     @StateObject private var filters = QueryModel()
     @State private var selectedTab: Tab = .now
     @State private var currentError: DisplayableError?
     @State private var showNeighborhoodPicker = false
     @State private var selectedNeighborhood: String?
+    @State private var showCityPicker = false
 
-    // Momentum preservation: restore tab selection on relaunch
+    // Momentum preservation: restore selections on relaunch
     @SceneStorage("selectedTab") private var storedTab: String = "now"
     @SceneStorage("lastQueryJSON") private var lastQueryJSON: String = ""
+    @SceneStorage("selectedCityID") private var storedCityID: String = City.default.id
 
     private let aiService: AIRecommendationService = OpenAIService.makeDefault()
+
+    init() {
+        // Restore city from storage or use default
+        let cityID = UserDefaults.standard.string(forKey: "selectedCityID") ?? City.default.id
+        let city = City.find(byID: cityID) ?? .default
+        _appModel = StateObject(wrappedValue: AppModel(city: city))
+    }
 
     var body: some View {
         NavigationStack {
@@ -46,6 +55,12 @@ struct AppExperienceView: View {
             }
             .navigationTitle(navigationTitle(for: selectedTab))
             .toolbar {
+                // City picker in leading position
+                ToolbarItem(placement: .topBarLeading) {
+                    cityPickerMenu
+                }
+
+                // Offline indicator in trailing position
                 ToolbarItem(placement: .topBarTrailing) {
                     if appModel.store.isUsingCachedData {
                         OfflineIndicator(isUsingCachedData: true)
@@ -63,6 +78,13 @@ struct AppExperienceView: View {
         .onChange(of: filters.query) { _, newValue in
             saveQueryState(newValue)
         }
+        .onChange(of: appModel.currentCity) { _, newCity in
+            storedCityID = newCity.id
+            UserDefaults.standard.set(newCity.id, forKey: "selectedCityID")
+            // Clear neighborhood filter when city changes
+            selectedNeighborhood = nil
+            filters.query.neighborhoods = []
+        }
         .errorToast($currentError)
         .sheet(isPresented: $showNeighborhoodPicker) {
             NeighborhoodPicker(
@@ -71,11 +93,76 @@ struct AppExperienceView: View {
                 onDismiss: { showNeighborhoodPicker = false }
             )
         }
+        .sheet(isPresented: $showCityPicker) {
+            CityPickerSheet(
+                currentCity: appModel.currentCity,
+                onSelect: { city in
+                    Task { await appModel.switchCity(city) }
+                    showCityPicker = false
+                },
+                onDismiss: { showCityPicker = false }
+            )
+        }
         .onChange(of: selectedNeighborhood) { _, newValue in
             if let neighborhood = newValue {
                 filters.query.neighborhoods = [neighborhood]
             }
         }
+    }
+
+    // MARK: - City Picker Menu
+
+    private var cityPickerMenu: some View {
+        Menu {
+            // Current city section
+            Section {
+                Label(appModel.currentCity.name, systemImage: "checkmark")
+                    .labelStyle(.titleAndIcon)
+            } header: {
+                Text("Current City")
+            }
+
+            Divider()
+
+            // Quick switch to cities with data
+            Section {
+                ForEach(City.citiesWithData.filter { $0.id != appModel.currentCity.id }) { city in
+                    Button {
+                        Task { await appModel.switchCity(city) }
+                    } label: {
+                        Label(city.name, systemImage: "building.2")
+                    }
+                }
+            } header: {
+                Text("Switch City")
+            }
+
+            Divider()
+
+            // Full city picker
+            Button {
+                showCityPicker = true
+            } label: {
+                Label("All Cities...", systemImage: "globe")
+            }
+        } label: {
+            HStack(spacing: 4) {
+                Image(systemName: "building.2")
+                Text(appModel.currentCity.name)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                Image(systemName: "chevron.down")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(
+                Capsule()
+                    .fill(Color.blue.opacity(0.1))
+            )
+        }
+        .accessibilityLabel("Select city, currently \(appModel.currentCity.name)")
     }
 
     // MARK: - Main Content
@@ -169,6 +256,90 @@ struct AppExperienceView: View {
         case map
         case list
         case chat
+    }
+}
+
+// MARK: - City Picker Sheet
+
+struct CityPickerSheet: View {
+    let currentCity: City
+    let onSelect: (City) -> Void
+    let onDismiss: () -> Void
+
+    var body: some View {
+        NavigationStack {
+            List {
+                ForEach(CityGroup.all) { group in
+                    Section(group.name) {
+                        ForEach(group.cities) { city in
+                            CityRow(
+                                city: city,
+                                isSelected: city.id == currentCity.id,
+                                onSelect: {
+                                    if city.hasData {
+                                        onSelect(city)
+                                    }
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Select City")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") {
+                        onDismiss()
+                    }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - City Row
+
+struct CityRow: View {
+    let city: City
+    let isSelected: Bool
+    let onSelect: () -> Void
+
+    var body: some View {
+        Button(action: onSelect) {
+            HStack {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(city.name)
+                        .font(.body)
+                        .foregroundStyle(city.hasData ? .primary : .secondary)
+
+                    Text(city.spotCountLabel)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                if isSelected {
+                    Image(systemName: "checkmark")
+                        .foregroundStyle(.blue)
+                        .fontWeight(.semibold)
+                } else if !city.hasData {
+                    Text("Coming Soon")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(
+                            Capsule()
+                                .fill(Color.gray.opacity(0.1))
+                        )
+                }
+            }
+        }
+        .disabled(!city.hasData && !isSelected)
+        .accessibilityLabel("\(city.name), \(city.spotCountLabel)")
+        .accessibilityHint(city.hasData ? "Tap to select" : "Coming soon")
     }
 }
 
