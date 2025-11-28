@@ -1,0 +1,34 @@
+[
+  {
+    "Name": "Scarsdale Public Library",
+    "City": "Scarsdale",
+    "Neighborhood": "Village Center",
+    "PlaceType": "Library",
+    "Tier": "Elite",
+    "SentimentScore": 9.2,
+    "CostBasis": "Free, library card for study rooms",
+    "OpenLate": true,
+    "CloseToHome": true,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": true,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "⚡️ Power Heavy, 🪑 Ergonomic, 🧘 Deep Focus, 📚 Library, 🆓 Free",
+    "CriticalFieldNotes": "Beautifully renovated library at 54 Olmsted Road. Bright, spacious reading room with large tables and quiet cubicles ideal for focused work. Study rooms available (2 hours/day max, 3x/week). Free WiFi throughout. Part of Westchester Library System. Exceptional environment for deep work sessions. One of the best public libraries in Westchester County.",
+    "Status": "Verified Open",
+    "Latitude": 41.0055,
+    "Longitude": -73.7938,
+    "OperatingHours": {
+      "1": { "open": "09:00", "close": "21:00" },
+      "2": { "open": "09:00", "close": "21:00" },
+      "3": { "open": "09:00", "close": "21:00" },
+      "4": { "open": "09:00", "close": "18:00" },
+      "5": { "open": "09:00", "close": "18:00" },
+      "6": { "open": "09:00", "close": "17:00" },
+      "7": { "open": "12:00", "close": "17:00" }
+    },
+    "WiFiQuality": "Fast",
+    "NoiseLevel": "Silent"
+  }
+]

@@ -91,12 +91,27 @@ extension City {
         workLongitude: -122.4008
     )
 
+    /// Palm Springs / Joshua Tree region
+    static let palmSprings = City(
+        id: "palm-springs",
+        name: "Palm Springs / Joshua Tree",
+        region: "California, USA",
+        dataFileName: "palm_springs_spots",
+        spotCount: 2, // Two Bunch Palms + Joshua Tree Starfire House
+        defaultLatitude: 33.8303,  // Palm Springs center
+        defaultLongitude: -116.5453,
+        homeLatitude: nil,
+        homeLongitude: nil,
+        workLatitude: nil,
+        workLongitude: nil
+    )
+
     // MARK: - East Coast USA
 
     /// New York City
     static let newYork = City(
         id: "nyc",
-        name: "New York",
+        name: "New York City",
         region: "New York, USA",
         dataFileName: "nyc_spots",
         spotCount: 0,
@@ -106,6 +121,38 @@ extension City {
         homeLongitude: nil,
         workLatitude: 40.7580,  // Midtown
         workLongitude: -73.9855
+    )
+
+    /// Scarsdale, NY (Westchester)
+    static let scarsdale = City(
+        id: "scarsdale",
+        name: "Scarsdale",
+        region: "New York, USA",
+        dataFileName: "scarsdale_spots",
+        spotCount: 1, // Scarsdale Public Library
+        defaultLatitude: 41.0055,  // Scarsdale village center
+        defaultLongitude: -73.7938,
+        homeLatitude: nil,
+        homeLongitude: nil,
+        workLatitude: nil,
+        workLongitude: nil
+    )
+
+    // MARK: - Mountain West USA
+
+    /// Salt Lake City, Utah
+    static let saltLakeCity = City(
+        id: "salt-lake-city",
+        name: "Salt Lake City",
+        region: "Utah, USA",
+        dataFileName: "salt_lake_city_spots",
+        spotCount: 1, // Little America Hotel
+        defaultLatitude: 40.7608,  // Downtown SLC
+        defaultLongitude: -111.8910,
+        homeLatitude: nil,
+        homeLongitude: nil,
+        workLatitude: 40.7596,  // Central business district
+        workLongitude: -111.8867
     )
 
     // MARK: - Midwest USA
@@ -163,8 +210,11 @@ extension City {
     static let available: [City] = [
         .laWestside,
         .sanFrancisco,
+        .palmSprings,
         .london,
         .newYork,
+        .scarsdale,
+        .saltLakeCity,
         .detroitAnnArbor,
         .paris
     ].sorted { lhs, rhs in
@@ -198,8 +248,9 @@ struct CityGroup: Identifiable {
     let cities: [City]
 
     static let all: [CityGroup] = [
-        CityGroup(id: "usa-west", name: "West Coast USA", cities: [.laWestside, .sanFrancisco]),
-        CityGroup(id: "usa-east", name: "East Coast USA", cities: [.newYork]),
+        CityGroup(id: "usa-west", name: "West Coast USA", cities: [.laWestside, .sanFrancisco, .palmSprings]),
+        CityGroup(id: "usa-east", name: "East Coast USA", cities: [.newYork, .scarsdale]),
+        CityGroup(id: "usa-mountain", name: "Mountain West USA", cities: [.saltLakeCity]),
         CityGroup(id: "usa-midwest", name: "Midwest USA", cities: [.detroitAnnArbor]),
         CityGroup(id: "europe", name: "Europe", cities: [.london, .paris])
     ]
