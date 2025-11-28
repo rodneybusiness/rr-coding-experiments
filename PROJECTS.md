@@ -2,6 +2,26 @@
 
 This document catalogs all projects in the RR Coding Experiments repository.
 
+## Featured Projects
+
+### Westside Work Decider
+- **Location**: `active-projects/westside-work-decider/`
+- **Status**: Ready for Xcode Deployment
+- **Description**: ADHD-friendly iOS app for discovering remote work spots on LA's Westside. Features 44 verified locations, AI-powered recommendations, real-time open/closed status, and quick presets.
+- **Tech Stack**: Swift, SwiftUI, iOS 17+, MapKit
+- **Dependencies**: Xcode 15+, iPhone/iPad with iOS 17+
+- **Last Modified**: 2025-11-28
+
+### Independent Animated Film Financing Model v1
+- **Location**: `active-projects/Independent Animated Film Financing Model v1/`
+- **Status**: Production Ready (v1.0.0)
+- **Description**: Full-stack financial simulation platform for animation film financing. Calculates tax incentives, executes recoupment waterfalls, and optimizes capital scenarios.
+- **Tech Stack**: Python 3.11, FastAPI, PostgreSQL, Redis, Next.js 14, TypeScript
+- **Dependencies**: Docker, docker-compose
+- **Last Modified**: 2025-10-15
+
+---
+
 ## Active Projects
 
 ### Index Cards Project (2025)
@@ -32,7 +52,7 @@ This document catalogs all projects in the RR Coding Experiments repository.
 - **Location**: `active-projects/cogrepo/`
 - **Original Source**: Existing in main repo
 - **Status**: Active development
-- **Description**: Repository search and analysis system with UI
+- **Description**: LLM-powered tool to transform AI conversations into searchable knowledge bases
 - **Dependencies**: Python, Node.js
 - **Last Modified**: 2025-08-30
 
@@ -73,9 +93,11 @@ This document catalogs all projects in the RR Coding Experiments repository.
 - **Location**: `active-projects/zombie-quest/`
 - **Original Source**: Existing in main repo
 - **Status**: Active development
-- **Description**: Interactive game implementation
-- **Dependencies**: Python
+- **Description**: Retro-style Sierra game built with Python and Pygame
+- **Dependencies**: Python, Pygame
 - **Last Modified**: 2025-08-30
+
+---
 
 ## Archived Projects (Internal)
 
@@ -86,6 +108,8 @@ This document catalogs all projects in the RR Coding Experiments repository.
 - **Description**: Travel analytics and reporting system
 - **Dependencies**: Python
 - **Last Modified**: 2025-08-30
+
+---
 
 ## Archived Projects
 
@@ -113,6 +137,8 @@ This document catalogs all projects in the RR Coding Experiments repository.
 - **Dependencies**: Various
 - **Last Modified**: 2025-08-30
 
+---
+
 ## Artifacts
 
 ### html-experiments
@@ -122,6 +148,8 @@ This document catalogs all projects in the RR Coding Experiments repository.
 - **Description**: Standalone HTML visualizations and experiments
 - **Dependencies**: None (static HTML)
 - **Last Modified**: 2025-08-30
+
+---
 
 ## Shared Utilities
 
@@ -135,11 +163,14 @@ This document catalogs all projects in the RR Coding Experiments repository.
 
 ---
 
-**Repository Consolidation Date**: August 30, 2025  
-**Total Projects**: 13 (9 active, 1 internal archive, 3 external archives)
+**Repository Consolidation Date**: August 30, 2025
+**Last Updated**: November 28, 2025
+**Total Projects**: 15 (11 active, 1 internal archive, 3 external archives)
 **GitHub Repository**: https://github.com/rodneybusiness/rr-coding-experiments
 
 ## Notes
+- Westside Work Decider added (November 2025) - ready for iOS deployment
+- Film Financing Navigator is production-ready with Docker deployment
 - Separate `anime-directors-analysis` repo archived (consolidated version is more recent)
 - Modern Magic taxonomy projects added from Downloads/Business folders
 - 8bg-renaming-tools and zombie-quest moved to active (per user feedback)
