@@ -10,24 +10,26 @@ final class IntegrationTests: XCTestCase {
     // MARK: - Test Data
 
     static let testSpot = LocationSpot(
-        id: "test-1",
         name: "Test Coffee Shop",
+        city: "Los Angeles",
         neighborhood: "Venice",
-        latitude: 33.9925,
-        longitude: -118.4695,
-        placeType: .coffeeShop,
+        placeType: .cafe,
         tier: .elite,
         sentimentScore: 4.5,
-        criticalFieldNotes: "Great spot for focused work",
-        safeToLeaveComputer: true,
+        costBasis: "$$",
         openLate: true,
         closeToHome: false,
         closeToWork: false,
+        safeToLeaveComputer: true,
         walkingFriendlyLocation: true,
         exerciseWellnessAvailable: false,
         chargedLaptopBrickOnly: false,
         attributes: [.deepFocus, .powerHeavy, .eliteCoffee],
-        wifiQuality: .excellent,
+        criticalFieldNotes: "Great spot for focused work",
+        status: "Verified Open",
+        latitude: 33.9925,
+        longitude: -118.4695,
+        wifiQuality: .fast,
         noiseLevel: .quiet,
         operatingHours: OperatingHours(schedule: [
             1: DayHours(open: "06:00", close: "21:00"),
@@ -40,24 +42,26 @@ final class IntegrationTests: XCTestCase {
         ])
     )
 
-    static let testSpotNoHours = LocationSpot(
-        id: "test-2",
+    static var testSpotNoHours = LocationSpot(
         name: "Test Spot Without Hours",
+        city: "Los Angeles",
         neighborhood: "Santa Monica",
-        latitude: 34.0195,
-        longitude: -118.4912,
         placeType: .cafe,
         tier: .reliable,
         sentimentScore: 3.5,
-        criticalFieldNotes: "Basic cafe",
-        safeToLeaveComputer: false,
+        costBasis: "$$",
         openLate: false,
         closeToHome: true,
         closeToWork: false,
+        safeToLeaveComputer: false,
         walkingFriendlyLocation: false,
         exerciseWellnessAvailable: false,
         chargedLaptopBrickOnly: true,
-        attributes: [.bodyDoubling]
+        attributes: [.bodyDoubling],
+        criticalFieldNotes: "Basic cafe",
+        status: "Verified Open",
+        latitude: 34.0195,
+        longitude: -118.4912
     )
 }
 
@@ -335,15 +339,15 @@ final class DisplayableErrorIntegrationTests: XCTestCase {
 final class WiFiQualityIntegrationTests: XCTestCase {
 
     func testWiFiQualityValues() {
-        XCTAssertEqual(WiFiQuality.excellent.rawValue, "excellent")
-        XCTAssertEqual(WiFiQuality.good.rawValue, "good")
-        XCTAssertEqual(WiFiQuality.adequate.rawValue, "adequate")
-        XCTAssertEqual(WiFiQuality.poor.rawValue, "poor")
+        XCTAssertEqual(WiFiQuality.fast.rawValue, "Fast")
+        XCTAssertEqual(WiFiQuality.moderate.rawValue, "Moderate")
+        XCTAssertEqual(WiFiQuality.slow.rawValue, "Slow")
+        XCTAssertEqual(WiFiQuality.none.rawValue, "None")
     }
 
     func testWiFiQualityFromSpot() {
         let spot = IntegrationTests.testSpot
-        XCTAssertEqual(spot.wifiQuality, .excellent)
+        XCTAssertEqual(spot.wifiQuality, .fast)
     }
 }
 
@@ -352,9 +356,10 @@ final class WiFiQualityIntegrationTests: XCTestCase {
 final class NoiseLevelIntegrationTests: XCTestCase {
 
     func testNoiseLevelValues() {
-        XCTAssertEqual(NoiseLevel.quiet.rawValue, "quiet")
-        XCTAssertEqual(NoiseLevel.moderate.rawValue, "moderate")
-        XCTAssertEqual(NoiseLevel.lively.rawValue, "lively")
+        XCTAssertEqual(NoiseLevel.silent.rawValue, "Silent")
+        XCTAssertEqual(NoiseLevel.quiet.rawValue, "Quiet")
+        XCTAssertEqual(NoiseLevel.moderate.rawValue, "Moderate")
+        XCTAssertEqual(NoiseLevel.loud.rawValue, "Loud")
     }
 
     func testNoiseLevelFromSpot() {
@@ -421,7 +426,7 @@ final class SpotStoreIntegrationTests: XCTestCase {
         let spots = [IntegrationTests.testSpot]
         let store = SpotStore(spots: spots)
 
-        let found = store.spot(byID: "test-1")
+        let found = store.spot(byID: "test-coffee-shop-venice")
         XCTAssertNotNil(found)
         XCTAssertEqual(found?.name, "Test Coffee Shop")
     }
@@ -471,14 +476,15 @@ final class SpotStoreIntegrationTests: XCTestCase {
     func testToggleFavorite() {
         let spots = [IntegrationTests.testSpot]
         let store = SpotStore(spots: spots)
+        let spotID = "test-coffee-shop-venice"
 
-        XCTAssertFalse(store.favorites.contains("test-1"))
-
-        store.toggleFavorite(for: IntegrationTests.testSpot)
-        XCTAssertTrue(store.favorites.contains("test-1"))
+        XCTAssertFalse(store.favorites.contains(spotID))
 
         store.toggleFavorite(for: IntegrationTests.testSpot)
-        XCTAssertFalse(store.favorites.contains("test-1"))
+        XCTAssertTrue(store.favorites.contains(spotID))
+
+        store.toggleFavorite(for: IntegrationTests.testSpot)
+        XCTAssertFalse(store.favorites.contains(spotID))
     }
 }
 
@@ -494,7 +500,7 @@ final class SimulatedAIServiceIntegrationTests: XCTestCase {
                 name: "Quiet Coffee",
                 neighborhood: "Venice",
                 tier: .elite,
-                placeType: .coffeeShop,
+                placeType: .cafe,
                 attributes: [.deepFocus, .powerHeavy],
                 criticalFieldNotes: "Great for focus work",
                 distanceMeters: 1000
@@ -547,5 +553,87 @@ final class SimulatedAIServiceIntegrationTests: XCTestCase {
 
         // Should recommend the night owl spot
         XCTAssertNotNil(response.filters?.openLate)
+    }
+}
+
+// MARK: - City Tests
+
+final class CityIntegrationTests: XCTestCase {
+
+    func testDefaultCity() {
+        XCTAssertEqual(City.default.id, "la-westside")
+        XCTAssertEqual(City.default.name, "LA Westside")
+    }
+
+    func testCityFindByID() {
+        let found = City.find(byID: "la-westside")
+        XCTAssertNotNil(found)
+        XCTAssertEqual(found?.name, "LA Westside")
+
+        let notFound = City.find(byID: "nonexistent")
+        XCTAssertNil(notFound)
+    }
+
+    func testCitiesWithData() {
+        let citiesWithData = City.citiesWithData
+        XCTAssertTrue(citiesWithData.contains { $0.id == "la-westside" })
+        XCTAssertTrue(citiesWithData.contains { $0.id == "sf-bay" })
+        XCTAssertTrue(citiesWithData.contains { $0.id == "london" })
+    }
+
+    func testCityAnchors() {
+        let la = City.laWestside
+
+        XCTAssertNotNil(la.defaultAnchor)
+        XCTAssertNotNil(la.homeAnchor)
+        XCTAssertNotNil(la.workAnchor)
+
+        // SF doesn't have home anchor
+        let sf = City.sanFrancisco
+        XCTAssertNotNil(sf.defaultAnchor)
+        XCTAssertNil(sf.homeAnchor)
+        XCTAssertNotNil(sf.workAnchor)
+    }
+
+    func testCitySpotCount() {
+        XCTAssertEqual(City.laWestside.spotCount, 44)
+        XCTAssertEqual(City.sanFrancisco.spotCount, 2)
+        XCTAssertEqual(City.london.spotCount, 1)
+        XCTAssertEqual(City.newYork.spotCount, 0)
+    }
+
+    func testCityHasData() {
+        XCTAssertTrue(City.laWestside.hasData)
+        XCTAssertTrue(City.sanFrancisco.hasData)
+        XCTAssertTrue(City.london.hasData)
+        XCTAssertFalse(City.newYork.hasData)
+        XCTAssertFalse(City.paris.hasData)
+    }
+
+    func testCitySpotCountLabel() {
+        XCTAssertEqual(City.laWestside.spotCountLabel, "44 spots")
+        XCTAssertEqual(City.london.spotCountLabel, "1 spot")
+        XCTAssertEqual(City.newYork.spotCountLabel, "Coming soon")
+    }
+
+    func testAllCitiesAvailable() {
+        let all = City.available
+        XCTAssertGreaterThanOrEqual(all.count, 6)
+        XCTAssertTrue(all.contains { $0.id == "la-westside" })
+        XCTAssertTrue(all.contains { $0.id == "sf-bay" })
+        XCTAssertTrue(all.contains { $0.id == "london" })
+        XCTAssertTrue(all.contains { $0.id == "nyc" })
+        XCTAssertTrue(all.contains { $0.id == "paris" })
+        XCTAssertTrue(all.contains { $0.id == "detroit-aa" })
+    }
+
+    func testCityGroups() {
+        let groups = CityGroup.all
+        XCTAssertGreaterThanOrEqual(groups.count, 4)
+
+        let westCoast = groups.first { $0.id == "usa-west" }
+        XCTAssertNotNil(westCoast)
+        XCTAssertTrue(westCoast?.cities.contains { $0.id == "la-westside" } ?? false)
+        XCTAssertTrue(westCoast?.cities.contains { $0.id == "sf-bay" } ?? false)
     }
 }
