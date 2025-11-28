@@ -1,181 +1,256 @@
-# Westside Work Decider (SwiftUI)
+# Westside Work Decider
 
-An ADHD-friendly iOS decision tool that recommends the best remote-work spot on LA's Westside using a curated dataset. The project prioritizes low-friction choices, quick presets, and AI-assisted intent parsing while keeping a local, offline-first source of truth.
+An ADHD-friendly iOS app that recommends the best remote-work spots on LA's Westside. Features quick presets, AI-assisted intent parsing, real-time open/closed status, and an offline-first local database of 44 verified locations.
 
-## Recent Updates (November 2025)
-
-### New Features
-- **Real-time Open/Closed Status** - Shows whether each spot is currently open based on operating hours
-- **Time-Sensitive Warnings** - "Closes in 30 min!" nudges help avoid wasted trips
-- **One-Tap Navigation** - Navigate button opens Apple Maps with directions
-- **Smart Friction Alerts** - Rush hour parking warnings, night safety reminders
-- **Tier Color System** - Visual hierarchy: Purple (Elite), Blue (Reliable), Gray (Unknown)
-- **AI Feedback Loop** - Thumbs up/down after recommendations to improve suggestions
-- **State Restoration** - App remembers your tab and filters when reopening
-
-### Data Enhancements
-- All 44 spots now include operating hours, WiFi quality ratings, and noise levels
-- Enhanced AI keyword detection (60+ keywords for better intent parsing)
-
-### Accessibility
-- Comprehensive VoiceOver labels throughout
-- Dynamic Type support for all text
-- Location permission graceful fallback with neighborhood picker
-
-### Testing
-- 95+ unit tests covering core functionality
-- Integration tests for AI services, formatters, and error handling
+**Platform:** iOS 17+ | **Framework:** SwiftUI | **Status:** Ready for Xcode
 
 ---
 
-## Goals & Scope
-- **Now screen** with recommendations for the current context (time of day, location, intent presets)
-- **Map + list** with pill filters for Tier, Neighborhood, PlaceType, attributes, and boolean flags
-- **Chat** that translates free-text questions into filters/sorts against the local dataset (no hallucinated venues)
-- **Offline-first data** loaded from bundled JSON into a single local store
-- **ADHD-friendly UX**: high contrast, large tap targets, presets over manual steps, minimal clutter
+## Quick Start (Xcode Setup)
 
-## Architecture Overview
+### Prerequisites
 
-### UI (SwiftUI, iOS 17+)
-- **Feature views**: `NowView`, `SpotsMapView`, `SpotListView`, `ChatView`
-- **Shared components**: `SpotCard`, `UIComponents` (LoadingStateView, TierBadge, OpenClosedBadge, NavigateButton, FeedbackView, etc.)
-- Layout defaults to cards and horizontally scrolling pill filters
+- macOS with **Xcode 15+** (free from App Store)
+- **Apple ID** (free tier works, or $99/year Developer account)
+- iPhone running **iOS 17+** with USB cable
 
-### Domain Model
-- `LocationSpot` with enums for `Tier`, `PlaceType`, `AttributeTag`; booleans for flags; `CriticalFieldNotes` for friction cues
-- `OperatingHours` with per-day schedules and `isOpen(at:)` checking
-- `WiFiQuality` and `NoiseLevel` enums for amenity filtering
-- `SpotQuery` and `SpotSort` encapsulate filter/sort intent
-- `SessionPreset` for ADHD-friendly quick filters (Deep Focus, Body Doubling, Quick Sprint, Late Night)
+### Step 1: Create Xcode Project
 
-### Data Layer
-- `SpotStore` loads bundled JSON, normalizes attributes, caches with indexed lookups
-- `LoadingState<T>` enum provides proper loading/error states to UI
-- `QueryCache` with TTL for efficient repeated queries
-- User state (favorites/recents) persisted to Documents directory
+1. Open Xcode → File → New → Project
+2. Select **iOS** → **App** → Next
+3. Configure:
+   - **Product Name:** `WestsideWorkDecider`
+   - **Team:** Your Apple ID
+   - **Organization Identifier:** `com.yourname`
+   - **Interface:** SwiftUI
+   - **Language:** Swift
+   - **Minimum Deployment:** iOS 17.0
+4. Save the project
 
-### AI Layer
-- `AIRecommendationService` protocol with DTOs for requests/responses
-- `SimulatedAIService` - offline rule-based intent parsing with 60+ keyword mappings
-- `OpenAIService` - optional live client with caching, retry logic, and automatic fallback
-- Both services share the same response format for seamless switching
+### Step 2: Add Source Files
 
-### Error Handling
-- Domain-specific errors: `SpotDataError`, `AIServiceError`, `LocationError`
-- `DisplayableError` for user-friendly error presentation
-- `ErrorRecovery` builder for chaining fallback operations
-- Error toast modifier for consistent UI feedback
+1. In Xcode's Project Navigator, delete the auto-generated `ContentView.swift`
+2. Right-click on your project → **Add Files to "WestsideWorkDecider"**
+3. Select the entire `Sources` folder from this repo
+4. Check:
+   - ✅ Copy items if needed
+   - ✅ Create groups
+5. Click Add
 
-### Location & Distance
-- `LocationProvider` wraps `CLLocationManager` with authorization state
-- `LocationPermissionView` handles denial gracefully with neighborhood picker fallback
-- `DistanceFormatter` for consistent distance display with travel time estimates
-- `OfflineIndicator` shows when using cached data
+### Step 3: Add Data File
 
-## Screens
+1. Right-click project → **Add Files**
+2. Select `data/westside_remote_work_master_verified.json`
+3. Ensure **Target Membership** shows your app checked
+4. Click Add
 
-### NowView
+### Step 4: Add App Icon
+
+1. In your Xcode project, find `Assets.xcassets`
+2. Drag the `Assets/AppIcon.appiconset` folder into Assets.xcassets
+3. Or copy the PNG files from `Assets/AppIcon.appiconset/` into the existing AppIcon set
+
+**Icon Design:** Purple-to-blue gradient with coffee cup, WiFi waves, and location pin—representing remote work connectivity and place discovery.
+
+### Step 5: Set Root View
+
+Edit your app's entry file (e.g., `WestsideWorkDeciderApp.swift`):
+
+```swift
+import SwiftUI
+
+@main
+struct WestsideWorkDeciderApp: App {
+    var body: some Scene {
+        WindowGroup {
+            AppExperienceView()
+        }
+    }
+}
+```
+
+### Step 6: Build & Run
+
+1. Connect your iPhone via USB
+2. On iPhone: Settings → Privacy & Security → Developer Mode → ON
+3. Trust your Mac when prompted
+4. Select your iPhone from Xcode's device dropdown
+5. Press **⌘R** to build and run
+6. On first launch: Settings → General → VPN & Device Management → Trust your developer certificate
+
+---
+
+## Features
+
+### Now Screen
 - Time-based greetings ("Good morning!", "Night owl mode")
-- Quick preset buttons (Deep Focus, Body Doubling, Quick Sprint, Late Night)
-- Full spot list with all matching results
-- Navigate and favorite actions on each card
+- Quick presets: Deep Focus, Body Doubling, Quick Sprint, Late Night
+- Real-time open/closed status with "Closes soon!" warnings
+- One-tap navigation to Apple Maps
 
-### MapView
+### Map + List Views
 - MapKit pins filtered by current query
-- List drawer with ranked spots
-- Distance-sorted by default
+- Pill filters for Tier, Neighborhood, PlaceType, and attributes
+- Sort by distance, sentiment, tier, or time-of-day fit
 
-### ListView
-- Full catalog with sticky filter bar
-- Sort options: Distance, Sentiment, Tier, Time-of-day fit
-- Results count displayed
+### Chat
+- Natural language queries ("I need a quiet spot with great WiFi")
+- AI parses intent into filters (no hallucinated venues)
+- Thumbs up/down feedback after recommendations
 
-### ChatView
-- Welcome message with suggested prompts
-- Typing indicator while processing
-- AI recommendations with reasons
-- Feedback buttons after each response
-- Quick actions to jump to list/map
+### ADHD-Friendly Design
+- High contrast, large tap targets
+- Presets over manual configuration
+- Friction warnings (parking, closing time, safety)
+- State restoration (remembers your tab and filters)
+
+---
 
 ## Data Model
 
-The dataset includes 44 verified LA Westside work spots with:
+The app includes **44 verified LA Westside work spots** with:
 
-### Core Fields
-- Name, City, Neighborhood, PlaceType, Tier
-- SentimentScore (1-10)
-- CriticalFieldNotes (friction cues and tips)
+| Field | Description |
+|-------|-------------|
+| Name, City, Neighborhood | Location info |
+| PlaceType | Coffee shop, coworking, library, hotel lobby, etc. |
+| Tier | Elite (purple), Reliable (blue), Unknown (gray) |
+| SentimentScore | 1-10 rating |
+| OperatingHours | Per-day open/close times with `isOpen(at:)` |
+| WiFiQuality | excellent, good, adequate, poor |
+| NoiseLevel | quiet, moderate, lively |
+| Attributes | Power Heavy, Easy Parking, Ergonomic, Body Doubling, Deep Focus, Real Food, Call Friendly, Patio Power, Day Pass, Early Bird, Night Owl, Luxury, Elite Coffee |
+| Boolean Flags | OpenLate, CloseToHome, CloseToWork, SafeToLeaveComputer, WalkingFriendly, ExerciseWellness, ChargedLaptopOnly |
+| CriticalFieldNotes | Friction cues and tips |
 
-### Boolean Flags
-- OpenLate, CloseToHome, CloseToWork
-- SafeToLeaveComputer, WalkingFriendlyLocation
-- ExerciseWellnessAvailable, ChargedLaptopBrickOnly
+---
 
-### New Fields
-- `OperatingHours` - Per-day open/close times
-- `WifiQuality` - excellent/good/adequate/poor
-- `NoiseLevel` - quiet/moderate/lively
+## Architecture
 
-### Attributes
-Power Heavy, Easy Parking, Ergonomic, Body Doubling, Deep Focus, Real Food, Call Friendly, Patio Power, Day Pass, Early Bird, Night Owl, Luxury, Elite Coffee
+```
+Sources/
+├── App/
+│   ├── AppExperienceView.swift   # Root view with tab navigation
+│   ├── AppModel.swift            # App-wide state
+│   └── QueryModel.swift          # Filter/sort state
+├── Data/
+│   └── SpotStore.swift           # JSON loading, caching, indexed lookups
+├── Model/
+│   └── LocationSpot.swift        # Domain model with OperatingHours
+├── Services/
+│   ├── AI/
+│   │   ├── AIModels.swift        # DTOs for AI requests/responses
+│   │   ├── SimulatedAIService.swift  # Offline rule-based AI (60+ keywords)
+│   │   └── OpenAIService.swift   # Optional live AI with caching/retry
+│   └── Location/
+│       └── LocationProvider.swift    # CLLocationManager wrapper
+├── Utils/
+│   ├── Errors.swift              # Domain errors, LoadingState, ErrorRecovery
+│   ├── Formatters.swift          # Distance, time, friction formatters
+│   └── TimeOfDayScoring.swift    # Time-based relevance scoring
+└── Views/
+    ├── Features/
+    │   ├── NowView.swift         # Main recommendation screen
+    │   ├── ChatView.swift        # Natural language interface
+    │   ├── SpotListView.swift    # Full catalog with filters
+    │   └── SpotsMapView.swift    # MapKit integration
+    └── Shared/
+        ├── SpotCard.swift        # Reusable spot display
+        ├── UIComponents.swift    # Badges, buttons, loading states
+        ├── FiltersBar.swift      # Pill filter UI
+        └── ActiveFiltersSummary.swift
 
-## Shared UI Components
+Tests/
+└── WestsideWorkDeciderTests/
+    ├── SpotStoreRoundTripTests.swift  # Query/sort/filter tests
+    ├── IntegrationTests.swift         # Cross-component tests
+    └── ErrorSimulationTests.swift     # Error handling tests
+
+Assets/
+├── AppIcon.appiconset/           # iOS app icons (all sizes)
+│   ├── Contents.json
+│   └── icon_*.png                # 1024, 180, 167, 152, 120, etc.
+├── AppIcon.svg                   # Source vector
+└── generate_icon.py              # Icon generation script
+
+data/
+├── westside_remote_work_master_verified.json  # Main dataset (44 spots)
+└── westside_remote_work_rejected.csv          # Excluded venues
+```
+
+---
+
+## UI Components
 
 Located in `Sources/Views/Shared/UIComponents.swift`:
 
 | Component | Description |
 |-----------|-------------|
 | `LoadingStateView` | Generic loading/error/content handler |
-| `LoadingIndicator` | Animated spinner with message |
-| `ErrorStateView` | Error display with retry button |
 | `OpenClosedBadge` | Real-time open/closed status |
-| `TierBadge` | Color-coded tier display |
-| `TimeSensitiveWarning` | "Closes soon" alerts |
+| `TierBadge` | Color-coded tier display (purple/blue/gray) |
+| `TimeSensitiveWarning` | "Closes in 30 min!" alerts |
 | `NavigateButton` | Apple Maps deep link |
-| `OfflineIndicator` | Cached data warning |
 | `FeedbackView` | Thumbs up/down buttons |
-| `LocationPermissionView` | Permission request/denial |
+| `OfflineIndicator` | Cached data warning |
+| `LocationPermissionView` | Permission handling with fallback |
 | `NeighborhoodPicker` | Manual location selection |
-| `DistanceDisplay` | Formatted distance with walk time |
 
-## Testing
+---
 
-### Test Files
-- `SpotStoreRoundTripTests.swift` - Query, sort, filter tests
-- `IntegrationTests.swift` - Cross-component integration tests
-- `ErrorSimulationTests.swift` - Error handling and edge cases
+## Configuration
 
-### Running Tests
-```bash
-# Via Xcode
-⌘U in Xcode
-
-# Via command line (if swift package)
-swift test
-```
-
-## Setup
-
-1. Create an iOS 17+ Xcode project
-2. Add the `Sources` folder to your project
-3. Add `data/westside_remote_work_master_verified.json` to the bundle
-4. Wire `AppExperienceView` as your root view
-5. (Optional) Set `OPENAI_API_KEY` environment variable for live AI
-
-## Environment Variables
+### Environment Variables (Optional)
 
 | Variable | Description |
 |----------|-------------|
-| `OPENAI_API_KEY` | Optional. Enables live OpenAI recommendations. Falls back to SimulatedAI if not set. |
+| `OPENAI_API_KEY` | Enables live OpenAI recommendations. Without this, the app uses SimulatedAI which works great offline. |
 
-## What's Next
+To set in Xcode: Product → Scheme → Edit Scheme → Run → Arguments → Environment Variables
 
-- [ ] Widget support (iOS home screen widget)
+---
+
+## Testing
+
+**95+ tests** covering core functionality:
+
+```bash
+# In Xcode
+⌘U
+
+# Command line (Swift Package Manager)
+swift test
+```
+
+| Test File | Coverage |
+|-----------|----------|
+| `SpotStoreRoundTripTests.swift` | SpotQuery, LocationSpot, sorting |
+| `IntegrationTests.swift` | Formatters, LoadingState, SpotStore, AI |
+| `ErrorSimulationTests.swift` | Error types, recovery, edge cases |
+
+---
+
+## Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| "Untrusted Developer" | Settings → General → VPN & Device Management → Trust |
+| "Device not found" | Unlock iPhone, tap "Trust This Computer" |
+| Build errors about iOS version | Set Minimum Deployment to iOS 17.0 |
+| App expires after 7 days | Re-run from Xcode (free tier) or get Developer account |
+| Missing JSON data | Ensure `westside_remote_work_master_verified.json` has Target Membership checked |
+
+---
+
+## Future Roadmap
+
+- [ ] iOS Widget (home screen quick access)
 - [ ] Apple Watch companion
 - [ ] Calendar integration ("block 90 minutes")
-- [ ] Check-in functionality with crowd sourcing
-- [ ] Shortcuts/Siri integration
+- [ ] Check-in with crowd-sourced data
+- [ ] Siri Shortcuts integration
+
+---
 
 ## License
 

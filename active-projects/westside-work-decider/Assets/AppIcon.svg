@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <!-- Main gradient matching app tier colors: Purple (Elite) to Blue (Reliable) -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6"/>
+      <stop offset="50%" style="stop-color:#6366F1"/>
+      <stop offset="100%" style="stop-color:#3B82F6"/>
+    </linearGradient>
+
+    <!-- Subtle inner shadow -->
+    <linearGradient id="innerGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.2"/>
+      <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background with rounded corners (iOS will mask this) -->
+  <rect width="1024" height="1024" fill="url(#bgGradient)"/>
+
+  <!-- Subtle top highlight -->
+  <rect width="1024" height="512" fill="url(#innerGlow)"/>
+
+  <!-- Coffee cup body -->
+  <path d="M280 340 L280 620 Q280 720 380 720 L540 720 Q640 720 640 620 L640 340 Z"
+        fill="white" opacity="0.95"/>
+
+  <!-- Coffee cup handle -->
+  <path d="M640 380 Q740 380 740 480 Q740 580 640 580"
+        stroke="white" stroke-width="50" fill="none" opacity="0.95"
+        stroke-linecap="round"/>
+
+  <!-- Steam/WiFi waves (representing connectivity) -->
+  <path d="M360 280 Q410 220 460 280"
+        stroke="white" stroke-width="28" fill="none" opacity="0.7"
+        stroke-linecap="round"/>
+  <path d="M320 220 Q410 130 500 220"
+        stroke="white" stroke-width="28" fill="none" opacity="0.5"
+        stroke-linecap="round"/>
+  <path d="M280 160 Q410 40 540 160"
+        stroke="white" stroke-width="28" fill="none" opacity="0.3"
+        stroke-linecap="round"/>
+
+  <!-- Location pin (small, bottom right) -->
+  <g transform="translate(680, 620)">
+    <path d="M80 0 Q130 0 130 50 Q130 100 80 150 Q30 100 30 50 Q30 0 80 0 Z"
+          fill="white" opacity="0.95"/>
+    <circle cx="80" cy="55" r="22" fill="url(#bgGradient)"/>
+  </g>
+
+  <!-- Subtle "W" watermark integrated into cup -->
+  <text x="390" y="580"
+        font-family="SF Pro Display, -apple-system, Helvetica, Arial, sans-serif"
+        font-size="200" font-weight="700"
+        fill="url(#bgGradient)" opacity="0.3">W</text>
+</svg>

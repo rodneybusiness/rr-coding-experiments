@@ -49,32 +49,35 @@ make install && make up
 
 ### Advanced Projects
 
-1. **Film Financing Navigator**  
+1. **Film Financing Navigator**
 A financial simulation platform with advanced calculations, optimized for production.
 
-2. **CogRepo**  
+2. **Westside Work Decider**
+ADHD-friendly iOS app for discovering remote work spots on LA's Westside. Features 44 verified locations, AI-powered recommendations, and real-time open/closed status. Ready for Xcode deployment.
+
+3. **CogRepo**
 An LLM-powered tool to transform AI conversations into searchable, analyzable knowledge bases.
 
 ### Intermediate Projects
 
-3. **MM Area + Sub-Area Taxonomy**  
+4. **MM Area + Sub-Area Taxonomy**
 A taxonomy system with clear DRI assignments and GitHub→Notion integration.
 
-4. **Family Travel Analysis**  
+5. **Family Travel Analysis**
 A data mining tool for analyzing family travel patterns and planning insights.
 
-5. **Anime Directors Analysis**  
+6. **Anime Directors Analysis**
 Analyzes patterns and themes in discussions about legendary animation directors.
 
 ### Beginner Projects
 
-6. **8BG Renaming Tools**  
+7. **8BG Renaming Tools**
 Scripts and tools to manage file naming conventions, suitable for creative projects.
 
-7. **Zombie Quest**  
+8. **Zombie Quest**
 A retro-style Sierra game built with Python and Pygame.
 
-8. **Miscellaneous Experiments**  
+9. **Miscellaneous Experiments**
 Exploratory scripts and one-off utilities.
 
 ## Themes and Technologies
