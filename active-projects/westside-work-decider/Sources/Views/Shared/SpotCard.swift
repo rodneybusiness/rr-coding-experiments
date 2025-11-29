@@ -1,7 +1,7 @@
 import SwiftUI
 import CoreLocation
 
-// MARK: - Premium SpotCard 2025
+// MARK: - Premium SpotCard 2025 + iOS 26 Liquid Glass
 
 struct SpotCard: View {
     let spot: LocationSpot
@@ -303,6 +303,51 @@ struct PremiumTierBadge: View {
     @State private var isAnimating = false
 
     var body: some View {
+        if #available(iOS 26, *) {
+            liquidGlassBadge
+        } else {
+            fallbackBadge
+        }
+    }
+
+    // MARK: - iOS 26+ Liquid Glass Badge
+
+    @available(iOS 26, *)
+    private var liquidGlassBadge: some View {
+        HStack(spacing: DS.Spacing.xxs) {
+            if tier == .elite {
+                Image(systemName: "sparkles")
+                    .font(.system(size: 10, weight: .bold))
+                    .symbolEffect(.pulse, isActive: isAnimating)
+            }
+            Text(tier.rawValue.capitalized)
+                .font(.system(size: 11, weight: .bold, design: .rounded))
+                .textCase(.uppercase)
+                .tracking(0.5)
+        }
+        .foregroundStyle(tierTextColor)
+        .padding(.horizontal, DS.Spacing.sm)
+        .padding(.vertical, DS.Spacing.xs)
+        .background(
+            Capsule()
+                .fill(tier == .elite ? DS.Colors.accentGold.opacity(0.15) : .clear)
+        )
+        .glassEffect(
+            .regular.tint(tierGlowColor),
+            in: Capsule()
+        )
+        .shadow(color: tierGlowColor.opacity(0.35), radius: 10, x: 0, y: 4)
+        .onAppear {
+            if tier == .elite {
+                isAnimating = true
+            }
+        }
+        .accessibilityLabel("\(tier.rawValue) tier")
+    }
+
+    // MARK: - iOS 17-25 Fallback Badge
+
+    private var fallbackBadge: some View {
         HStack(spacing: DS.Spacing.xxs) {
             if tier == .elite {
                 Image(systemName: "sparkles")
@@ -614,27 +659,37 @@ struct PremiumNavigateButton: View {
             .foregroundStyle(.white)
             .padding(.horizontal, DS.Spacing.md)
             .padding(.vertical, DS.Spacing.sm)
-            .background(
-                Capsule()
-                    .fill(
-                        LinearGradient(
-                            colors: [DS.Colors.accentGold, DS.Colors.accentAmber],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
-            )
+            .background(buttonBackground)
             .shadow(color: DS.Colors.accentGold.opacity(0.4), radius: 8, x: 0, y: 4)
         }
         .buttonStyle(.plain)
         .scaleEffect(isPressed ? 0.95 : 1)
+        .animation(DS.Animation.glassMorph, value: isPressed)
         .onLongPressGesture(minimumDuration: 0.1, pressing: { pressing in
-            withAnimation(DS.Animation.quick) {
-                isPressed = pressing
-            }
+            isPressed = pressing
         }, perform: {})
         .accessibilityLabel("Navigate to \(spot.name)")
         .accessibilityHint("Opens in Apple Maps")
+    }
+
+    @ViewBuilder
+    private var buttonBackground: some View {
+        if #available(iOS 26, *) {
+            // iOS 26+ Liquid Glass with gold tint
+            Capsule()
+                .fill(DS.Colors.accentGold.opacity(0.9))
+                .glassEffect(.regular.tint(DS.Colors.accentGold), in: Capsule())
+        } else {
+            // Fallback gradient
+            Capsule()
+                .fill(
+                    LinearGradient(
+                        colors: [DS.Colors.accentGold, DS.Colors.accentAmber],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+        }
     }
 
     private func openInMaps() {
