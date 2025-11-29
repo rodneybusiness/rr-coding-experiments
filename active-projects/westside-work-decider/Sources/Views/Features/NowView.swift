@@ -1,6 +1,8 @@
 import SwiftUI
 import CoreLocation
 
+// MARK: - Premium NowView 2025
+
 struct NowView: View {
     @ObservedObject var store: SpotStore
     @ObservedObject var filters: QueryModel
@@ -8,54 +10,117 @@ struct NowView: View {
     var onShowList: () -> Void
 
     @State private var selectedPreset: SessionPreset?
+    @State private var hasAppeared = false
+    @State private var headerScale: CGFloat = 0.9
+    @State private var headerOpacity: CGFloat = 0
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                // Header
-                headerSection
+            VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+                // Hero header with dramatic animation
+                heroHeaderSection
+                    .padding(.top, DS.Spacing.md)
 
-                // Active filters summary
+                // Active filters summary (glass style)
                 ActiveFiltersSummary(query: filters.query, sort: filters.sort)
 
-                // Quick presets
-                QuickActionsView(
+                // Quick presets with premium design
+                PremiumQuickActionsView(
                     presets: SessionPreset.defaults,
                     selected: $selectedPreset
                 )
                 .onChange(of: selectedPreset) { _, newValue in
+                    HapticFeedback.selection()
                     filters.apply(preset: newValue)
                 }
 
-                // Results
+                // Results section with staggered animations
                 resultsSection
 
-                // Actions
-                actionButtons
+                // Premium action buttons
+                premiumActionButtons
             }
-            .padding()
+            .padding(.horizontal, DS.Spacing.md)
+            .padding(.bottom, DS.Spacing.xxl)
+        }
+        .background(backgroundGradient)
+        .onAppear {
+            withAnimation(DS.Animation.springy.delay(0.1)) {
+                hasAppeared = true
+                headerScale = 1
+                headerOpacity = 1
+            }
         }
         .accessibilityElement(children: .contain)
         .accessibilityLabel("Now view - Find your perfect work spot")
     }
 
-    // MARK: - Subviews
+    // MARK: - Background
 
-    private var headerSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Where should I go right now?")
-                .font(.largeTitle.bold())
+    private var backgroundGradient: some View {
+        ZStack {
+            // Base color
+            Color(uiColor: .systemBackground)
+
+            // Subtle gradient overlay
+            LinearGradient(
+                colors: [
+                    DS.Colors.accentPurple.opacity(0.03),
+                    Color.clear,
+                    DS.Colors.accentBlue.opacity(0.02)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        }
+        .ignoresSafeArea()
+    }
+
+    // MARK: - Hero Header
+
+    private var heroHeaderSection: some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            // Time-based greeting with subtle animation
+            if let hour = Calendar.current.dateComponents([.hour], from: Date()).hour {
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: greetingIcon(for: hour))
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(greetingColor(for: hour))
+                        .symbolEffect(.pulse)
+                    Text(greetingForHour(hour))
+                        .font(.system(size: 15, weight: .medium, design: .rounded))
+                        .foregroundStyle(.secondary)
+                }
+                .opacity(headerOpacity)
+            }
+
+            // Hero title with dramatic typography
+            Text("Where should I\ngo right now?")
+                .font(.system(size: 36, weight: .bold, design: .default))
+                .tracking(-0.5)
+                .lineSpacing(-4)
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [.primary, .primary.opacity(0.8)],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+                .scaleEffect(headerScale, anchor: .leading)
+                .opacity(headerOpacity)
                 .accessibilityAddTraits(.isHeader)
 
-            if let hour = Calendar.current.dateComponents([.hour], from: Date()).hour {
-                Text(greetingForHour(hour))
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
+            // Subtle context line
+            Text("\(store.openSpots(for: filters.query).count) spots open now")
+                .font(.system(size: 14, weight: .medium, design: .rounded))
+                .foregroundStyle(DS.Colors.accentPurple)
+                .opacity(headerOpacity)
         }
     }
+
+    // MARK: - Results Section
 
     private var resultsSection: some View {
         let query = presetAdjustedQuery(selectedPreset)
@@ -64,11 +129,25 @@ struct NowView: View {
 
         return Group {
             if results.isEmpty {
-                emptyStateView
+                premiumEmptyStateView
             } else {
-                // Show all matching spots in a vertical list
-                VStack(spacing: 16) {
-                    ForEach(results, id: \.id) { spot in
+                VStack(spacing: DS.Spacing.md) {
+                    // Section header
+                    HStack {
+                        Text("Recommended")
+                            .font(.system(size: 13, weight: .bold, design: .rounded))
+                            .textCase(.uppercase)
+                            .tracking(1)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Text("\(results.count) spots")
+                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                            .foregroundStyle(.tertiary)
+                    }
+                    .opacity(hasAppeared ? 1 : 0)
+
+                    // Staggered card list
+                    ForEach(Array(results.enumerated()), id: \.element.id) { index, spot in
                         SpotCard(
                             spot: spot,
                             distanceMeters: spot.distance(from: anchor),
@@ -77,68 +156,98 @@ struct NowView: View {
                             onFavorite: { store.toggleFavorite(for: spot) },
                             onTap: { store.markVisited(spot) }
                         )
+                        .opacity(hasAppeared ? 1 : 0)
+                        .offset(y: hasAppeared ? 0 : 30)
+                        .animation(
+                            DS.Animation.springy.delay(Double(index) * 0.08),
+                            value: hasAppeared
+                        )
                     }
                 }
             }
         }
     }
 
-    private var emptyStateView: some View {
-        VStack(spacing: 12) {
-            Image(systemName: "magnifyingglass")
-                .font(.system(size: 48))
-                .foregroundStyle(.secondary)
+    // MARK: - Empty State
 
-            Text("No spots match your criteria")
-                .font(.headline)
+    private var premiumEmptyStateView: some View {
+        VStack(spacing: DS.Spacing.lg) {
+            // Animated icon
+            ZStack {
+                Circle()
+                    .fill(DS.Colors.accentPurple.opacity(0.1))
+                    .frame(width: 100, height: 100)
 
-            Text("Try adjusting your filters or selecting a different preset")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
+                Image(systemName: "magnifyingglass")
+                    .font(.system(size: 40, weight: .medium))
+                    .foregroundStyle(DS.Colors.accentPurple.opacity(0.6))
+                    .symbolEffect(.pulse)
+            }
 
-            Button("Clear Filters") {
+            VStack(spacing: DS.Spacing.xs) {
+                Text("No spots match")
+                    .font(.system(size: 20, weight: .semibold))
+                    .foregroundStyle(.primary)
+
+                Text("Try adjusting your filters or selecting a different preset")
+                    .font(.system(size: 14, weight: .regular, design: .rounded))
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, DS.Spacing.xl)
+            }
+
+            Button {
+                HapticFeedback.light()
                 filters.clear()
                 selectedPreset = nil
+            } label: {
+                Text("Clear Filters")
+                    .font(.system(size: 14, weight: .semibold, design: .rounded))
+                    .foregroundStyle(DS.Colors.accentPurple)
+                    .padding(.horizontal, DS.Spacing.lg)
+                    .padding(.vertical, DS.Spacing.sm)
+                    .background(
+                        Capsule()
+                            .fill(DS.Colors.accentPurple.opacity(0.12))
+                    )
             }
-            .buttonStyle(.bordered)
+            .buttonStyle(.plain)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 40)
+        .padding(.vertical, DS.Spacing.xxxl)
+        .glassCard()
         .accessibilityElement(children: .combine)
         .accessibilityLabel("No spots found. Try adjusting your filters.")
     }
 
-    private var actionButtons: some View {
-        HStack(spacing: 12) {
-            Button {
-                onShowMap()
-            } label: {
-                Label("Show Map", systemImage: "map")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 14)
-                            .fill(Color.blue.opacity(0.15))
-                    )
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Show all spots on map")
+    // MARK: - Action Buttons
 
-            Button {
-                onShowList()
-            } label: {
-                Label("Full List", systemImage: "list.bullet")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(
-                        RoundedRectangle(cornerRadius: 14)
-                            .fill(Color.gray.opacity(0.15))
-                    )
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Show full list of spots")
+    private var premiumActionButtons: some View {
+        HStack(spacing: DS.Spacing.sm) {
+            PremiumActionButton(
+                title: "Map",
+                icon: "map.fill",
+                gradient: [DS.Colors.accentBlue, DS.Colors.accentPurple],
+                action: {
+                    HapticFeedback.light()
+                    onShowMap()
+                }
+            )
+
+            PremiumActionButton(
+                title: "Full List",
+                icon: "list.bullet",
+                gradient: [.gray.opacity(0.3), .gray.opacity(0.2)],
+                isSecondary: true,
+                action: {
+                    HapticFeedback.light()
+                    onShowList()
+                }
+            )
         }
+        .opacity(hasAppeared ? 1 : 0)
+        .offset(y: hasAppeared ? 0 : 20)
+        .animation(DS.Animation.springy.delay(0.3), value: hasAppeared)
     }
 
     // MARK: - Helpers
@@ -168,24 +277,68 @@ struct NowView: View {
             return "Night owl mode - late-night friendly spots."
         }
     }
+
+    private func greetingIcon(for hour: Int) -> String {
+        switch hour {
+        case 0..<6: return "moon.stars.fill"
+        case 6..<12: return "sunrise.fill"
+        case 12..<14: return "sun.max.fill"
+        case 14..<17: return "sun.haze.fill"
+        case 17..<21: return "sunset.fill"
+        default: return "moon.fill"
+        }
+    }
+
+    private func greetingColor(for hour: Int) -> Color {
+        switch hour {
+        case 0..<6: return DS.Colors.accentPurple
+        case 6..<12: return DS.Colors.accentGold
+        case 12..<14: return DS.Colors.accentGold
+        case 14..<17: return .orange
+        case 17..<21: return .orange
+        default: return DS.Colors.accentPurple
+        }
+    }
 }
 
-// MARK: - Quick Actions View
+// MARK: - Premium Quick Actions View
 
-private struct QuickActionsView: View {
+private struct PremiumQuickActionsView: View {
     let presets: [SessionPreset]
     @Binding var selected: SessionPreset?
+    @State private var hasAppeared = false
 
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 12) {
-                ForEach(presets) { preset in
-                    PresetButton(
-                        preset: preset,
-                        isSelected: selected?.id == preset.id,
-                        onTap: { selected = preset }
-                    )
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            Text("Quick Start")
+                .font(.system(size: 13, weight: .bold, design: .rounded))
+                .textCase(.uppercase)
+                .tracking(1)
+                .foregroundStyle(.secondary)
+                .opacity(hasAppeared ? 1 : 0)
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: DS.Spacing.sm) {
+                    ForEach(Array(presets.enumerated()), id: \.element.id) { index, preset in
+                        PremiumPresetButton(
+                            preset: preset,
+                            isSelected: selected?.id == preset.id,
+                            onTap: { selected = preset }
+                        )
+                        .opacity(hasAppeared ? 1 : 0)
+                        .offset(x: hasAppeared ? 0 : 20)
+                        .animation(
+                            DS.Animation.springy.delay(Double(index) * 0.05),
+                            value: hasAppeared
+                        )
+                    }
                 }
+                .padding(.vertical, DS.Spacing.xxs)
+            }
+        }
+        .onAppear {
+            withAnimation(DS.Animation.springy.delay(0.2)) {
+                hasAppeared = true
             }
         }
         .accessibilityElement(children: .contain)
@@ -193,37 +346,140 @@ private struct QuickActionsView: View {
     }
 }
 
-private struct PresetButton: View {
+// MARK: - Premium Preset Button
+
+private struct PremiumPresetButton: View {
     let preset: SessionPreset
     let isSelected: Bool
     let onTap: () -> Void
+    @State private var isPressed = false
 
     var body: some View {
         Button(action: onTap) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(preset.title)
-                    .font(.headline)
-                    .foregroundStyle(.primary)
+            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                // Icon + Title row
+                HStack(spacing: DS.Spacing.xs) {
+                    Image(systemName: presetIcon)
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundStyle(isSelected ? .white : DS.Colors.accentPurple)
+
+                    Text(preset.title)
+                        .font(.system(size: 15, weight: .semibold, design: .rounded))
+                        .foregroundStyle(isSelected ? .white : .primary)
+                }
 
                 Text(preset.description)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .font(.system(size: 12, weight: .regular, design: .rounded))
+                    .foregroundStyle(isSelected ? .white.opacity(0.8) : .secondary)
                     .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
             }
-            .padding()
-            .frame(width: 160, alignment: .leading)
+            .padding(DS.Spacing.sm)
+            .frame(width: 150, alignment: .leading)
             .background(
-                RoundedRectangle(cornerRadius: 14)
-                    .fill(isSelected ? Color.blue.opacity(0.2) : Color.gray.opacity(0.12))
+                RoundedRectangle(cornerRadius: DS.Radius.md, style: .continuous)
+                    .fill(isSelected ? DS.Gradients.heroGradient : LinearGradient(colors: [Color.clear], startPoint: .top, endPoint: .bottom))
+            )
+            .background(
+                RoundedRectangle(cornerRadius: DS.Radius.md, style: .continuous)
+                    .fill(.ultraThinMaterial)
             )
             .overlay(
-                RoundedRectangle(cornerRadius: 14)
-                    .stroke(isSelected ? Color.blue : Color.clear, lineWidth: 2)
+                RoundedRectangle(cornerRadius: DS.Radius.md, style: .continuous)
+                    .stroke(
+                        isSelected
+                            ? Color.white.opacity(0.3)
+                            : Color.gray.opacity(0.2),
+                        lineWidth: isSelected ? 1 : 0.5
+                    )
+            )
+            .shadow(
+                color: isSelected ? DS.Colors.accentPurple.opacity(0.3) : .clear,
+                radius: 12,
+                x: 0,
+                y: 6
             )
         }
         .buttonStyle(.plain)
+        .scaleEffect(isPressed ? 0.96 : 1)
+        .animation(DS.Animation.quick, value: isPressed)
+        .onLongPressGesture(minimumDuration: 0.1, pressing: { pressing in
+            isPressed = pressing
+        }, perform: {})
         .accessibilityLabel("\(preset.title): \(preset.description)")
         .accessibilityAddTraits(isSelected ? [.isSelected] : [])
+    }
+
+    private var presetIcon: String {
+        switch preset.title.lowercased() {
+        case let t where t.contains("focus"): return "brain.head.profile"
+        case let t where t.contains("body"): return "person.2.fill"
+        case let t where t.contains("sprint"): return "bolt.fill"
+        case let t where t.contains("night"): return "moon.fill"
+        default: return "sparkles"
+        }
+    }
+}
+
+// MARK: - Premium Action Button
+
+private struct PremiumActionButton: View {
+    let title: String
+    let icon: String
+    let gradient: [Color]
+    var isSecondary: Bool = false
+    let action: () -> Void
+
+    @State private var isPressed = false
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: DS.Spacing.xs) {
+                Image(systemName: icon)
+                    .font(.system(size: 16, weight: .semibold))
+                    .symbolEffect(.bounce, value: isPressed)
+                Text(title)
+                    .font(.system(size: 15, weight: .semibold, design: .rounded))
+            }
+            .foregroundStyle(isSecondary ? .primary : .white)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, DS.Spacing.md)
+            .background(
+                RoundedRectangle(cornerRadius: DS.Radius.md, style: .continuous)
+                    .fill(
+                        isSecondary
+                            ? AnyShapeStyle(.ultraThinMaterial)
+                            : AnyShapeStyle(LinearGradient(colors: gradient, startPoint: .leading, endPoint: .trailing))
+                    )
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: DS.Radius.md, style: .continuous)
+                    .stroke(Color.white.opacity(isSecondary ? 0.1 : 0.2), lineWidth: 0.5)
+            )
+            .shadow(
+                color: isSecondary ? .clear : gradient.first?.opacity(0.3) ?? .clear,
+                radius: 12,
+                x: 0,
+                y: 6
+            )
+        }
+        .buttonStyle(.plain)
+        .scaleEffect(isPressed ? 0.97 : 1)
+        .animation(DS.Animation.quick, value: isPressed)
+        .onLongPressGesture(minimumDuration: 0.1, pressing: { pressing in
+            isPressed = pressing
+        }, perform: {})
+    }
+}
+
+// MARK: - SpotStore Extension
+
+extension SpotStore {
+    func openSpots(for query: SpotQuery) -> [LocationSpot] {
+        let now = Date()
+        return apply(query: query, sort: .distance).filter { spot in
+            spot.operatingHours?.isOpen(at: now, calendar: .current) ?? true
+        }
     }
 }
 
@@ -236,4 +492,5 @@ private struct PresetButton: View {
         onShowMap: {},
         onShowList: {}
     )
+    .preferredColorScheme(.dark)
 }
