@@ -2,7 +2,27 @@
 
 An ADHD-friendly iOS app that recommends the best remote-work spots. Originally focused on LA's Westside, now expanded to include favorite spots across multiple cities. Features quick presets, AI-assisted intent parsing, real-time open/closed status, and an offline-first local database of 48 verified locations.
 
-**Platform:** iOS 17+ | **Framework:** SwiftUI | **Status:** Ready for Xcode
+**Platform:** iOS 17+ (iOS 26 enhanced) | **Framework:** SwiftUI | **Status:** Ready for Xcode
+
+---
+
+## Design System
+
+### iOS 26 Liquid Glass
+The app features a premium design system optimized for iOS 26's Liquid Glass aesthetic:
+
+- **Native `.glassEffect()`** on iOS 26+ for authentic depth and refraction
+- **Warm luxury palette** — gold (#D4A853) for Elite tier, slate (#64748B) for Reliable
+- **Editorial serif typography** for distinctive, non-generic appearance
+- **Motion-reactive glass** with fluid morph animations
+- **Full iOS 17+ backward compatibility** with material fallbacks
+
+### Visual Hierarchy
+| Tier | Color | Effect |
+|------|-------|--------|
+| **Elite** | Warm Gold | Liquid Glass with gold tint, pulsing sparkle |
+| **Reliable** | Sophisticated Slate | Liquid Glass with slate tint |
+| **Unknown** | Neutral Gray | Standard glass effect |
 
 ---
 
@@ -50,7 +70,7 @@ An ADHD-friendly iOS app that recommends the best remote-work spots. Originally 
 2. Drag the `Assets/AppIcon.appiconset` folder into Assets.xcassets
 3. Or copy the PNG files from `Assets/AppIcon.appiconset/` into the existing AppIcon set
 
-**Icon Design:** Purple-to-blue gradient with coffee cup, WiFi waves, and location pin—representing remote work connectivity and place discovery.
+**Icon Design:** Premium gradient with coffee cup, WiFi waves, and location pin—representing remote work connectivity and place discovery.
 
 ### Step 5: Set Root View
 
@@ -124,7 +144,7 @@ The app includes **48 verified work spots** across multiple locations:
 |-------|-------------|
 | Name, City, Neighborhood | Location info |
 | PlaceType | Coffee shop, coworking, library, hotel lobby, etc. |
-| Tier | Elite (purple), Reliable (blue), Unknown (gray) |
+| Tier | Elite (gold), Reliable (slate), Unknown (gray) |
 | SentimentScore | 1-10 rating |
 | OperatingHours | Per-day open/close times with `isOpen(at:)` |
 | WiFiQuality | excellent, good, adequate, poor |
@@ -165,7 +185,8 @@ Sources/
     │   ├── SpotListView.swift    # Full catalog with filters
     │   └── SpotsMapView.swift    # MapKit integration
     └── Shared/
-        ├── SpotCard.swift        # Reusable spot display
+        ├── DesignSystem.swift    # iOS 26 Liquid Glass design tokens
+        ├── SpotCard.swift        # Premium spot card with glass effects
         ├── UIComponents.swift    # Badges, buttons, loading states
         ├── FiltersBar.swift      # Pill filter UI
         └── ActiveFiltersSummary.swift
@@ -192,13 +213,37 @@ data/
 
 ## UI Components
 
-Located in `Sources/Views/Shared/UIComponents.swift`:
+### Design System (`DesignSystem.swift`)
+
+| Component | Description |
+|-----------|-------------|
+| `DS.Colors` | Warm luxury palette with gold/slate/amber accents |
+| `DS.LiquidGlass` | iOS 26 refraction and depth configuration |
+| `DS.Typography` | Editorial serif for hero, rounded for body |
+| `DS.Animation` | Spring animations including glassMorph/glassRipple |
+| `.glassCard()` | Native Liquid Glass on iOS 26, material fallback |
+| `.liquidGlassProminent()` | Elevated glass for CTAs |
+| `.liquidGlassButton()` | Glass-styled buttons |
+| `LiquidGlassContainer` | Groups glass elements for shared context |
+
+### Premium Components (`SpotCard.swift`)
+
+| Component | Description |
+|-----------|-------------|
+| `SpotCard` | Full spot display with Liquid Glass background |
+| `PremiumTierBadge` | Gold/slate badges with glass effects |
+| `PremiumNavigateButton` | Glass morphing navigate action |
+| `PremiumOpenClosedBadge` | Real-time status with pulse animation |
+| `PremiumAttributePill` | Tier-aware attribute tags |
+| `PremiumDistanceDisplay` | Walk time with icon |
+
+### Shared Components (`UIComponents.swift`)
 
 | Component | Description |
 |-----------|-------------|
 | `LoadingStateView` | Generic loading/error/content handler |
 | `OpenClosedBadge` | Real-time open/closed status |
-| `TierBadge` | Color-coded tier display (purple/blue/gray) |
+| `TierBadge` | Color-coded tier display (gold/slate/gray) |
 | `TimeSensitiveWarning` | "Closes in 30 min!" alerts |
 | `NavigateButton` | Apple Maps deep link |
 | `FeedbackView` | Thumbs up/down buttons |
