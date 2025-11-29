@@ -266,8 +266,8 @@ struct SpotCard: View {
 
     private var tierAccentColor: Color {
         switch spot.tier {
-        case .elite: return DS.Colors.accentPurple
-        case .reliable: return DS.Colors.accentBlue
+        case .elite: return DS.Colors.accentGold
+        case .reliable: return DS.Colors.accentSlate
         case .unknown: return .gray
         }
     }
@@ -336,8 +336,8 @@ struct PremiumTierBadge: View {
 
     private var tierTextColor: Color {
         switch tier {
-        case .elite: return .white
-        case .reliable: return DS.Colors.accentBlue
+        case .elite: return Color(hex: "1A1A1F") // Dark text on gold
+        case .reliable: return DS.Colors.textPrimary
         case .unknown: return .gray
         }
     }
@@ -346,13 +346,13 @@ struct PremiumTierBadge: View {
         switch tier {
         case .elite:
             return LinearGradient(
-                colors: [DS.Colors.accentPurple, DS.Colors.accentPink],
+                colors: [DS.Colors.accentGold, DS.Colors.accentAmber],
                 startPoint: .leading,
                 endPoint: .trailing
             )
         case .reliable:
             return LinearGradient(
-                colors: [DS.Colors.accentBlue.opacity(0.2)],
+                colors: [DS.Colors.accentSlate.opacity(0.25), DS.Colors.accentBlue.opacity(0.15)],
                 startPoint: .leading,
                 endPoint: .trailing
             )
@@ -367,15 +367,15 @@ struct PremiumTierBadge: View {
 
     private var tierBorderColor: Color {
         switch tier {
-        case .elite: return .white
-        case .reliable: return DS.Colors.accentBlue
+        case .elite: return DS.Colors.accentAmber
+        case .reliable: return DS.Colors.accentSlate
         case .unknown: return .gray
         }
     }
 
     private var tierGlowColor: Color {
         switch tier {
-        case .elite: return DS.Colors.accentPurple
+        case .elite: return DS.Colors.accentGold
         case .reliable: return DS.Colors.accentBlue
         case .unknown: return .clear
         }
@@ -520,13 +520,13 @@ struct PremiumAttributePill: View {
     private var attributeBackgroundColor: Color {
         switch tag {
         case .deepFocus, .powerHeavy:
-            return DS.Colors.accentBlue.opacity(0.12)
+            return DS.Colors.accentSlate.opacity(0.12)
         case .luxury, .eliteCoffee:
-            return DS.Colors.accentPurple.opacity(0.12)
+            return DS.Colors.accentGold.opacity(0.12)
         case .bodyDoubling:
             return DS.Colors.accentTeal.opacity(0.12)
         case .nightOwl, .earlyBird:
-            return DS.Colors.accentGold.opacity(0.12)
+            return DS.Colors.accentAmber.opacity(0.12)
         default:
             return DS.Colors.glassBackground
         }
@@ -535,13 +535,13 @@ struct PremiumAttributePill: View {
     private var attributeBorderColor: Color {
         switch tag {
         case .deepFocus, .powerHeavy:
-            return DS.Colors.accentBlue
+            return DS.Colors.accentSlate
         case .luxury, .eliteCoffee:
-            return DS.Colors.accentPurple
+            return DS.Colors.accentGold
         case .bodyDoubling:
             return DS.Colors.accentTeal
         case .nightOwl, .earlyBird:
-            return DS.Colors.accentGold
+            return DS.Colors.accentAmber
         default:
             return .gray
         }
@@ -580,7 +580,7 @@ struct PremiumDistanceDisplay: View {
             .padding(.vertical, DS.Spacing.xs)
             .background(
                 Capsule()
-                    .fill(DS.Colors.accentBlue.opacity(0.12))
+                    .fill(DS.Colors.accentSlate.opacity(0.12))
             )
             .accessibilityLabel("Distance: \(DistanceFormatter.format(meters: meters))")
         }
@@ -618,13 +618,13 @@ struct PremiumNavigateButton: View {
                 Capsule()
                     .fill(
                         LinearGradient(
-                            colors: [DS.Colors.accentBlue, DS.Colors.accentPurple],
+                            colors: [DS.Colors.accentGold, DS.Colors.accentAmber],
                             startPoint: .leading,
                             endPoint: .trailing
                         )
                     )
             )
-            .shadow(color: DS.Colors.accentBlue.opacity(0.4), radius: 8, x: 0, y: 4)
+            .shadow(color: DS.Colors.accentGold.opacity(0.4), radius: 8, x: 0, y: 4)
         }
         .buttonStyle(.plain)
         .scaleEffect(isPressed ? 0.95 : 1)
