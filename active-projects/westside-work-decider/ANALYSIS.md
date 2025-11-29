@@ -7,7 +7,7 @@
 
 ## Summary
 
-The Westside Work Decider is a production-ready iOS SwiftUI application for ADHD-friendly work spot discovery on LA's Westside. All planned features have been implemented, tested, and documented.
+The Westside Work Decider is a production-ready iOS SwiftUI application for ADHD-friendly work spot discovery. Originally focused on LA's Westside, now expanded to include favorite spots across Scarsdale (NY), Palm Springs/Joshua Tree, and Salt Lake City. All planned features have been implemented, tested, and documented.
 
 ---
 
@@ -27,7 +27,7 @@ The Westside Work Decider is a production-ready iOS SwiftUI application for ADHD
 
 | Feature | Status | Description |
 |---------|--------|-------------|
-| 44 Verified Spots | Done | Complete LA Westside dataset |
+| 48 Verified Spots | Done | LA Westside + Scarsdale, Palm Springs, Joshua Tree, Salt Lake City |
 | Operating Hours | Done | Per-day schedules with `isOpen(at:)` |
 | WiFi/Noise Ratings | Done | Quality ratings for filtering |
 | SimulatedAI | Done | 60+ keyword mappings, time-aware |
@@ -120,7 +120,7 @@ westside-work-decider/
 
 | File | Records | Purpose |
 |------|---------|---------|
-| `westside_remote_work_master_verified.json` | 44 | Production dataset |
+| `westside_remote_work_master_verified.json` | 48 | Production dataset (LA + Scarsdale + Desert + SLC) |
 | `westside_remote_work_rejected.csv` | — | Excluded venues |
 
 ---

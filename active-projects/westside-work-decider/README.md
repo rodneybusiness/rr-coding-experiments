@@ -1,6 +1,6 @@
 # Westside Work Decider
 
-An ADHD-friendly iOS app that recommends the best remote-work spots on LA's Westside. Features quick presets, AI-assisted intent parsing, real-time open/closed status, and an offline-first local database of 44 verified locations.
+An ADHD-friendly iOS app that recommends the best remote-work spots. Originally focused on LA's Westside, now expanded to include favorite spots across multiple cities. Features quick presets, AI-assisted intent parsing, real-time open/closed status, and an offline-first local database of 48 verified locations.
 
 **Platform:** iOS 17+ | **Framework:** SwiftUI | **Status:** Ready for Xcode
 
@@ -108,7 +108,17 @@ struct WestsideWorkDeciderApp: App {
 
 ## Data Model
 
-The app includes **44 verified LA Westside work spots** with:
+The app includes **48 verified work spots** across multiple locations:
+
+### Coverage Areas
+| Region | Cities/Areas |
+|--------|--------------|
+| **LA Westside** | Santa Monica, Venice, Culver City, Mar Vista, Westwood, Marina del Rey, Playa Vista, Palms, Westchester |
+| **New York** | Scarsdale (Westchester County) |
+| **California Desert** | Palm Springs Area, Joshua Tree |
+| **Utah** | Salt Lake City |
+
+### Spot Data Fields
 
 | Field | Description |
 |-------|-------------|

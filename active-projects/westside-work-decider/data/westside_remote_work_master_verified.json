@@ -2326,5 +2326,213 @@
     },
     "WifiQuality": "excellent",
     "NoiseLevel": "moderate"
+  },
+  {
+    "Name": "Scarsdale Public Library",
+    "City": "Scarsdale",
+    "Neighborhood": "Scarsdale Village",
+    "PlaceType": "Library",
+    "Tier": "Elite",
+    "SentimentScore": 10.0,
+    "CostBasis": "Free (public library with library card)",
+    "OpenLate": false,
+    "CloseToHome": true,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": false,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "⚡️ Power Heavy, 🧘 Deep Focus, 🪑 Ergonomic",
+    "CriticalFieldNotes": "Exceptional Westchester library with dedicated quiet study areas, strong wifi, and plenty of outlets. Beautiful building with natural light and serious work energy. Personal favorite for deep focus sessions.",
+    "Status": "Verified Open",
+    "Latitude": 40.9887,
+    "Longitude": -73.7846,
+    "OperatingHours": {
+      "1": {
+        "open": "09:00",
+        "close": "21:00"
+      },
+      "2": {
+        "open": "09:00",
+        "close": "21:00"
+      },
+      "3": {
+        "open": "09:00",
+        "close": "21:00"
+      },
+      "4": {
+        "open": "09:00",
+        "close": "21:00"
+      },
+      "5": {
+        "open": "09:00",
+        "close": "18:00"
+      },
+      "6": {
+        "open": "09:00",
+        "close": "17:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "quiet"
+  },
+  {
+    "Name": "Two Bunch Palms",
+    "City": "Desert Hot Springs",
+    "Neighborhood": "Palm Springs Area",
+    "PlaceType": "Resort",
+    "Tier": "Elite",
+    "SentimentScore": 9.5,
+    "CostBasis": "Resort guest (room rates vary; day spa passes available)",
+    "OpenLate": true,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": true,
+    "WalkingFriendlyLocation": false,
+    "ExerciseWellnessAvailable": true,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "🧘 Deep Focus, 🪑 Ergonomic, 💎 Luxury, 🌤️ Patio Power",
+    "CriticalFieldNotes": "Historic desert wellness resort with natural hot springs. Rooms have good wifi and quiet work-friendly spaces. The grounds offer serene outdoor spots for laptop work. Perfect for creative retreats and deep thinking away from the city.",
+    "Status": "Verified Open",
+    "Latitude": 33.9614,
+    "Longitude": -116.5092,
+    "OperatingHours": {
+      "1": {
+        "open": "00:00",
+        "close": "24:00"
+      },
+      "2": {
+        "open": "00:00",
+        "close": "24:00"
+      },
+      "3": {
+        "open": "00:00",
+        "close": "24:00"
+      },
+      "4": {
+        "open": "00:00",
+        "close": "24:00"
+      },
+      "5": {
+        "open": "00:00",
+        "close": "24:00"
+      },
+      "6": {
+        "open": "00:00",
+        "close": "24:00"
+      },
+      "7": {
+        "open": "00:00",
+        "close": "24:00"
+      }
+    },
+    "WifiQuality": "good",
+    "NoiseLevel": "quiet"
+  },
+  {
+    "Name": "Joshua Tree Desert Retreat (Airbnb)",
+    "City": "Joshua Tree",
+    "Neighborhood": "Joshua Tree",
+    "PlaceType": "Vacation Rental",
+    "Tier": "Elite",
+    "SentimentScore": 9.5,
+    "CostBasis": "Airbnb nightly rate (check listing for current pricing)",
+    "OpenLate": true,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": true,
+    "WalkingFriendlyLocation": false,
+    "ExerciseWellnessAvailable": false,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "🧘 Deep Focus, 🚗 Easy Parking, 🌤️ Patio Power, 🌙 Night Owl",
+    "CriticalFieldNotes": "Personal favorite desert Airbnb. Isolated location provides zero distractions for deep work. Strong wifi for a remote location. The desert landscape and starry nights reset creative energy. Best for multi-day writing or thinking retreats.",
+    "Status": "Verified Open",
+    "Latitude": 34.1347,
+    "Longitude": -116.3131,
+    "OperatingHours": {
+      "1": {
+        "open": "00:00",
+        "close": "24:00"
+      },
+      "2": {
+        "open": "00:00",
+        "close": "24:00"
+      },
+      "3": {
+        "open": "00:00",
+        "close": "24:00"
+      },
+      "4": {
+        "open": "00:00",
+        "close": "24:00"
+      },
+      "5": {
+        "open": "00:00",
+        "close": "24:00"
+      },
+      "6": {
+        "open": "00:00",
+        "close": "24:00"
+      },
+      "7": {
+        "open": "00:00",
+        "close": "24:00"
+      }
+    },
+    "WifiQuality": "good",
+    "NoiseLevel": "quiet"
+  },
+  {
+    "Name": "Little America Hotel",
+    "City": "Salt Lake City",
+    "Neighborhood": "Downtown SLC",
+    "PlaceType": "Hotel",
+    "Tier": "Elite",
+    "SentimentScore": 10.0,
+    "CostBasis": "Hotel guest (rooms have exceptional work setup)",
+    "OpenLate": true,
+    "CloseToHome": false,
+    "CloseToWork": false,
+    "SafeToLeaveComputer": true,
+    "WalkingFriendlyLocation": true,
+    "ExerciseWellnessAvailable": true,
+    "ChargedLaptopBrickOnly": false,
+    "Attributes": "⚡️ Power Heavy, 🪑 Ergonomic, 💎 Luxury, 🚗 Easy Parking, 🍽️ Real Food, 📞 Call Friendly",
+    "CriticalFieldNotes": "Outstanding in-room work setup with excellent desks and high-quality ergonomic desk chairs—rare for hotels. Strong wifi throughout. The lobby also works for meetings. Grand, classic American hotel with attentive service and good on-site dining. A top-tier destination for work travel.",
+    "Status": "Verified Open",
+    "Latitude": 40.7578,
+    "Longitude": -111.8988,
+    "OperatingHours": {
+      "1": {
+        "open": "00:00",
+        "close": "24:00"
+      },
+      "2": {
+        "open": "00:00",
+        "close": "24:00"
+      },
+      "3": {
+        "open": "00:00",
+        "close": "24:00"
+      },
+      "4": {
+        "open": "00:00",
+        "close": "24:00"
+      },
+      "5": {
+        "open": "00:00",
+        "close": "24:00"
+      },
+      "6": {
+        "open": "00:00",
+        "close": "24:00"
+      },
+      "7": {
+        "open": "00:00",
+        "close": "24:00"
+      }
+    },
+    "WifiQuality": "excellent",
+    "NoiseLevel": "quiet"
   }
 ]
