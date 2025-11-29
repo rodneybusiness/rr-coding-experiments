@@ -47,19 +47,17 @@ enum DS {
 
     // MARK: Gradients
     enum Gradients {
-        static let meshBackground = MeshGradient(
-            width: 3,
-            height: 3,
-            points: [
-                [0.0, 0.0], [0.5, 0.0], [1.0, 0.0],
-                [0.0, 0.5], [0.5, 0.5], [1.0, 0.5],
-                [0.0, 1.0], [0.5, 1.0], [1.0, 1.0]
-            ],
+        // Note: MeshGradient requires iOS 18+, so we use a multi-stop radial gradient fallback
+        static let meshBackground = RadialGradient(
             colors: [
-                Colors.backgroundPrimary, Colors.backgroundSecondary, Colors.backgroundPrimary,
-                Colors.accentPurple.opacity(0.1), Colors.backgroundPrimary, Colors.accentBlue.opacity(0.1),
-                Colors.backgroundPrimary, Colors.backgroundSecondary, Colors.backgroundPrimary
-            ]
+                Colors.accentPurple.opacity(0.08),
+                Colors.backgroundPrimary,
+                Colors.accentBlue.opacity(0.05),
+                Colors.backgroundPrimary
+            ],
+            center: .topLeading,
+            startRadius: 0,
+            endRadius: 600
         )
 
         static let eliteCard = LinearGradient(

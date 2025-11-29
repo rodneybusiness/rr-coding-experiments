@@ -252,12 +252,15 @@ struct SpotCard: View {
 
     private var placeTypeIcon: String {
         switch spot.placeType {
-        case .coffeeShop: return "cup.and.saucer.fill"
+        case .cafe: return "cup.and.saucer.fill"
         case .coworking: return "building.2.fill"
-        case .library: return "books.vertical.fill"
-        case .hotel: return "building.fill"
-        case .cafe: return "fork.knife"
-        case .other: return "mappin.circle.fill"
+        case .library: return "book.fill"
+        case .hotelLobby: return "building.fill"
+        case .cafeRestaurant: return "fork.knife"
+        case .club: return "building.columns.fill"
+        case .bookstoreCafe: return "books.vertical.fill"
+        case .bankCafe: return "dollarsign.circle.fill"
+        case .unknown: return "mappin.circle.fill"
         }
     }
 
@@ -458,7 +461,7 @@ struct PremiumTimeSensitiveWarning: View {
         let calendar = Calendar.current
         let weekday = calendar.component(.weekday, from: currentDate)
 
-        guard let todayHours = hours.schedule[weekday] else { return nil }
+        guard let todayHours = hours.hours(for: weekday) else { return nil }
 
         let components = todayHours.close.split(separator: ":")
         guard components.count >= 2,
@@ -635,7 +638,7 @@ struct PremiumNavigateButton: View {
     }
 
     private func openInMaps() {
-        let coordinate = spot.coordinate
+        guard let coordinate = spot.coordinate else { return }
         let modeParam: String
         switch travelMode {
         case .walking: modeParam = "w"
@@ -684,45 +687,49 @@ struct PremiumNavigateButton: View {
 private extension LocationSpot {
     static var preview: LocationSpot {
         LocationSpot(
-            id: "preview-1",
             name: "Groundwork Coffee - Rose Ave",
+            city: "Los Angeles",
             neighborhood: "Venice",
-            latitude: 33.9925,
-            longitude: -118.4695,
-            placeType: .coffeeShop,
+            placeType: .cafe,
             tier: .elite,
             sentimentScore: 9.0,
-            criticalFieldNotes: "One of Venice's most reliable work cafés: big patio, many plugs and very dependable wifi with a crowd that's almost all laptops and meetings.",
-            safeToLeaveComputer: false,
+            costBasis: "$$",
             openLate: false,
             closeToHome: true,
             closeToWork: false,
+            safeToLeaveComputer: false,
             walkingFriendlyLocation: true,
             exerciseWellnessAvailable: false,
             chargedLaptopBrickOnly: false,
-            attributes: [.eliteCoffee, .deepFocus, .powerHeavy, .bodyDoubling, .patioPower]
+            attributes: [.eliteCoffee, .deepFocus, .powerHeavy, .bodyDoubling, .patioPower],
+            criticalFieldNotes: "One of Venice's most reliable work cafés: big patio, many plugs and very dependable wifi with a crowd that's almost all laptops and meetings.",
+            status: "Active",
+            latitude: 33.9925,
+            longitude: -118.4695
         )
     }
 
     static var previewReliable: LocationSpot {
         LocationSpot(
-            id: "preview-2",
             name: "Santa Monica Public Library",
+            city: "Los Angeles",
             neighborhood: "Santa Monica",
-            latitude: 34.0142,
-            longitude: -118.4921,
             placeType: .library,
             tier: .reliable,
             sentimentScore: 8.0,
-            criticalFieldNotes: "Quiet, power-rich reading rooms plus a courtyard wifi signal; perfect when you want deep-focus script work.",
-            safeToLeaveComputer: false,
+            costBasis: "Free",
             openLate: false,
             closeToHome: false,
             closeToWork: false,
+            safeToLeaveComputer: false,
             walkingFriendlyLocation: true,
             exerciseWellnessAvailable: false,
             chargedLaptopBrickOnly: false,
-            attributes: [.deepFocus, .patioPower]
+            attributes: [.deepFocus, .patioPower],
+            criticalFieldNotes: "Quiet, power-rich reading rooms plus a courtyard wifi signal; perfect when you want deep-focus script work.",
+            status: "Active",
+            latitude: 34.0142,
+            longitude: -118.4921
         )
     }
 }

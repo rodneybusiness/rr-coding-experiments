@@ -253,7 +253,7 @@ struct TimeSensitiveWarning: View {
         let calendar = Calendar.current
         let weekday = calendar.component(.weekday, from: currentDate)
 
-        guard let todayHours = hours.schedule[weekday] else { return nil }
+        guard let todayHours = hours.hours(for: weekday) else { return nil }
 
         // Parse close time
         let components = todayHours.close.split(separator: ":")
