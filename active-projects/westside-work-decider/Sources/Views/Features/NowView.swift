@@ -64,12 +64,12 @@ struct NowView: View {
             // Base color
             Color(uiColor: .systemBackground)
 
-            // Subtle gradient overlay
+            // Subtle gradient overlay - warm luxury tones
             LinearGradient(
                 colors: [
-                    DS.Colors.accentPurple.opacity(0.03),
+                    DS.Colors.accentGold.opacity(0.025),
                     Color.clear,
-                    DS.Colors.accentBlue.opacity(0.02)
+                    DS.Colors.accentSlate.opacity(0.02)
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
@@ -115,7 +115,7 @@ struct NowView: View {
             // Subtle context line
             Text("\(store.openSpots(for: filters.query).count) spots open now")
                 .font(.system(size: 14, weight: .medium, design: .rounded))
-                .foregroundStyle(DS.Colors.accentPurple)
+                .foregroundStyle(DS.Colors.accentGold)
                 .opacity(headerOpacity)
         }
     }
@@ -175,12 +175,12 @@ struct NowView: View {
             // Animated icon
             ZStack {
                 Circle()
-                    .fill(DS.Colors.accentPurple.opacity(0.1))
+                    .fill(DS.Colors.accentGold.opacity(0.1))
                     .frame(width: 100, height: 100)
 
                 Image(systemName: "magnifyingglass")
                     .font(.system(size: 40, weight: .medium))
-                    .foregroundStyle(DS.Colors.accentPurple.opacity(0.6))
+                    .foregroundStyle(DS.Colors.accentGold.opacity(0.6))
                     .symbolEffect(.pulse)
             }
 
@@ -203,12 +203,12 @@ struct NowView: View {
             } label: {
                 Text("Clear Filters")
                     .font(.system(size: 14, weight: .semibold, design: .rounded))
-                    .foregroundStyle(DS.Colors.accentPurple)
+                    .foregroundStyle(DS.Colors.accentGold)
                     .padding(.horizontal, DS.Spacing.lg)
                     .padding(.vertical, DS.Spacing.sm)
                     .background(
                         Capsule()
-                            .fill(DS.Colors.accentPurple.opacity(0.12))
+                            .fill(DS.Colors.accentGold.opacity(0.12))
                     )
             }
             .buttonStyle(.plain)
@@ -227,7 +227,7 @@ struct NowView: View {
             PremiumActionButton(
                 title: "Map",
                 icon: "map.fill",
-                gradient: [DS.Colors.accentBlue, DS.Colors.accentPurple],
+                gradient: [DS.Colors.accentGold, DS.Colors.accentAmber],
                 action: {
                     HapticFeedback.light()
                     onShowMap()
@@ -291,12 +291,12 @@ struct NowView: View {
 
     private func greetingColor(for hour: Int) -> Color {
         switch hour {
-        case 0..<6: return DS.Colors.accentPurple
+        case 0..<6: return DS.Colors.accentSlate
         case 6..<12: return DS.Colors.accentGold
-        case 12..<14: return DS.Colors.accentGold
-        case 14..<17: return .orange
-        case 17..<21: return .orange
-        default: return DS.Colors.accentPurple
+        case 12..<14: return DS.Colors.accentAmber
+        case 14..<17: return DS.Colors.accentGold
+        case 17..<21: return DS.Colors.accentAmber
+        default: return DS.Colors.accentSlate
         }
     }
 }
@@ -361,16 +361,16 @@ private struct PremiumPresetButton: View {
                 HStack(spacing: DS.Spacing.xs) {
                     Image(systemName: presetIcon)
                         .font(.system(size: 14, weight: .semibold))
-                        .foregroundStyle(isSelected ? .white : DS.Colors.accentPurple)
+                        .foregroundStyle(isSelected ? Color(hex: "1A1A1F") : DS.Colors.accentGold)
 
                     Text(preset.title)
                         .font(.system(size: 15, weight: .semibold, design: .rounded))
-                        .foregroundStyle(isSelected ? .white : .primary)
+                        .foregroundStyle(isSelected ? Color(hex: "1A1A1F") : .primary)
                 }
 
                 Text(preset.description)
                     .font(.system(size: 12, weight: .regular, design: .rounded))
-                    .foregroundStyle(isSelected ? .white.opacity(0.8) : .secondary)
+                    .foregroundStyle(isSelected ? Color(hex: "1A1A1F").opacity(0.7) : .secondary)
                     .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -394,7 +394,7 @@ private struct PremiumPresetButton: View {
                     )
             )
             .shadow(
-                color: isSelected ? DS.Colors.accentPurple.opacity(0.3) : .clear,
+                color: isSelected ? DS.Colors.accentGold.opacity(0.35) : .clear,
                 radius: 12,
                 x: 0,
                 y: 6

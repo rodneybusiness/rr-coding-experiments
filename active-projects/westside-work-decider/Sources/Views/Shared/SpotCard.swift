@@ -1,7 +1,7 @@
 import SwiftUI
 import CoreLocation
 
-// MARK: - Premium SpotCard 2025
+// MARK: - Premium SpotCard 2025 + iOS 26 Liquid Glass
 
 struct SpotCard: View {
     let spot: LocationSpot
@@ -266,8 +266,8 @@ struct SpotCard: View {
 
     private var tierAccentColor: Color {
         switch spot.tier {
-        case .elite: return DS.Colors.accentPurple
-        case .reliable: return DS.Colors.accentBlue
+        case .elite: return DS.Colors.accentGold
+        case .reliable: return DS.Colors.accentSlate
         case .unknown: return .gray
         }
     }
@@ -303,6 +303,51 @@ struct PremiumTierBadge: View {
     @State private var isAnimating = false
 
     var body: some View {
+        if #available(iOS 26, *) {
+            liquidGlassBadge
+        } else {
+            fallbackBadge
+        }
+    }
+
+    // MARK: - iOS 26+ Liquid Glass Badge
+
+    @available(iOS 26, *)
+    private var liquidGlassBadge: some View {
+        HStack(spacing: DS.Spacing.xxs) {
+            if tier == .elite {
+                Image(systemName: "sparkles")
+                    .font(.system(size: 10, weight: .bold))
+                    .symbolEffect(.pulse, isActive: isAnimating)
+            }
+            Text(tier.rawValue.capitalized)
+                .font(.system(size: 11, weight: .bold, design: .rounded))
+                .textCase(.uppercase)
+                .tracking(0.5)
+        }
+        .foregroundStyle(tierTextColor)
+        .padding(.horizontal, DS.Spacing.sm)
+        .padding(.vertical, DS.Spacing.xs)
+        .background(
+            Capsule()
+                .fill(tier == .elite ? DS.Colors.accentGold.opacity(0.15) : .clear)
+        )
+        .glassEffect(
+            .regular.tint(tierGlowColor),
+            in: Capsule()
+        )
+        .shadow(color: tierGlowColor.opacity(0.35), radius: 10, x: 0, y: 4)
+        .onAppear {
+            if tier == .elite {
+                isAnimating = true
+            }
+        }
+        .accessibilityLabel("\(tier.rawValue) tier")
+    }
+
+    // MARK: - iOS 17-25 Fallback Badge
+
+    private var fallbackBadge: some View {
         HStack(spacing: DS.Spacing.xxs) {
             if tier == .elite {
                 Image(systemName: "sparkles")
@@ -336,8 +381,8 @@ struct PremiumTierBadge: View {
 
     private var tierTextColor: Color {
         switch tier {
-        case .elite: return .white
-        case .reliable: return DS.Colors.accentBlue
+        case .elite: return Color(hex: "1A1A1F") // Dark text on gold
+        case .reliable: return DS.Colors.textPrimary
         case .unknown: return .gray
         }
     }
@@ -346,13 +391,13 @@ struct PremiumTierBadge: View {
         switch tier {
         case .elite:
             return LinearGradient(
-                colors: [DS.Colors.accentPurple, DS.Colors.accentPink],
+                colors: [DS.Colors.accentGold, DS.Colors.accentAmber],
                 startPoint: .leading,
                 endPoint: .trailing
             )
         case .reliable:
             return LinearGradient(
-                colors: [DS.Colors.accentBlue.opacity(0.2)],
+                colors: [DS.Colors.accentSlate.opacity(0.25), DS.Colors.accentBlue.opacity(0.15)],
                 startPoint: .leading,
                 endPoint: .trailing
             )
@@ -367,15 +412,15 @@ struct PremiumTierBadge: View {
 
     private var tierBorderColor: Color {
         switch tier {
-        case .elite: return .white
-        case .reliable: return DS.Colors.accentBlue
+        case .elite: return DS.Colors.accentAmber
+        case .reliable: return DS.Colors.accentSlate
         case .unknown: return .gray
         }
     }
 
     private var tierGlowColor: Color {
         switch tier {
-        case .elite: return DS.Colors.accentPurple
+        case .elite: return DS.Colors.accentGold
         case .reliable: return DS.Colors.accentBlue
         case .unknown: return .clear
         }
@@ -520,13 +565,13 @@ struct PremiumAttributePill: View {
     private var attributeBackgroundColor: Color {
         switch tag {
         case .deepFocus, .powerHeavy:
-            return DS.Colors.accentBlue.opacity(0.12)
+            return DS.Colors.accentSlate.opacity(0.12)
         case .luxury, .eliteCoffee:
-            return DS.Colors.accentPurple.opacity(0.12)
+            return DS.Colors.accentGold.opacity(0.12)
         case .bodyDoubling:
             return DS.Colors.accentTeal.opacity(0.12)
         case .nightOwl, .earlyBird:
-            return DS.Colors.accentGold.opacity(0.12)
+            return DS.Colors.accentAmber.opacity(0.12)
         default:
             return DS.Colors.glassBackground
         }
@@ -535,13 +580,13 @@ struct PremiumAttributePill: View {
     private var attributeBorderColor: Color {
         switch tag {
         case .deepFocus, .powerHeavy:
-            return DS.Colors.accentBlue
+            return DS.Colors.accentSlate
         case .luxury, .eliteCoffee:
-            return DS.Colors.accentPurple
+            return DS.Colors.accentGold
         case .bodyDoubling:
             return DS.Colors.accentTeal
         case .nightOwl, .earlyBird:
-            return DS.Colors.accentGold
+            return DS.Colors.accentAmber
         default:
             return .gray
         }
@@ -580,7 +625,7 @@ struct PremiumDistanceDisplay: View {
             .padding(.vertical, DS.Spacing.xs)
             .background(
                 Capsule()
-                    .fill(DS.Colors.accentBlue.opacity(0.12))
+                    .fill(DS.Colors.accentSlate.opacity(0.12))
             )
             .accessibilityLabel("Distance: \(DistanceFormatter.format(meters: meters))")
         }
@@ -614,27 +659,37 @@ struct PremiumNavigateButton: View {
             .foregroundStyle(.white)
             .padding(.horizontal, DS.Spacing.md)
             .padding(.vertical, DS.Spacing.sm)
-            .background(
-                Capsule()
-                    .fill(
-                        LinearGradient(
-                            colors: [DS.Colors.accentBlue, DS.Colors.accentPurple],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
-            )
-            .shadow(color: DS.Colors.accentBlue.opacity(0.4), radius: 8, x: 0, y: 4)
+            .background(buttonBackground)
+            .shadow(color: DS.Colors.accentGold.opacity(0.4), radius: 8, x: 0, y: 4)
         }
         .buttonStyle(.plain)
         .scaleEffect(isPressed ? 0.95 : 1)
+        .animation(DS.Animation.glassMorph, value: isPressed)
         .onLongPressGesture(minimumDuration: 0.1, pressing: { pressing in
-            withAnimation(DS.Animation.quick) {
-                isPressed = pressing
-            }
+            isPressed = pressing
         }, perform: {})
         .accessibilityLabel("Navigate to \(spot.name)")
         .accessibilityHint("Opens in Apple Maps")
+    }
+
+    @ViewBuilder
+    private var buttonBackground: some View {
+        if #available(iOS 26, *) {
+            // iOS 26+ Liquid Glass with gold tint
+            Capsule()
+                .fill(DS.Colors.accentGold.opacity(0.9))
+                .glassEffect(.regular.tint(DS.Colors.accentGold), in: Capsule())
+        } else {
+            // Fallback gradient
+            Capsule()
+                .fill(
+                    LinearGradient(
+                        colors: [DS.Colors.accentGold, DS.Colors.accentAmber],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+        }
     }
 
     private func openInMaps() {

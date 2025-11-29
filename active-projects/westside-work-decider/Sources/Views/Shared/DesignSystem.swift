@@ -1,58 +1,84 @@
 import SwiftUI
 
-// MARK: - Design System 2025
-// A comprehensive design system for premium iOS experiences
+// MARK: - Design System 2025 + iOS 26 Liquid Glass
+// A distinctive design system with editorial typography and warm luxury tones
+// Aesthetic Direction: Refined luxury meets editorial clarity
+// iOS 26: Enhanced with native Liquid Glass effects for depth and refraction
 
 // MARK: - Color Palette
 
 enum DS {
     // MARK: Base Colors
     enum Colors {
-        // Dark mode base (not pure black)
-        static let backgroundPrimary = Color(hex: "0A0A0F")
-        static let backgroundSecondary = Color(hex: "131318")
-        static let backgroundTertiary = Color(hex: "1C1C24")
-        static let backgroundElevated = Color(hex: "242430")
+        // Dark mode base - warm undertone (not cold black)
+        static let backgroundPrimary = Color(hex: "09090B")
+        static let backgroundSecondary = Color(hex: "121214")
+        static let backgroundTertiary = Color(hex: "1A1A1F")
+        static let backgroundElevated = Color(hex: "232328")
 
-        // Accent colors
-        static let accentPurple = Color(hex: "8B5CF6")
-        static let accentBlue = Color(hex: "3B82F6")
-        static let accentGold = Color(hex: "F59E0B")
-        static let accentTeal = Color(hex: "14B8A6")
-        static let accentPink = Color(hex: "EC4899")
+        // Accent colors - warm luxury palette
+        static let accentGold = Color(hex: "D4A853")      // Elite: warm gold (luxury)
+        static let accentAmber = Color(hex: "E8B866")     // Elite highlight
+        static let accentSlate = Color(hex: "64748B")     // Reliable: sophisticated slate
+        static let accentBlue = Color(hex: "5B8DEF")      // Reliable highlight
+        static let accentTeal = Color(hex: "2DD4BF")      // Fresh accent
+        static let accentPurple = Color(hex: "A78BFA")    // Rare accent only
 
         // Semantic colors
-        static let success = Color(hex: "22C55E")
-        static let warning = Color(hex: "F59E0B")
-        static let error = Color(hex: "EF4444")
+        static let success = Color(hex: "34D399")
+        static let warning = Color(hex: "FBBF24")
+        static let error = Color(hex: "F87171")
 
-        // Text colors
-        static let textPrimary = Color.white
-        static let textSecondary = Color.white.opacity(0.7)
-        static let textTertiary = Color.white.opacity(0.5)
-        static let textMuted = Color.white.opacity(0.3)
+        // Text colors - warm whites
+        static let textPrimary = Color(hex: "FAFAF9")
+        static let textSecondary = Color(hex: "A8A29E")
+        static let textTertiary = Color(hex: "78716C")
+        static let textMuted = Color(hex: "57534E")
 
-        // Tier colors with glow
-        static let elitePrimary = Color(hex: "A855F7")
-        static let eliteGlow = Color(hex: "8B5CF6").opacity(0.4)
-        static let reliablePrimary = Color(hex: "3B82F6")
-        static let reliableGlow = Color(hex: "3B82F6").opacity(0.3)
-        static let unknownPrimary = Color(hex: "6B7280")
+        // Tier colors - distinctive luxury hierarchy
+        static let elitePrimary = Color(hex: "D4A853")    // Warm gold
+        static let eliteGlow = Color(hex: "D4A853").opacity(0.35)
+        static let reliablePrimary = Color(hex: "64748B") // Sophisticated slate
+        static let reliableGlow = Color(hex: "5B8DEF").opacity(0.25)
+        static let unknownPrimary = Color(hex: "525252")
 
-        // Glass effect colors
-        static let glassBackground = Color.white.opacity(0.05)
-        static let glassBorder = Color.white.opacity(0.1)
-        static let glassHighlight = Color.white.opacity(0.15)
+        // Glass effect colors - warmer tint
+        static let glassBackground = Color(hex: "FAFAF9").opacity(0.04)
+        static let glassBorder = Color(hex: "FAFAF9").opacity(0.08)
+        static let glassHighlight = Color(hex: "FAFAF9").opacity(0.12)
+
+        // iOS 26 Liquid Glass tints - for native glass effect color modulation
+        static let liquidGlassElite = Color(hex: "D4A853").opacity(0.15)
+        static let liquidGlassReliable = Color(hex: "64748B").opacity(0.12)
+        static let liquidGlassNeutral = Color(hex: "FAFAF9").opacity(0.08)
+    }
+
+    // MARK: Liquid Glass Configuration (iOS 26+)
+    enum LiquidGlass {
+        // Refraction intensity levels
+        static let refractionSubtle: CGFloat = 0.3
+        static let refractionStandard: CGFloat = 0.5
+        static let refractionIntense: CGFloat = 0.8
+
+        // Depth levels for glass layering
+        static let depthBackground: CGFloat = 0.2
+        static let depthCard: CGFloat = 0.5
+        static let depthElevated: CGFloat = 0.7
+        static let depthFloating: CGFloat = 1.0
+
+        // Animation curves for glass morphing
+        static let morphDuration: Double = 0.4
+        static let rippleDuration: Double = 0.6
     }
 
     // MARK: Gradients
     enum Gradients {
-        // Note: MeshGradient requires iOS 18+, so we use a multi-stop radial gradient fallback
+        // Atmospheric background - warm undertone
         static let meshBackground = RadialGradient(
             colors: [
-                Colors.accentPurple.opacity(0.08),
+                Colors.accentGold.opacity(0.04),
                 Colors.backgroundPrimary,
-                Colors.accentBlue.opacity(0.05),
+                Colors.accentSlate.opacity(0.03),
                 Colors.backgroundPrimary
             ],
             center: .topLeading,
@@ -60,38 +86,42 @@ enum DS {
             endRadius: 600
         )
 
+        // Elite: warm gold luxury gradient
         static let eliteCard = LinearGradient(
             colors: [
-                Colors.accentPurple.opacity(0.15),
-                Colors.accentPurple.opacity(0.05)
+                Colors.accentGold.opacity(0.12),
+                Colors.accentAmber.opacity(0.04)
             ],
             startPoint: .topLeading,
             endPoint: .bottomTrailing
         )
 
+        // Reliable: sophisticated slate gradient
         static let reliableCard = LinearGradient(
             colors: [
-                Colors.accentBlue.opacity(0.12),
-                Colors.accentBlue.opacity(0.04)
+                Colors.accentSlate.opacity(0.10),
+                Colors.accentBlue.opacity(0.03)
             ],
             startPoint: .topLeading,
             endPoint: .bottomTrailing
         )
 
+        // Hero: warm gold to slate (luxury editorial)
         static let heroGradient = LinearGradient(
             colors: [
-                Colors.accentPurple,
-                Colors.accentBlue
+                Colors.accentGold,
+                Colors.accentSlate
             ],
             startPoint: .topLeading,
             endPoint: .bottomTrailing
         )
 
+        // Shimmer with warm tone
         static let shimmer = LinearGradient(
             colors: [
-                Color.white.opacity(0),
-                Color.white.opacity(0.2),
-                Color.white.opacity(0)
+                Colors.textPrimary.opacity(0),
+                Colors.textPrimary.opacity(0.15),
+                Colors.textPrimary.opacity(0)
             ],
             startPoint: .leading,
             endPoint: .trailing
@@ -124,45 +154,63 @@ enum DS {
     }
 
     // MARK: Typography
+    // Editorial approach: Serif for display, refined sans for body
     enum Typography {
-        // Hero / Large Title
+        // Hero: Editorial serif for maximum distinction
         static func hero(_ text: Text) -> some View {
             text
-                .font(.system(size: 40, weight: .bold, design: .default))
-                .tracking(-0.5)
+                .font(.system(size: 38, weight: .bold, design: .serif))
+                .tracking(-1.5)
         }
 
-        // Title
+        // Title: Serif for editorial hierarchy
         static func title(_ text: Text) -> some View {
             text
-                .font(.system(size: 28, weight: .bold, design: .default))
+                .font(.system(size: 26, weight: .bold, design: .serif))
+                .tracking(-0.8)
+        }
+
+        // Headline: Clean sans with tight tracking
+        static func headline(_ text: Text) -> some View {
+            text
+                .font(.system(size: 19, weight: .semibold, design: .default))
                 .tracking(-0.3)
         }
 
-        // Headline
-        static func headline(_ text: Text) -> some View {
-            text
-                .font(.system(size: 20, weight: .semibold, design: .default))
-        }
-
-        // Body (Rounded for friendly elements)
+        // Body: Rounded for warmth and approachability
         static func bodyRounded(_ text: Text) -> some View {
             text
                 .font(.system(size: 16, weight: .regular, design: .rounded))
+                .tracking(0.1)
         }
 
-        // Caption
+        // Caption: Refined, slightly condensed feel
         static func caption(_ text: Text) -> some View {
             text
                 .font(.system(size: 13, weight: .medium, design: .default))
+                .tracking(0.2)
         }
 
-        // Micro
+        // Micro: All-caps with generous tracking
         static func micro(_ text: Text) -> some View {
             text
-                .font(.system(size: 11, weight: .semibold, design: .default))
+                .font(.system(size: 10, weight: .bold, design: .default))
                 .textCase(.uppercase)
-                .tracking(0.5)
+                .tracking(1.2)
+        }
+
+        // Display: Large serif for splash moments
+        static func display(_ text: Text) -> some View {
+            text
+                .font(.system(size: 48, weight: .bold, design: .serif))
+                .tracking(-2)
+        }
+
+        // Label: Compact utility text
+        static func label(_ text: Text) -> some View {
+            text
+                .font(.system(size: 12, weight: .semibold, design: .rounded))
+                .tracking(0.3)
         }
     }
 
@@ -194,6 +242,11 @@ enum DS {
         static let smooth = SwiftUI.Animation.easeInOut(duration: 0.3)
         static let quick = SwiftUI.Animation.easeOut(duration: 0.2)
         static let slow = SwiftUI.Animation.easeInOut(duration: 0.5)
+
+        // Liquid Glass specific animations (iOS 26+)
+        static let glassMorph = SwiftUI.Animation.spring(response: 0.4, dampingFraction: 0.75)
+        static let glassRipple = SwiftUI.Animation.spring(response: 0.6, dampingFraction: 0.6)
+        static let glassFloat = SwiftUI.Animation.easeInOut(duration: 0.8)
     }
 }
 
@@ -230,13 +283,43 @@ extension Color {
 struct GlassCardModifier: ViewModifier {
     let cornerRadius: CGFloat
     let tier: Tier?
+    let depth: CGFloat
 
-    init(cornerRadius: CGFloat = DS.Radius.lg, tier: Tier? = nil) {
+    init(cornerRadius: CGFloat = DS.Radius.lg, tier: Tier? = nil, depth: CGFloat = DS.LiquidGlass.depthCard) {
         self.cornerRadius = cornerRadius
         self.tier = tier
+        self.depth = depth
     }
 
     func body(content: Content) -> some View {
+        if #available(iOS 26, *) {
+            liquidGlassContent(content)
+        } else {
+            fallbackGlassContent(content)
+        }
+    }
+
+    // MARK: - iOS 26+ Liquid Glass Implementation
+
+    @available(iOS 26, *)
+    @ViewBuilder
+    private func liquidGlassContent(_ content: Content) -> some View {
+        content
+            .background(
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .fill(tierTintColor.opacity(0.08))
+            )
+            .glassEffect(
+                .regular.tint(tierTintColor),
+                in: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+            )
+            .shadow(color: tierShadowColor.opacity(0.25), radius: 16, x: 0, y: 8)
+    }
+
+    // MARK: - iOS 17-25 Fallback
+
+    @ViewBuilder
+    private func fallbackGlassContent(_ content: Content) -> some View {
         content
             .background(
                 ZStack {
@@ -250,12 +333,12 @@ struct GlassCardModifier: ViewModifier {
                             .fill(gradientForTier(tier))
                     }
 
-                    // Top highlight
+                    // Top highlight - mimics Liquid Glass refraction
                     RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                         .fill(
                             LinearGradient(
                                 colors: [
-                                    Color.white.opacity(0.1),
+                                    Color.white.opacity(0.12),
                                     Color.white.opacity(0)
                                 ],
                                 startPoint: .top,
@@ -282,6 +365,8 @@ struct GlassCardModifier: ViewModifier {
             .shadow(color: .black.opacity(0.2), radius: 8, x: 0, y: 4)
     }
 
+    // MARK: - Tier Styling Helpers
+
     private func gradientForTier(_ tier: Tier) -> LinearGradient {
         switch tier {
         case .elite:
@@ -293,11 +378,20 @@ struct GlassCardModifier: ViewModifier {
         }
     }
 
+    private var tierTintColor: Color {
+        guard let tier else { return DS.Colors.textPrimary }
+        switch tier {
+        case .elite: return DS.Colors.accentGold
+        case .reliable: return DS.Colors.accentSlate
+        case .unknown: return DS.Colors.textSecondary
+        }
+    }
+
     private var tierShadowColor: Color {
         guard let tier else { return .black }
         switch tier {
-        case .elite: return DS.Colors.accentPurple
-        case .reliable: return DS.Colors.accentBlue
+        case .elite: return DS.Colors.accentGold
+        case .reliable: return DS.Colors.accentSlate
         case .unknown: return .black
         }
     }
@@ -309,6 +403,162 @@ struct PressableButtonStyle: ButtonStyle {
             .scaleEffect(configuration.isPressed ? 0.96 : 1)
             .opacity(configuration.isPressed ? 0.9 : 1)
             .animation(DS.Animation.quick, value: configuration.isPressed)
+    }
+}
+
+// MARK: - iOS 26 Liquid Glass Button Style
+
+struct LiquidGlassButtonStyle: ButtonStyle {
+    let tint: Color
+    let isProminent: Bool
+
+    init(tint: Color = DS.Colors.accentGold, isProminent: Bool = false) {
+        self.tint = tint
+        self.isProminent = isProminent
+    }
+
+    func makeBody(configuration: Configuration) -> some View {
+        if #available(iOS 26, *) {
+            configuration.label
+                .padding(.horizontal, DS.Spacing.lg)
+                .padding(.vertical, DS.Spacing.sm)
+                .glassEffect(
+                    isProminent ? .regular.tint(tint).interactive : .regular.tint(tint),
+                    in: Capsule()
+                )
+                .scaleEffect(configuration.isPressed ? 0.96 : 1)
+                .animation(DS.Animation.glassMorph, value: configuration.isPressed)
+        } else {
+            // Fallback for iOS < 26
+            configuration.label
+                .padding(.horizontal, DS.Spacing.lg)
+                .padding(.vertical, DS.Spacing.sm)
+                .background(
+                    Capsule()
+                        .fill(.ultraThinMaterial)
+                        .overlay(
+                            Capsule()
+                                .fill(tint.opacity(isProminent ? 0.2 : 0.1))
+                        )
+                )
+                .overlay(
+                    Capsule()
+                        .stroke(tint.opacity(0.3), lineWidth: 0.5)
+                )
+                .scaleEffect(configuration.isPressed ? 0.96 : 1)
+                .opacity(configuration.isPressed ? 0.9 : 1)
+                .animation(DS.Animation.quick, value: configuration.isPressed)
+        }
+    }
+}
+
+// MARK: - Liquid Glass Prominent Modifier (for elevated UI elements)
+
+struct LiquidGlassProminentModifier: ViewModifier {
+    let tint: Color
+    let cornerRadius: CGFloat
+
+    init(tint: Color = DS.Colors.accentGold, cornerRadius: CGFloat = DS.Radius.lg) {
+        self.tint = tint
+        self.cornerRadius = cornerRadius
+    }
+
+    func body(content: Content) -> some View {
+        if #available(iOS 26, *) {
+            content
+                .background(
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .fill(tint.opacity(0.1))
+                )
+                .glassEffect(
+                    .regular.tint(tint).interactive,
+                    in: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                )
+                .shadow(color: tint.opacity(0.4), radius: 20, x: 0, y: 10)
+        } else {
+            content
+                .background(
+                    ZStack {
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                            .fill(.ultraThinMaterial)
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                            .fill(tint.opacity(0.15))
+                        // Prominent highlight edge
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                            .fill(
+                                LinearGradient(
+                                    colors: [tint.opacity(0.3), .clear],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                )
+                            )
+                    }
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .stroke(tint.opacity(0.4), lineWidth: 1)
+                )
+                .shadow(color: tint.opacity(0.4), radius: 20, x: 0, y: 10)
+        }
+    }
+}
+
+// MARK: - Motion-Reactive Glass Modifier
+
+struct MotionReactiveGlassModifier: ViewModifier {
+    @State private var offset: CGSize = .zero
+    @State private var scale: CGFloat = 1.0
+    let intensity: CGFloat
+
+    init(intensity: CGFloat = 1.0) {
+        self.intensity = intensity
+    }
+
+    func body(content: Content) -> some View {
+        content
+            .offset(x: offset.width * intensity * 0.5, y: offset.height * intensity * 0.5)
+            .scaleEffect(scale)
+            .onAppear {
+                startMotionEffect()
+            }
+    }
+
+    private func startMotionEffect() {
+        // Subtle floating animation for glass depth perception
+        withAnimation(
+            SwiftUI.Animation
+                .easeInOut(duration: 3)
+                .repeatForever(autoreverses: true)
+        ) {
+            offset = CGSize(width: 2, height: 3)
+        }
+    }
+}
+
+// MARK: - Liquid Glass Container (iOS 26+)
+// Groups glass elements for shared visual context
+
+struct LiquidGlassContainer<Content: View>: View {
+    let content: Content
+    let spacing: CGFloat
+
+    init(spacing: CGFloat = DS.Spacing.md, @ViewBuilder content: () -> Content) {
+        self.content = content()
+        self.spacing = spacing
+    }
+
+    var body: some View {
+        if #available(iOS 26, *) {
+            GlassEffectContainer {
+                VStack(spacing: spacing) {
+                    content
+                }
+            }
+        } else {
+            VStack(spacing: spacing) {
+                content
+            }
+        }
     }
 }
 
@@ -369,6 +619,45 @@ extension View {
 
     func pressableButton() -> some View {
         buttonStyle(PressableButtonStyle())
+    }
+
+    // MARK: - iOS 26 Liquid Glass Extensions
+
+    /// Applies a prominent Liquid Glass effect (elevated elements, CTAs)
+    func liquidGlassProminent(tint: Color = DS.Colors.accentGold, cornerRadius: CGFloat = DS.Radius.lg) -> some View {
+        modifier(LiquidGlassProminentModifier(tint: tint, cornerRadius: cornerRadius))
+    }
+
+    /// Applies motion-reactive floating effect for glass depth
+    func motionReactiveGlass(intensity: CGFloat = 1.0) -> some View {
+        modifier(MotionReactiveGlassModifier(intensity: intensity))
+    }
+
+    /// Applies Liquid Glass button styling
+    func liquidGlassButton(tint: Color = DS.Colors.accentGold, isProminent: Bool = false) -> some View {
+        buttonStyle(LiquidGlassButtonStyle(tint: tint, isProminent: isProminent))
+    }
+
+    /// Native Liquid Glass effect with custom tint (iOS 26+, falls back on earlier versions)
+    @ViewBuilder
+    func liquidGlass(tint: Color = DS.Colors.textPrimary, cornerRadius: CGFloat = DS.Radius.lg) -> some View {
+        if #available(iOS 26, *) {
+            self
+                .glassEffect(
+                    .regular.tint(tint),
+                    in: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                )
+        } else {
+            self
+                .background(
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .fill(.ultraThinMaterial)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                        .stroke(tint.opacity(0.2), lineWidth: 0.5)
+                )
+        }
     }
 }
 
@@ -467,6 +756,51 @@ enum HapticFeedback {
     }
 }
 
+// MARK: - Grain Texture Overlay
+// Adds subtle film grain for atmospheric depth
+
+struct GrainOverlay: View {
+    let opacity: Double
+
+    init(opacity: Double = 0.03) {
+        self.opacity = opacity
+    }
+
+    var body: some View {
+        GeometryReader { geometry in
+            Canvas { context, size in
+                // Generate deterministic grain pattern
+                for x in stride(from: 0, to: size.width, by: 2) {
+                    for y in stride(from: 0, to: size.height, by: 2) {
+                        let noise = sin(x * 0.1) * cos(y * 0.1) * sin((x + y) * 0.05)
+                        let brightness = (noise + 1) / 2
+                        context.opacity = brightness * opacity
+                        context.fill(
+                            Path(CGRect(x: x, y: y, width: 2, height: 2)),
+                            with: .color(.white)
+                        )
+                    }
+                }
+            }
+        }
+        .allowsHitTesting(false)
+    }
+}
+
+struct GrainModifier: ViewModifier {
+    let opacity: Double
+
+    func body(content: Content) -> some View {
+        content.overlay(GrainOverlay(opacity: opacity))
+    }
+}
+
+extension View {
+    func grainTexture(opacity: Double = 0.03) -> some View {
+        modifier(GrainModifier(opacity: opacity))
+    }
+}
+
 // MARK: - Animated Symbol
 
 struct AnimatedSymbol: View {
@@ -522,24 +856,74 @@ struct AnimatedSymbol: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(DS.Spacing.lg)
 
-            // Cards showcase
-            VStack(spacing: DS.Spacing.md) {
-                Text("Elite Card")
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .glassCard(tier: .elite)
+            // Liquid Glass Cards (iOS 26+ native glass, fallback on earlier)
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                DS.Typography.micro(Text("Liquid Glass Cards"))
+                    .foregroundStyle(DS.Colors.textMuted)
+                    .padding(.horizontal, DS.Spacing.lg)
 
-                Text("Reliable Card")
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .glassCard(tier: .reliable)
+                VStack(spacing: DS.Spacing.md) {
+                    Text("Elite Card")
+                        .font(.system(size: 15, weight: .semibold))
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .glassCard(tier: .elite)
 
-                Text("Unknown Card")
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .glassCard(tier: .unknown)
+                    Text("Reliable Card")
+                        .font(.system(size: 15, weight: .semibold))
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .glassCard(tier: .reliable)
+
+                    Text("Neutral Card")
+                        .font(.system(size: 15, weight: .semibold))
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .glassCard(tier: .unknown)
+                }
+                .padding(DS.Spacing.lg)
             }
-            .padding(DS.Spacing.lg)
+
+            // Liquid Glass Prominent (iOS 26+)
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                DS.Typography.micro(Text("Prominent Glass Effects"))
+                    .foregroundStyle(DS.Colors.textMuted)
+                    .padding(.horizontal, DS.Spacing.lg)
+
+                VStack(spacing: DS.Spacing.md) {
+                    Text("Prominent Elite")
+                        .font(.system(size: 15, weight: .bold))
+                        .foregroundStyle(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .liquidGlassProminent(tint: DS.Colors.accentGold)
+
+                    Text("Prominent Slate")
+                        .font(.system(size: 15, weight: .bold))
+                        .foregroundStyle(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .liquidGlassProminent(tint: DS.Colors.accentSlate)
+                }
+                .padding(DS.Spacing.lg)
+            }
+
+            // Liquid Glass Buttons (iOS 26+)
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                DS.Typography.micro(Text("Liquid Glass Buttons"))
+                    .foregroundStyle(DS.Colors.textMuted)
+                    .padding(.horizontal, DS.Spacing.lg)
+
+                HStack(spacing: DS.Spacing.md) {
+                    Button("Standard") {}
+                        .liquidGlassButton(tint: DS.Colors.accentGold)
+
+                    Button("Prominent") {}
+                        .liquidGlassButton(tint: DS.Colors.accentGold, isProminent: true)
+                }
+                .foregroundStyle(.white)
+                .padding(DS.Spacing.lg)
+            }
 
             // Skeleton loading
             SpotCardSkeleton()
