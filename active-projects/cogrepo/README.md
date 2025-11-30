@@ -1,159 +1,156 @@
 # CogRepo (Cognitive Repository)
-**Transform Your LLM Conversations Into Searchable Knowledge**
 
-## What This Is
-A comprehensive system for capturing, processing, indexing, and searching through thousands of AI/LLM conversations. CogRepo turns ephemeral chat history into a permanent, searchable knowledge base that can be analyzed for insights, patterns, and strategic opportunities.
+**Turn LLM conversations into searchable knowledge**
 
-## The Problem It Solves
-- LLM conversations contain valuable insights but disappear into history
-- No way to search across months/years of AI interactions
-- Can't identify patterns in your thinking or recurring topics
-- Difficult to extract actionable insights from conversation history
-- No way to build on previous AI-assisted work systematically
+Import, enrich, and search conversations from ChatGPT, Claude, and Gemini. Supports incremental updates - only processes new conversations.
 
-## 📁 Project Structure
+## Features
+
+- **Multi-platform**: ChatGPT, Claude, Gemini parsers with automatic format detection
+- **Incremental sync**: Track archives and only process new conversations
+- **AI enrichment**: Generate titles, summaries, tags, and quality scores via Claude API
+- **Full-text search**: SQLite FTS5 with BM25 ranking
+- **Modern web UI**: Search, filter, keyboard shortcuts (⌘K), offline support
+- **101 tests passing**
+
+## Quick Start
+
+```bash
+# Install
+pip install -r requirements.txt
+
+# Set API key for enrichment (optional)
+export ANTHROPIC_API_KEY="sk-..."
+
+# Start web server
+cd cogrepo-ui && python app.py
+# Open http://localhost:5000
+```
+
+## Project Structure
 
 ```
 cogrepo/
-├── README.md                    # This documentation
-├── IMPORT_GUIDE.md             # 📖 Complete import/update guide
-├── INCREMENTAL_PROCESSING_PLAN.md  # 🏗️ Technical architecture
-├── requirements.txt             # Python dependencies
-│
-├── cogrepo_import.py           # 📥 Main import tool
-├── cogrepo_update.py           # ♻️  Incremental update command
-├── cogrepo_search.py           # 🔍 Keyword search tool
-├── cogrepo_date_search.py      # 📅 Date-based search
-├── index_builder.py            # 🔨 Build search indexes
-│
-├── models.py                   # 📊 Data models
-├── state_manager.py            # 💾 Processing state tracking
-│
-├── parsers/                    # 🔧 Format parsers
+├── parsers/                    # Format parsers
 │   ├── chatgpt_parser.py       # ChatGPT conversations.json
 │   ├── claude_parser.py        # Claude JSON/JSONL
 │   └── gemini_parser.py        # Gemini JSON/HTML
 │
-├── enrichment/                 # 🤖 AI enrichment pipeline
+├── core/                       # Core infrastructure
+│   ├── config.py               # Configuration management
+│   ├── exceptions.py           # Custom exceptions
+│   └── logging_config.py       # Structured logging
+│
+├── enrichment/                 # AI enrichment
 │   └── enrichment_pipeline.py  # Title, summary, tags, scoring
 │
-├── config/                     # ⚙️ Configuration
-│   └── enrichment_config.yaml  # Enrichment settings
+├── archive_registry.py         # Track archive files & cursors
+├── smart_parser.py             # Auto-detect format, incremental parsing
+├── search_engine.py            # FTS5 search with filters
+├── cogrepo_import.py           # Import conversations
+├── cogrepo_manage.py           # CLI management tool
+├── quick_sync.py               # Fast incremental sync
 │
-├── cogrepo-ui/                 # 🌐 Web interface
-│   ├── index.html              # Web UI for browsing conversations
-│   └── server.py               # Backend API server
+├── cogrepo-ui/                 # Web interface
+│   ├── app.py                  # Flask API server
+│   ├── index.html              # Modern search UI
+│   ├── static/css/             # Design system
+│   ├── static/js/              # Modular JS (api, ui, app)
+│   └── sw.js                   # Service worker (offline)
 │
-└── data/                       # 📊 Processed conversation data
-    ├── enriched_repository.jsonl    # Main database (all conversations)
-    ├── focus_list.jsonl            # High-priority items
-    ├── repository.index.meta.json  # Search index metadata
-    ├── processing_state.json       # Import state tracking
-    └── strategic_projects.json     # Key insights & opportunities
+├── tests/                      # Test suite (101 tests)
+│   ├── test_parsers.py
+│   ├── test_search_engine.py
+│   ├── test_integration.py
+│   └── test_config.py
+│
+└── data/                       # Output
+    ├── enriched_repository.jsonl
+    └── archives/               # Registry state
 ```
 
-## 🚀 Quick Start Guide
+## Usage
 
-### Option A: Web Interface (Recommended) 🌐
-
-**Beautiful drag-and-drop interface with real-time progress!**
+### Import Conversations
 
 ```bash
-# Install dependencies
-pip install -r requirements.txt
-
-# Start the web server
-./start_web_ui.sh
-
-# Open in browser:
-# 📤 Upload: http://localhost:5000/upload.html
-# 🔍 Search: http://localhost:5000/index.html
-```
-
-**Features:**
-- ✨ Drag-and-drop file upload
-- 📊 Real-time progress tracking via WebSocket
-- 💰 Live cost estimation
-- 📈 Import history dashboard
-- 🎨 Modern, responsive design
-
-**📖 See [WEB_UI_GUIDE.md](WEB_UI_GUIDE.md) for complete web interface documentation**
-
-### Option B: Command Line
-
-```bash
-# Install dependencies
-pip install -r requirements.txt
-
-# Set your Anthropic API key (for AI enrichment)
-export ANTHROPIC_API_KEY="your-key-here"
-
-# Import ChatGPT conversations
+# Import with enrichment
 python cogrepo_import.py --source chatgpt --file conversations.json --enrich
 
-# Update with new conversations later
-python cogrepo_update.py --source chatgpt --file new_export.json
+# Import without enrichment (faster)
+python cogrepo_import.py --source claude --file export.json
 
-# Build search indexes
-python index_builder.py --rebuild
+# Auto-detect format
+python cogrepo_import.py --file any_export.json
 ```
 
-**📖 See [IMPORT_GUIDE.md](IMPORT_GUIDE.md) for detailed CLI instructions**
+### Incremental Sync
 
-### 2. **Search Your Conversations (Command Line)**
 ```bash
-# Search for topics
-python cogrepo_search.py "family travel"
-python cogrepo_search.py "creative projects"
+# Register archive for tracking
+python cogrepo_manage.py register ~/Downloads/chatgpt_export.json chatgpt
 
-# Search by date range
+# Sync only new conversations
+python quick_sync.py
+
+# Check what's pending
+python cogrepo_manage.py status
+```
+
+### Search
+
+```bash
+# CLI search
+python cogrepo_search.py "machine learning"
+
+# Date range
 python cogrepo_date_search.py --start 2024-01-01 --end 2024-06-30
+
+# Web UI (recommended)
+cd cogrepo-ui && python app.py
 ```
 
-### 3. **Browse with Web Interface**
+## API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/conversations` | GET | List all (limit, source filter) |
+| `/api/conversation/<id>` | GET | Single conversation |
+| `/api/search` | GET | Full-text search with filters |
+| `/api/stats` | GET | Repository statistics |
+| `/api/tags` | GET | Tag cloud data |
+| `/api/export` | POST | Export selected conversations |
+
+## Configuration
+
+```yaml
+# config/enrichment_config.yaml
+enrichment:
+  batch_size: 10
+  model: claude-sonnet-4-20250514
+
+search:
+  use_fts5: true
+  default_limit: 50
+```
+
+## Running Tests
+
 ```bash
-# Start the web UI
-cd cogrepo-ui
-python server.py
-
-# Open browser to http://localhost:8000
-# Use the web interface for visual exploration
+pytest tests/ -v
+# 101 tests, ~1.5s
 ```
 
-### 4. **Analyze Data Files**
-```bash
-# View high-priority items
-head data/focus_list.jsonl
+## Keyboard Shortcuts (Web UI)
 
-# Check strategic insights
-cat data/strategic_projects.json
+| Shortcut | Action |
+|----------|--------|
+| ⌘K | Focus search |
+| ⌘S | Save search |
+| ⌘E | Export results |
+| J/K | Navigate results |
+| ? | Show shortcuts |
 
-# View processing statistics
-python index_builder.py --stats
-```
+## License
 
-## How It Works
-1. Export your LLM conversations (Claude, ChatGPT, etc.)
-2. Process through the enrichment pipeline
-3. Search and analyze using Python scripts or web UI
-4. Extract insights, patterns, and actionable intelligence
-
-## Real-World Impact
-- **Rediscover forgotten insights** from months-old conversations
-- **Track evolution of ideas** across multiple sessions
-- **Identify patterns** in your questions and interests
-- **Build on previous work** instead of starting fresh
-- **Create a personal knowledge graph** from AI interactions
-
-## Technical Stack
-- Python for processing and analysis
-- JSONL for flexible data storage
-- Parquet for high-performance queries
-- Web-based UI for accessibility
-- Semantic search capabilities
-
-## Why This Matters
-Your conversations with AI contain years of refined thinking, problem-solving, and creative exploration. CogRepo transforms this hidden goldmine into an accessible, searchable asset that grows more valuable over time.
-
----
-*Built for anyone who believes their AI conversations are too valuable to forget*
+MIT

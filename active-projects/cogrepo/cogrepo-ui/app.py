@@ -175,7 +175,7 @@ def process_import_background(
         try:
             if os.path.exists(file_path):
                 os.remove(file_path)
-        except:
+        except OSError:
             pass
 
 
@@ -332,7 +332,7 @@ def api_conversations():
                     try:
                         conv = json.loads(line)
                         conversations.append(conv)
-                    except:
+                    except (json.JSONDecodeError, ValueError):
                         continue
 
         # Apply filters if provided
@@ -356,8 +356,8 @@ def api_conversations():
             reverse=True
         )
 
-        # Limit results
-        limit = int(request.args.get('limit', 100))
+        # Limit results (cap at 1000 to prevent OOM)
+        limit = min(int(request.args.get('limit', 100)), 1000)
         conversations = conversations[:limit]
 
         return jsonify({
@@ -387,7 +387,7 @@ def api_conversation(convo_id):
                         # Check both convo_id and external_id
                         if conv.get('convo_id') == convo_id or conv.get('external_id') == convo_id:
                             return jsonify(conv)
-                    except:
+                    except (json.JSONDecodeError, ValueError):
                         continue
 
         return jsonify({'error': 'Conversation not found'}), 404
@@ -406,7 +406,7 @@ def api_search():
         date_to = request.args.get('date_to', '')
         min_score = request.args.get('min_score', type=float)
         page = request.args.get('page', 1, type=int)
-        limit = request.args.get('limit', 25, type=int)
+        limit = min(request.args.get('limit', 25, type=int), 1000)  # Cap at 1000
 
         repo_path = get_repo_path()
 
@@ -421,7 +421,7 @@ def api_search():
                     try:
                         conv = json.loads(line)
                         conversations.append(conv)
-                    except:
+                    except (json.JSONDecodeError, ValueError):
                         continue
 
         # Apply search
@@ -533,7 +533,7 @@ def api_stats():
                         # Collect tags
                         for tag in conv.get('tags', []):
                             tags[tag] = tags.get(tag, 0) + 1
-                    except:
+                    except (json.JSONDecodeError, ValueError):
                         continue
 
         # Calculate stats
@@ -589,7 +589,7 @@ def api_export():
                         cid = conv.get('convo_id') or conv.get('external_id')
                         if cid in conversation_ids:
                             exported.append(conv)
-                    except:
+                    except (json.JSONDecodeError, ValueError):
                         continue
 
         return jsonify({
@@ -618,7 +618,7 @@ def api_tags():
                             conv = json.loads(line)
                             for tag in conv.get('tags', []):
                                 tags[tag] = tags.get(tag, 0) + 1
-                        except:
+                        except (json.JSONDecodeError, ValueError):
                             continue
 
         return jsonify({'tags': tags})
@@ -643,7 +643,7 @@ def api_sources():
                             conv = json.loads(line)
                             src = conv.get('source', 'Unknown')
                             sources[src] = sources.get(src, 0) + 1
-                        except:
+                        except (json.JSONDecodeError, ValueError):
                             continue
 
         return jsonify({'sources': sources})
@@ -657,7 +657,7 @@ def api_suggestions():
     """Get search suggestions/autocomplete"""
     try:
         query = request.args.get('q', '').lower()
-        limit = int(request.args.get('limit', 10))
+        limit = min(int(request.args.get('limit', 10)), 50)  # Cap suggestions
 
         if not query or len(query) < 2:
             return jsonify({'suggestions': []})
@@ -677,7 +677,7 @@ def api_suggestions():
                             title = conv.get('generated_title', conv.get('title', ''))
                             if title and query in title.lower():
                                 suggestions.add(title[:100])
-                        except:
+                        except (json.JSONDecodeError, ValueError):
                             continue
 
         return jsonify({'suggestions': list(suggestions)[:limit]})

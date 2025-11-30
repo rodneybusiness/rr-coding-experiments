@@ -71,14 +71,14 @@ class GeminiParser(ConversationParser):
             # Try JSON
             try:
                 data = self._load_json()
-            except:
+            except (json.JSONDecodeError, ValueError, UnicodeDecodeError):
                 # Try JSONL
                 try:
                     data = self._load_jsonl()
                     if not data:
                         return False
                     data = data[0] if isinstance(data, list) else data
-                except:
+                except (json.JSONDecodeError, ValueError, UnicodeDecodeError):
                     return False
 
             # Handle array of conversations
@@ -129,10 +129,10 @@ class GeminiParser(ConversationParser):
         # Try JSON first, then JSONL
         try:
             data = self._load_json()
-        except:
+        except (json.JSONDecodeError, ValueError, UnicodeDecodeError):
             try:
                 data = self._load_jsonl()
-            except:
+            except (json.JSONDecodeError, ValueError, UnicodeDecodeError):
                 raise ValueError("File is neither valid JSON nor JSONL")
 
         # Handle both single conversation and array
