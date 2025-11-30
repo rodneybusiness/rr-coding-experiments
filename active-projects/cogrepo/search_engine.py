@@ -584,7 +584,7 @@ class SearchEngine:
 
             try:
                 total_count = conn.execute(count_sql, count_params).fetchone()[0]
-            except:
+            except (sqlite3.Error, TypeError):
                 total_count = len(results)
 
         query_time = (time.perf_counter() - start_time) * 1000

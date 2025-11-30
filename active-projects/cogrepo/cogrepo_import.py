@@ -220,7 +220,7 @@ class CogRepoImporter:
                     if parser.detect_format():
                         print(f"✓ Detected format: {parser.platform_name}")
                         return parser
-                except:
+                except (FileNotFoundError, ValueError, json.JSONDecodeError, KeyError):
                     continue
 
             raise ValueError(f"Could not detect format for file: {file_path}")
