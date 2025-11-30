@@ -74,7 +74,7 @@ def format_time_ago(iso_timestamp: Optional[str]) -> str:
             return f"{diff.seconds // 60}m ago"
         else:
             return "Just now"
-    except:
+    except (ValueError, TypeError):
         return iso_timestamp[:10]
 
 

@@ -251,7 +251,7 @@ class SmartParser:
         """Parse cursor timestamp string to datetime."""
         try:
             return datetime.fromisoformat(timestamp_str.replace('Z', ''))
-        except:
+        except (ValueError, AttributeError):
             return None
 
     def _parse_conversation(self, conv_data: Dict[str, Any]) -> Optional[RawConversation]:
