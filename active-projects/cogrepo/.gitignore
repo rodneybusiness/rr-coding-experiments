@@ -12,6 +12,7 @@ __pycache__/
 .Python
 env/
 venv/
+.pytest_cache/
 
 # Build outputs
 dist/
@@ -38,3 +39,20 @@ logs/
 # Database
 *.db
 *.sqlite
+
+# Search results (generated)
+cogrepo_search_*.json
+
+# Large data files (keep locally but don't track)
+data/enriched_repository.jsonl
+data/focus_list.jsonl
+data/*.parquet
+data/*.index
+data/processing_state.json
+data/archives/
+
+# Uploads
+cogrepo-ui/uploads/
+
+# Taxonomy/analysis files (generated)
+taxonomy_*.txt

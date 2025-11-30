@@ -1,304 +1,168 @@
 # CogRepo Web UI Guide
 
-Beautiful, modern web interface for uploading and processing AI conversations.
+Modern web interface for uploading, searching, and browsing AI conversations.
 
-## ✨ Features
-
-### Upload Interface
-- 📤 **Drag-and-Drop Upload** - Simply drag files onto the upload zone
-- 🎯 **Auto-Detection** - Automatically detects ChatGPT, Claude, or Gemini formats
-- ⚡ **Real-Time Progress** - Live progress bars and statistics via WebSocket
-- 💰 **Cost Estimation** - See estimated API costs before processing
-- 📊 **Import History** - Track all your imports with timestamps and stats
-- 🎨 **Beautiful UI** - Modern, responsive design with smooth animations
-
-### Search Interface
-- 🔍 **Fast Search** - Keyword search across all conversations
-- 🏷️ **Filter by Source** - Filter by ChatGPT, Claude, or Gemini
-- 📅 **Date Range** - Search within specific time periods
-- 📋 **Export Results** - Export search results to JSON
-
-## 🚀 Quick Start
-
-### Starting the Server
+## Quick Start
 
 ```bash
-# From the cogrepo directory
-./start_web_ui.sh
-
-# Or manually:
 cd cogrepo-ui
-python3 app.py
+python app.py
+# Open http://localhost:5000
 ```
 
-### Access the UI
+## Features
 
-Open your browser to:
+- **Search**: Full-text search with filters (source, date, score)
+- **Keyboard shortcuts**: ⌘K (search), J/K (navigate), ⌘S (save), ⌘E (export)
+- **Offline support**: Service worker caches for offline use
+- **Dark mode**: Respects system preference
+- **Responsive**: Works on desktop and mobile
 
-- **Upload Interface:** http://localhost:5000/upload.html
-- **Search Interface:** http://localhost:5000/index.html
-- **API Status:** http://localhost:5000/api/status
+## Pages
 
-## 📤 How to Upload & Process
+| URL | Purpose |
+|-----|---------|
+| `/` | Search interface |
+| `/upload.html` | File upload |
+| `/api/status` | Server health check |
 
-### Step 1: Export Your Conversations
+## Uploading Conversations
 
-**ChatGPT:**
-1. Go to https://chat.openai.com
-2. Settings → Data controls → Export data
-3. Download `conversations.json` from email
+1. Open http://localhost:5000/upload.html
+2. Drag & drop export file (or click to browse)
+3. Select source (auto-detect, ChatGPT, Claude, Gemini)
+4. Toggle AI enrichment (requires `ANTHROPIC_API_KEY`)
+5. Click "Start Import"
+6. Watch real-time progress via WebSocket
 
-**Claude:**
-1. Install [Claude Exporter](https://chromewebstore.google.com/detail/claude-exporter) extension
-2. Export conversations as JSON
+## API Endpoints
 
-**Gemini:**
-1. Install [Gemini Chat Exporter](https://chromewebstore.google.com/detail/gemini-chat-exporter) extension
-2. Export conversations as JSON
+### Search & Browse
 
-### Step 2: Upload via Web UI
-
-1. **Open Upload Page:** http://localhost:5000/upload.html
-
-2. **Drag & Drop or Browse:**
-   - Drag your export file onto the upload zone
-   - Or click to browse and select file
-
-3. **Configure Options:**
-   - **Source:** Auto-detect or manually select platform
-   - **AI Enrichment:** Toggle on/off
-     - ON: Generates titles, summaries, tags, scores (~$0.025/conversation)
-     - OFF: Just imports raw data (free, faster)
-
-4. **Start Import:**
-   - Click "Start Import"
-   - Watch real-time progress
-   - See live statistics
-
-5. **Done!**
-   - Import completes automatically
-   - Conversations are now searchable
-   - View in search interface
-
-### Step 3: Search Your Conversations
-
-1. **Open Search Page:** http://localhost:5000/index.html
-
-2. **Search:**
-   - Enter keywords
-   - Filter by source
-   - Set date range
-   - Export results
-
-## 📊 Real-Time Progress Features
-
-During import, you'll see:
-
-- **Progress Bar** - Visual progress (0-100%)
-- **Status Updates** - Current processing step
-- **Live Statistics:**
-  - Total conversations found
-  - New conversations (not yet processed)
-  - Processed count
-  - Failed count
-- **Cost Estimation** - API cost estimates (if enriching)
-- **Time Remaining** - Estimated completion time
-
-## 🎨 UI Screenshots (Conceptual)
-
-### Upload Page
-```
-┌─────────────────────────────────────────┐
-│  🧠 CogRepo                             │
-│  Import & Process Your AI Conversations │
-├─────────────────────────────────────────┤
-│  📤 Import  |  🔍 Search                │
-├─────────────────────────────────────────┤
-│                                          │
-│  ┌────────────────────────────────────┐ │
-│  │  📁 Drag & Drop Your Export File   │ │
-│  │     or click to browse             │ │
-│  │                                     │ │
-│  │  Supports ChatGPT, Claude, Gemini  │ │
-│  └────────────────────────────────────┘ │
-│                                          │
-│  Source: [Auto-detect ▼]                │
-│  ☑ Enable AI enrichment                 │
-│                                          │
-│  [Start Import]                         │
-└─────────────────────────────────────────┘
-```
-
-### Progress View
-```
-┌─────────────────────────────────────────┐
-│  Processing Import        [Completed]   │
-├─────────────────────────────────────────┤
-│  ████████████████████ 100%             │
-│  Processing conversation 100/100       │
-├─────────────────────────────────────────┤
-│  Total: 100  New: 50  Processed: 50    │
-│  Failed: 0   Cost: $1.25               │
-└─────────────────────────────────────────┘
-```
-
-## 🔧 API Endpoints
-
-### GET `/api/status`
-Server status and statistics
-```json
-{
-  "status": "online",
-  "data_exists": true,
-  "total_conversations": 2150,
-  "api_key_configured": true
-}
-```
-
-### POST `/api/upload`
-Upload and process export file
-```
-Form data:
-- file: Export file (.json, .jsonl)
-- source: "auto" | "chatgpt" | "claude" | "gemini"
-- enrich: "true" | "false"
-```
-
-### GET `/api/imports`
-List all imports (history)
-```json
-{
-  "imports": [
-    {
-      "id": "uuid",
-      "filename": "conversations.json",
-      "source": "chatgpt",
-      "status": "completed",
-      "created_time": "2025-10-31T..."
-    }
-  ]
-}
-```
-
-### GET `/api/conversations`
-Search conversations
-```
-Query params:
-- q: Search query
-- source: Filter by source
-- limit: Max results (default: 100)
-```
-
-## 🌐 WebSocket Events
-
-The UI uses WebSocket for real-time updates:
-
-### Server → Client Events
-
-- `connected` - Connection established
-- `import_progress` - Progress updates during processing
-- `import_status` - Status changes
-- `import_complete` - Import finished successfully
-- `import_error` - Import failed
-
-### Client → Server Events
-
-- `subscribe_import` - Subscribe to specific import updates
-
-## 🛠️ Troubleshooting
-
-### Server Won't Start
-
-**Check dependencies:**
 ```bash
-pip install flask flask-socketio flask-cors werkzeug
+# List conversations
+GET /api/conversations?q=query&source=OpenAI&limit=50
+
+# Get single conversation
+GET /api/conversation/{id}
+
+# Full-text search with filters
+GET /api/search?q=query&source=OpenAI&date_from=2024-01-01&min_score=7
+
+# Semantic search (same params)
+GET /api/semantic_search?q=query
+
+# Autocomplete suggestions
+GET /api/suggestions?q=mach
 ```
 
-**Check API key:**
+### Metadata
+
 ```bash
-cat .env
-# Should show: ANTHROPIC_API_KEY=sk-ant-...
+# Repository statistics
+GET /api/stats
+# Returns: total_conversations, sources, date_range, avg_score, top_tags
+
+# All tags with counts
+GET /api/tags
+
+# All sources with counts
+GET /api/sources
 ```
 
-### Upload Fails
+### Export & Import
 
-**File too large:**
-- Max size: 500MB
-- Split large exports if needed
+```bash
+# Export selected conversations
+POST /api/export
+Body: {"conversation_ids": ["id1", "id2"], "format": "json"}
 
-**Invalid format:**
-- Ensure file is .json or .jsonl
-- Check file isn't corrupted
+# Upload file for import
+POST /api/upload
+Form: file, source (auto|chatgpt|claude|gemini), enrich (true|false)
 
-**API key error:**
-- Disable enrichment (uncheck box)
-- Or set ANTHROPIC_API_KEY in .env
+# List imports
+GET /api/imports
 
-### No Progress Updates
+# Get import status
+GET /api/imports/{import_id}
+```
 
-**Refresh page:**
-- Reload to reconnect WebSocket
+## WebSocket Events
 
-**Check browser console:**
-- F12 → Console tab
-- Look for connection errors
+Real-time updates during import:
 
-### Port Already in Use
+| Event | Direction | Data |
+|-------|-----------|------|
+| `connected` | Server→Client | Connection confirmed |
+| `import_progress` | Server→Client | `{current, total, percentage, status}` |
+| `import_complete` | Server→Client | `{stats, message}` |
+| `import_error` | Server→Client | `{error, message}` |
 
-**Change port in app.py:**
+## Keyboard Shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| ⌘K / Ctrl+K | Focus search |
+| ⌘S / Ctrl+S | Save current search |
+| ⌘E / Ctrl+E | Export results |
+| J | Next result |
+| K | Previous result |
+| Enter | Open selected |
+| Escape | Close modal |
+| ? | Show shortcuts help |
+
+## Configuration
+
+Server runs on port 5000 by default. To change:
+
 ```python
+# In cogrepo-ui/app.py, line ~407
 socketio.run(app, host='0.0.0.0', port=5001)  # Change port
 ```
 
-## 💡 Tips & Best Practices
+## Troubleshooting
 
-### First Import
-1. Start with small file to test (~10 conversations)
-2. Try without enrichment first (faster, free)
-3. Then enable enrichment for full import
+### Server won't start
 
-### Incremental Updates
-1. Export fresh conversations weekly/monthly
-2. Upload via web UI
-3. System automatically skips duplicates
-4. Only new conversations are processed
+```bash
+pip install flask flask-socketio flask-cors python-dotenv
+```
 
-### Cost Optimization
-- **Without enrichment:** Free, fast (~seconds for 1000 conversations)
-- **With enrichment:** ~$0.025 per conversation
-  - 50 conversations: ~$1.25
-  - 100 conversations: ~$2.50
-  - Use for important conversations only
+### API key error on upload
 
-### Performance
-- **Upload:** Instant (just file upload)
-- **Processing:** ~2 minutes per 50 conversations (with enrichment)
-- **Search:** Instant once indexed
+Either:
+- Set `ANTHROPIC_API_KEY` in `.env` file
+- Uncheck "Enable AI enrichment" during upload
 
-## 🎯 Workflow Example
+### Port in use
 
-**Weekly update routine:**
+```bash
+lsof -i :5000  # Find process
+kill -9 <PID>  # Kill it
+```
 
-1. Monday morning: Export from ChatGPT, Claude, Gemini
-2. Open http://localhost:5000/upload.html
-3. Drag & drop ChatGPT export
-4. Enable enrichment, start import
-5. While processing: Repeat for Claude and Gemini
-6. 10 minutes later: All conversations searchable!
+### No search results
 
-## 🔒 Security Notes
+1. Check data file exists: `ls data/enriched_repository.jsonl`
+2. Verify it has content: `wc -l data/enriched_repository.jsonl`
+3. Check server logs for errors
 
-- Web server runs locally (localhost only)
-- No data sent to external servers (except Anthropic API for enrichment)
-- API key stored in .env file (not in git)
-- Uploaded files deleted after processing
+## Architecture
 
-## 📖 Additional Resources
-
-- **IMPORT_GUIDE.md** - Detailed import instructions
-- **INCREMENTAL_PROCESSING_PLAN.md** - Technical architecture
-- **README.md** - Project overview
-
----
-
-**Enjoy your beautiful, modern CogRepo web interface!** 🎉
+```
+cogrepo-ui/
+├── app.py              # Flask server (API + WebSocket)
+├── index.html          # Search UI (modern redesign)
+├── upload.html         # Upload interface
+├── sw.js               # Service worker (offline)
+├── static/
+│   ├── css/
+│   │   ├── design-system.css  # CSS tokens, components
+│   │   └── components.css     # App-specific styles
+│   └── js/
+│       ├── api.js      # API client (retry, cancellation)
+│       ├── ui.js       # Utilities (modals, toasts, escapeHTML)
+│       └── app.js      # Main app (state, search, render)
+└── uploads/            # Temporary upload storage
+```
