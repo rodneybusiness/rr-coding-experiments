@@ -10,7 +10,8 @@ Imports, enriches, and searches LLM conversations from ChatGPT, Claude, and Gemi
 
 | Task | File | Command |
 |------|------|---------|
-| Start web UI | `cogrepo-ui/app.py` | `cd cogrepo-ui && python app.py` |
+| Start web UI (macOS) | `CogRepo.command` | Double-click or search in Spotlight/Alfred/Raycast |
+| Start web UI (CLI) | `cogrepo-ui/app.py` | `cd cogrepo-ui && python app.py` |
 | Import conversations | `cogrepo_import.py` | `python cogrepo_import.py --file export.json --enrich` |
 | Incremental sync | `quick_sync.py` | `python quick_sync.py` |
 | CLI search | `cogrepo_search.py` | `python cogrepo_search.py "query"` |

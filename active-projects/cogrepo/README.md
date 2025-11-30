@@ -15,6 +15,12 @@ Import, enrich, and search conversations from ChatGPT, Claude, and Gemini. Suppo
 
 ## Quick Start
 
+### macOS (Spotlight/Alfred/Raycast)
+
+Double-click `CogRepo.command` or search "CogRepo" in Spotlight/Alfred/Raycast. Browser opens automatically.
+
+### Command Line
+
 ```bash
 # Install
 pip install -r requirements.txt
