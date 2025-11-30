@@ -4,6 +4,9 @@ Modern web interface for uploading, searching, and browsing AI conversations.
 
 ## Quick Start
 
+**macOS**: Double-click `CogRepo.command` or search "CogRepo" in Spotlight/Alfred/Raycast (auto-opens browser).
+
+**Command line**:
 ```bash
 cd cogrepo-ui
 python app.py
