@@ -59,7 +59,7 @@ class ClaudeParser(ConversationParser):
             # Try JSON first
             try:
                 data = self._load_json()
-            except:
+            except (json.JSONDecodeError, ValueError, UnicodeDecodeError):
                 # Try JSONL
                 data = self._load_jsonl()
                 if not data:
@@ -101,10 +101,10 @@ class ClaudeParser(ConversationParser):
         # Try JSON first, then JSONL
         try:
             data = self._load_json()
-        except:
+        except (json.JSONDecodeError, ValueError, UnicodeDecodeError):
             try:
                 data = self._load_jsonl()
-            except:
+            except (json.JSONDecodeError, ValueError, UnicodeDecodeError):
                 raise ValueError("File is neither valid JSON nor JSONL")
 
         # Handle both single conversation and array
@@ -270,7 +270,7 @@ class ClaudeParser(ConversationParser):
             # Try parsing with microseconds
             try:
                 return datetime.fromisoformat(timestamp_str)
-            except:
+            except ValueError:
                 # Try without microseconds
                 timestamp_str = timestamp_str.split('.')[0]
                 return datetime.fromisoformat(timestamp_str)

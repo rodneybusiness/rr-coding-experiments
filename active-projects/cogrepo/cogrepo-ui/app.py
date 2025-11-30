@@ -175,7 +175,7 @@ def process_import_background(
         try:
             if os.path.exists(file_path):
                 os.remove(file_path)
-        except:
+        except OSError:
             pass
 
 
@@ -332,7 +332,7 @@ def api_conversations():
                     try:
                         conv = json.loads(line)
                         conversations.append(conv)
-                    except:
+                    except (json.JSONDecodeError, ValueError):
                         continue
 
         # Apply filters if provided
@@ -352,18 +352,335 @@ def api_conversations():
 
         # Sort by timestamp (newest first)
         conversations.sort(
-            key=lambda x: x.get('timestamp', ''),
+            key=lambda x: x.get('timestamp', x.get('create_time', '')),
             reverse=True
         )
 
-        # Limit results
-        limit = int(request.args.get('limit', 100))
+        # Limit results (cap at 1000 to prevent OOM)
+        limit = min(int(request.args.get('limit', 100)), 1000)
         conversations = conversations[:limit]
 
         return jsonify({
             'conversations': conversations,
             'total': len(conversations)
         })
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/conversation/<path:convo_id>')
+def api_conversation(convo_id):
+    """Get a single conversation by ID"""
+    try:
+        repo_path = get_repo_path()
+
+        if not os.path.exists(repo_path):
+            return jsonify({'error': 'No conversations found'}), 404
+
+        with open(repo_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    try:
+                        conv = json.loads(line)
+                        # Check both convo_id and external_id
+                        if conv.get('convo_id') == convo_id or conv.get('external_id') == convo_id:
+                            return jsonify(conv)
+                    except (json.JSONDecodeError, ValueError):
+                        continue
+
+        return jsonify({'error': 'Conversation not found'}), 404
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/search')
+def api_search():
+    """Search conversations"""
+    try:
+        query = request.args.get('q', '')
+        source = request.args.get('source', '')
+        date_from = request.args.get('date_from', '')
+        date_to = request.args.get('date_to', '')
+        min_score = request.args.get('min_score', type=float)
+        page = request.args.get('page', 1, type=int)
+        limit = min(request.args.get('limit', 25, type=int), 1000)  # Cap at 1000
+
+        repo_path = get_repo_path()
+
+        if not os.path.exists(repo_path):
+            return jsonify({'results': [], 'total': 0, 'page': page, 'limit': limit})
+
+        conversations = []
+        with open(repo_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    try:
+                        conv = json.loads(line)
+                        conversations.append(conv)
+                    except (json.JSONDecodeError, ValueError):
+                        continue
+
+        # Apply search
+        results = []
+        query_lower = query.lower() if query else ''
+
+        for conv in conversations:
+            # Text search
+            if query_lower:
+                title = conv.get('generated_title', conv.get('title', '')).lower()
+                text = conv.get('raw_text', '').lower()
+                summary = conv.get('summary_abstractive', '').lower()
+                tags = ' '.join(conv.get('tags', [])).lower()
+
+                if not any(query_lower in field for field in [title, text, summary, tags]):
+                    continue
+
+            # Source filter
+            if source and conv.get('source', '') != source:
+                continue
+
+            # Date filters
+            conv_date = conv.get('create_time', conv.get('timestamp', ''))
+            if date_from and conv_date < date_from:
+                continue
+            if date_to and conv_date > date_to:
+                continue
+
+            # Score filter
+            if min_score is not None:
+                conv_score = conv.get('score', conv.get('relevance', 0))
+                if conv_score < min_score:
+                    continue
+
+            results.append(conv)
+
+        # Sort by date (newest first)
+        results.sort(
+            key=lambda x: x.get('create_time', x.get('timestamp', '')),
+            reverse=True
+        )
+
+        total = len(results)
+
+        # Paginate
+        offset = (page - 1) * limit
+        results = results[offset:offset + limit]
+
+        return jsonify({
+            'results': results,
+            'total': total,
+            'page': page,
+            'limit': limit
+        })
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/semantic_search')
+def api_semantic_search():
+    """Semantic search - for now, falls back to regular search"""
+    # Could be enhanced with vector embeddings later
+    return api_search()
+
+
+@app.route('/api/stats')
+def api_stats():
+    """Get repository statistics"""
+    try:
+        repo_path = get_repo_path()
+
+        if not os.path.exists(repo_path):
+            return jsonify({
+                'total_conversations': 0,
+                'sources': {},
+                'date_range': None,
+                'avg_score': None
+            })
+
+        conversations = []
+        sources = {}
+        dates = []
+        scores = []
+        tags = {}
+
+        with open(repo_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    try:
+                        conv = json.loads(line)
+                        conversations.append(conv)
+
+                        # Count sources
+                        src = conv.get('source', 'Unknown')
+                        sources[src] = sources.get(src, 0) + 1
+
+                        # Collect dates
+                        dt = conv.get('create_time', conv.get('timestamp'))
+                        if dt:
+                            dates.append(dt)
+
+                        # Collect scores
+                        score = conv.get('score', conv.get('relevance'))
+                        if score is not None:
+                            scores.append(score)
+
+                        # Collect tags
+                        for tag in conv.get('tags', []):
+                            tags[tag] = tags.get(tag, 0) + 1
+                    except (json.JSONDecodeError, ValueError):
+                        continue
+
+        # Calculate stats
+        date_range = None
+        if dates:
+            dates.sort()
+            date_range = {
+                'earliest': dates[0],
+                'latest': dates[-1]
+            }
+
+        avg_score = sum(scores) / len(scores) if scores else None
+
+        # Top tags
+        top_tags = sorted(tags.items(), key=lambda x: x[1], reverse=True)[:20]
+
+        return jsonify({
+            'total_conversations': len(conversations),
+            'sources': sources,
+            'date_range': date_range,
+            'avg_score': avg_score,
+            'top_tags': top_tags
+        })
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/export', methods=['POST'])
+def api_export():
+    """Export selected conversations"""
+    try:
+        data = request.get_json() or {}
+        conversation_ids = data.get('conversation_ids', [])
+        format_type = data.get('format', 'json')
+
+        if not conversation_ids:
+            return jsonify({'error': 'No conversation IDs provided'}), 400
+
+        repo_path = get_repo_path()
+
+        if not os.path.exists(repo_path):
+            return jsonify({'error': 'No conversations found'}), 404
+
+        # Find requested conversations
+        exported = []
+        with open(repo_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    try:
+                        conv = json.loads(line)
+                        cid = conv.get('convo_id') or conv.get('external_id')
+                        if cid in conversation_ids:
+                            exported.append(conv)
+                    except (json.JSONDecodeError, ValueError):
+                        continue
+
+        return jsonify({
+            'data': exported,
+            'count': len(exported),
+            'format': format_type
+        })
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/tags')
+def api_tags():
+    """Get all tags with counts"""
+    try:
+        repo_path = get_repo_path()
+        tags = {}
+
+        if os.path.exists(repo_path):
+            with open(repo_path, 'r', encoding='utf-8') as f:
+                for line in f:
+                    line = line.strip()
+                    if line:
+                        try:
+                            conv = json.loads(line)
+                            for tag in conv.get('tags', []):
+                                tags[tag] = tags.get(tag, 0) + 1
+                        except (json.JSONDecodeError, ValueError):
+                            continue
+
+        return jsonify({'tags': tags})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/sources')
+def api_sources():
+    """Get all sources with counts"""
+    try:
+        repo_path = get_repo_path()
+        sources = {}
+
+        if os.path.exists(repo_path):
+            with open(repo_path, 'r', encoding='utf-8') as f:
+                for line in f:
+                    line = line.strip()
+                    if line:
+                        try:
+                            conv = json.loads(line)
+                            src = conv.get('source', 'Unknown')
+                            sources[src] = sources.get(src, 0) + 1
+                        except (json.JSONDecodeError, ValueError):
+                            continue
+
+        return jsonify({'sources': sources})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/suggestions')
+def api_suggestions():
+    """Get search suggestions/autocomplete"""
+    try:
+        query = request.args.get('q', '').lower()
+        limit = min(int(request.args.get('limit', 10)), 50)  # Cap suggestions
+
+        if not query or len(query) < 2:
+            return jsonify({'suggestions': []})
+
+        repo_path = get_repo_path()
+        suggestions = set()
+
+        if os.path.exists(repo_path):
+            with open(repo_path, 'r', encoding='utf-8') as f:
+                for line in f:
+                    if len(suggestions) >= limit:
+                        break
+                    line = line.strip()
+                    if line:
+                        try:
+                            conv = json.loads(line)
+                            title = conv.get('generated_title', conv.get('title', ''))
+                            if title and query in title.lower():
+                                suggestions.add(title[:100])
+                        except (json.JSONDecodeError, ValueError):
+                            continue
+
+        return jsonify({'suggestions': list(suggestions)[:limit]})
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
